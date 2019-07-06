@@ -21,6 +21,7 @@ class App extends Component {
     static contextType= AppContext
 
     state={
+        anchorEl: undefined,
         contextMenu:undefined,
         activeStore: "Store Name",
         storesInputLabelWidth: 0,
@@ -53,11 +54,33 @@ class App extends Component {
         })
     }
 
+    openMenu = (event) => {
+        event.persist()
+        this.setState({anchorEl: event.target})
+    }
+    
+      closeMenu = () => {
+        this.setState({anchorEl: null})
+      }
+
     render() {
         let { classes } = this.props;
         let {storeListElTrigger}= this.state
+
+        let {anchorEl, activeProduct} = this.state
+        let userMenu = (
+            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} id="simple-menu" onClose={this.closeMenu}
+            style={{zIndex:100000}}>
+                 <MenuItem component={Link} to={"/"}>home</MenuItem>
+              <MenuItem onClick={this.closeMenu}
+                        component={Link} to={"/login"}>logout</MenuItem>
+            </Menu>
+        )
+
         return (
+           
                     <AppBar style={{zIndex:2000}}>
+                         {userMenu}
                         <Toolbar style={{display:"flex", alignItems:"center", justifyContent:"space-between", color:"white"}}>
                             <Grid container justify={"space-between"} alignItems={"center"}>
                                 <Grid sm={2} item>
@@ -93,7 +116,7 @@ class App extends Component {
                                         {/*<Typography color={"inherit"}>
                                             {this.context.user.email}
                                         </Typography>*/}
-                                        <Avatar style={{margin:"0px 8px"}}/>
+                                        <Avatar style={{margin:"0px 8px"}} onClick={this.openMenu}/>
                                     </div>
                                 </Grid>
                             </Grid>

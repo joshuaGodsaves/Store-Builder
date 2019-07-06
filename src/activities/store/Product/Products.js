@@ -196,11 +196,13 @@ class TableProductsView extends React.Component {
                               onChange={this.selectSingle(product._id)}
                           />
                         </Grid>
-                        <Grid item>
-                          <IconButton>
-                            <FaProductHunt/>
-                          </IconButton>
+                        <Grid item style={{display:"flex", alignItems:"center"}} >
+                          <span>
+                          <Avatar src={product.mainImageLink}/>
+                          </span>
+                          <span style={{margin:"0px 12px"}}>
                           {product.title}
+                            </span>
                         </Grid>
                       </Grid>
                     </Grid>
@@ -238,7 +240,7 @@ class TableProductsView extends React.Component {
         <Typography align={"center"}>
           You dont have any products yet, click the button above to add some.
         </Typography>
-        <Button to={`/stores/${this.context.store.id}/products/new`} component={Link} variant={"contained"} size={"large"} style={{margin:"16px 0px"}}>
+        <Button to={`/stores/${this.context.store.id}/products/new`} component={Link} style={{margin:"16px 0px"}}>
           <Add/> CREATE
         </Button>
       </div>

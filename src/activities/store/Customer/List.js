@@ -8,7 +8,7 @@ import {FaUserCircle,FaMailBulk} from "react-icons/fa"
 import {MdNotifications, MdDelete, MdGroupAdd, MdGroup} from "react-icons/md"
 import { Toolbar,
   Avatar,
-    Card, CardActions, CardHeader, CardContent, Divider, CardActionArea,
+    Card, Divider, CardActionArea,
   ButtonBase,
   Checkbox,
   IconButton,
@@ -16,15 +16,10 @@ import { Toolbar,
   Menu,
     Grid,
   MenuItem,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow
+  Button,
+  Paper
 } from "@material-ui/core";
 import PageAppBar from "../../../components/ActivityPrimaryAppBar";
-import AppToolBar from "../../../components/AppToolBar"
 import DataSource from "../../../DataSource"
 import NewCustomer from "../../../components/NewCustomer"
 
@@ -163,8 +158,8 @@ class TableProductsView extends React.Component {
     );
 
     let defaultToolbar = (
-        <React.Fragment>
-          <PageAppBar>
+          <Toolbar style={{display:"flex",justifyContent:'space-between', 
+          justifyContent:'space-between', background:"ghostwhite"}}>
             <div>
               <Typography variant={"title"}>Customers</Typography>
             </div>
@@ -174,17 +169,17 @@ class TableProductsView extends React.Component {
                 <Typography color={""}> CREATE</Typography>
               </ButtonBase>
             </div>
-          </PageAppBar>
-        </React.Fragment>
+          </Toolbar>
+    
     );
 
     let customersAvailable = (
         <React.Fragment>
-            <Paper style={{overflow:"hidden"}}>
+            <div style={{overflow:"hidden", color:"white"}}>
             {this.state.selected.length !== 0
                 ? selectedCategoriesOptionToolBar
                 : defaultToolbar}
-            </Paper>
+            </div>
           {/*<Checkbox onChange={this.selectAll} />*/}
                 <Grid container style={{margin:"24px 0"}} justify={"flex-start"}>
                   {this.state.customers.map((customer, i) => (
@@ -214,11 +209,14 @@ class TableProductsView extends React.Component {
     );
 
     let customersNotAvailable = (
-        <div>
-          <Typography>
-            You dont have any customers yet, click the button above to add some.
-          </Typography>
-        </div>
+      <div align="center">
+      <Typography align={"center"}>
+        You dont have any customers yet, click the button above to add some.
+      </Typography>
+      <Button onClick={this.openCreateCustomer} style={{margin:"16px 0px"}}>
+        <Add/> CREATE
+      </Button>
+      </div>
     );
 
     return (

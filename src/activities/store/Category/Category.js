@@ -4,29 +4,26 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import {
-  ButtonBase,
-  Dialog,
-  DialogActions,
-  DialogContent,
+
   FormLabel, Paper,
   FormHelperText,
   OutlinedInput as Input,
   InputBase,
-  List,
-  ListItemText,
+
   Tab, Divider,
   Tabs, IconButton
 } from "@material-ui/core";
 import PageAppBar from "../../../components/ActivityPrimaryAppBar";
 import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import ListItem from "@material-ui/core/ListItem";
+
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ImageSelectionComponent from "../../../components/ImageSelectionComponent"
 import {CloudUpload as UploadIcon, Link as LinkIcon, SelectAll as SelectIcon} from "@material-ui/icons";
 import axios from "axios";
 import StoreContext from "../StoreContext";
+import FileUploader from "../components/FileUpload"
+import { APIURL } from "../../../DataSource";
 
 let styles = {
   listItem: {
@@ -64,6 +61,7 @@ let styles = {
 class Category extends React.Component {
   static contextType = StoreContext;
   state = {
+    uploadFile: false,
     currentTab: 0,
     categoryDialogOpen: false,
     category: {
@@ -99,7 +97,7 @@ class Category extends React.Component {
     let {match: {params}} = this.props
     axios
         .put(
-            `http://localhost:5000/api/store/${this.context.store.id}/category/${params.category}`,
+            `${APIURL}/store/${this.context.store.id}/category/${params.category}`,
             this.state.category,
             {
               headers: {
@@ -121,9 +119,17 @@ class Category extends React.Component {
   closeingMainImageDrawer= ()=>{
     this.setState({selectMainImageDrawerOpen: false})
   }
-  selectMainImage = url=>{
-    this.setState({category: {mainImageLink: url}})
-  }
+
+  selectMainImage = (url) => {
+    this.setState(state => {
+        state.category.mainImageLink = url
+        return state
+    })
+}
+uploadFile = ()=>{
+  this.setState({uploadFile: true})
+}
+
 
   openSelectMainImageDrawer=()=>{
     this.setState({selectMainImageDrawerOpen: true})
@@ -131,8 +137,7 @@ class Category extends React.Component {
 
   loadCategory = async (catID) => {
     let category;
-      category = await axios.get(`http://localhost:5000/api/store/${this.context.store.id}/category/${catID}`)
-
+      category = await axios.get(`${APIURL}/store/${this.context.store.id}/category/${catID}`)
     if(!category){
       console.log("error")
       return
@@ -161,18 +166,22 @@ class Category extends React.Component {
       //load product
     }
   }
+  
   save =async  ()=>{
-    let category = await axios.post(`http://localhost:5000/api/store/${this.context.store.id}/category`,
+    let category = await axios.post(`${APIURL}/store/${this.context.store.id}/category`,
         this.state.category,
         {
           headers: {
             "X-auth-license": this.context.store.token
           }
-        })}
+        })
+        window.location.replace(`/stores/${this.context.store.id}/categories`)
+
+      }
 
   render() {
     let { classes } = this.props;
-
+    let {category} = this.state
 
     let primaryComponent = (
       <React.Fragment>
@@ -221,10 +230,19 @@ class Category extends React.Component {
                 <Paper style={{width:"100%", display:"flex", justifyContent:"center"}}>
                   <div>
                     <div style={{width:200, height:200, background: "grey"}}>
+                      <img height={"100%"} width={"100%"} src={category.mainImageLink} alt={"main image"}/>
                     </div>
                     <div style={{padding:"0px 0px"}}>
-                      <IconButton><UploadIcon/></IconButton>
-                      <IconButton onClick={this.openSelectMainImageDrawer}><SelectIcon/></IconButton>
+                    <FileUploader
+                                    onError={()=>{}} 
+                                    onFinish={this.selectMainImage}/>
+                                    <IconButton onClick={()=>{document.getElementById("fileSelectorElement").click();}}>
+                                        <UploadIcon>
+
+                                        </UploadIcon>
+                                    </IconButton>
+
+                      <IconButton disabled onClick={this.openSelectMainImageDrawer}><SelectIcon/></IconButton>
                       <IconButton><LinkIcon/></IconButton>
                     </div>
                   </div>

@@ -5,6 +5,7 @@ import Chip from "@material-ui/core/Chip";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import {FaMailBulk, FaProductHunt, FaDollarSign, FaTextWidth} from "react-icons/fa";
+import {APIURL} from "../../../DataSource"
 import ExternalImages from "../../../components/ExternalImages"
 import FileUploader from "../components/FileUpload"
 import {CloudUpload as UploadIcon, Link as LinkIcon, SelectAll as SelectIcon } from "@material-ui/icons";
@@ -12,6 +13,7 @@ import {
     ButtonBase,
     Checkbox,
     Dialog,
+    CircularProgress,
     DialogActions,
     DialogContent,
     Divider,
@@ -39,7 +41,6 @@ import axios from "axios";
 
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import {APIURL} from "../../../DataSource";
 
 let styles = {
     listItem: {
@@ -74,8 +75,8 @@ class Product extends React.Component {
     constructor(props) {
         super(props)
     }
-
     state = {
+        saveingProduct: false,
         uploadFile: false,
         externalImages: false,
         updated: false,
@@ -117,9 +118,10 @@ class Product extends React.Component {
     updateProduct = () => {
         let {product, mainProductObj} = this.state
         let {match: {params}} = this.props
+        this.setState({saveingProduct: true})
         axios
             .put(
-                `http://localhost:5000/api/store/${this.context.store.id}/product/${params.product}`,
+                `${APIURL}/store/${this.context.store.id}/product/${params.product}`,
                 this.state.product,
                 {
                     headers: {
@@ -127,7 +129,7 @@ class Product extends React.Component {
                     }
                 }
             ).then(v => {
-            console.log(v)
+                this.setState({saveingProduct: false})
             this.setState({updated: true})
             setTimeout(() => {
                 this.setState({updated: false})
@@ -163,6 +165,7 @@ class Product extends React.Component {
     }
 
     save = event => {
+        this.setState({saveingProduct: true})
         axios
             .post(
                 `http://localhost:5000/api/store/${
@@ -175,7 +178,12 @@ class Product extends React.Component {
                     }
                 }
             ).then(v => {
-            console.log(v.data)
+                //After saveing product reload with product id
+                console.log(v.data)
+                this.setState({saveingProduct: false})
+
+                window.location.replace(`/stores/${this.context.store.id}/products`)
+            
         })
     };
 
@@ -210,6 +218,7 @@ class Product extends React.Component {
         this.setState(state => {
             state.product.mainImageLink = url
             state.selectMainImageDrawerOpen= false
+            state.uploadFile=false
             return state
         })
     }
@@ -227,7 +236,6 @@ class Product extends React.Component {
 
     selectSingleGalleryItem= (url)=>{
         let index= this.state.currentSelectedGalleryItem
-
             this.setState(state => {
                 state.product.gallery[index]= url
                 state.selectGalleryItemDrawer= false
@@ -251,7 +259,9 @@ class Product extends React.Component {
 
     externalAssetSelectFinishProcess = (selected)=>{
         this.setState({externalImages: false})
-        let url= selected[0]
+        let url= selected[0];
+        this.selectMainImage(url)
+
     }
     externalAssetSelectCancelProcess = ()=>{
         this.setState({externalImages: false})
@@ -269,6 +279,9 @@ class Product extends React.Component {
     }
 
     componentDidMount() {
+        alert(JSON.stringify(this.state.product))
+
+
         let {match: {params}} = this.props
         if (params.product == "new") {
             this.setState({isNewProduct: true})
@@ -286,10 +299,9 @@ class Product extends React.Component {
         }
     }
     render() {
+        
         let {classes} = this.props;
         let {product, openCategory, selectMainImageDrawerOpen} = this.state
-
-
         let categoryLite= <CategoryLite open={openCategory}
                                         categories={this.state.product.categories.length? this.state.product.categories: []}
                                         closeCategorySelector={this.saveCategory}/>
@@ -381,18 +393,25 @@ class Product extends React.Component {
                                 <Typography variant={"caption"}>Main Product Image</Typography>
                                 <Grid style={{
                                     width: 200, height: 200, background: "grey", margin: "8px 0", borderRadius:10,
-                                    backgroundImage: 'url(file:///C:/Users/LUBI/Pictures/Screenshots/Screenshot%20(3).png)'
+                                    backgroundImage: `url(${this.state.product.mainImageLink})`
                                 }}>
+                                    <img src={product.mainImageLink} height="200px" width="200px"/>
                                 </Grid>
                                 <Grid item style={{}}>
-                                    <FileUploader triggerSelectFile={true} onError={()=>{}} onFinish={this.selectMainImage}/>
+                                    <FileUploader 
+                                    onError={()=>{}} 
+                                    onFinish={this.selectMainImage}/>
                                     <IconButton onClick={()=>{document.getElementById("fileSelectorElement").click()}}>
                                         <UploadIcon>
 
                                         </UploadIcon>
                                     </IconButton>
-                                    <IconButton onClick={this.openSelectMainImageDrawer}><SelectIcon/></IconButton>
-                                    <IconButton onClick={this.openExternalImages}><LinkIcon/></IconButton>
+                                    <IconButton 
+                                    disabled
+                                    onClick={this.openSelectMainImageDrawer}><SelectIcon/></IconButton>
+                                    <IconButton 
+                                    disabled
+                                    onClick={this.openExternalImages}><LinkIcon/></IconButton>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -476,10 +495,12 @@ class Product extends React.Component {
                         />
                         <Tab label={"Advanced"} style={{color: '#404040'}}/>
                     </Tabs>
-                    <div>
+                    <div style={{display:"flex", alignContent:"center", alignItems:"center"}}>
+                        {this.state.saveingProduct? <CircularProgress/> :""}
                         <Button
-                            variant={"contained"}
-                            onClick={this.state.isNewProduct ? this.save : this.updateProduct}>{this.state.isNewProduct ? "Save" : "Update"}</Button>
+                            onClick={this.state.isNewProduct ? this.save : this.updateProduct}>
+                            {this.state.isNewProduct ? "Save" : "Update"}
+                        </Button>
                     </div>
                 </PageAppBar>
                 <Grid container style={{padding: "12px 12px"}} justify={"center"}>

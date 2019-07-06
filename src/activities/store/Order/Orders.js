@@ -3,26 +3,18 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Typography from "@material-ui/core/Typography";
 import {Add, Delete, Edit, MoreHoriz, Refresh} from "@material-ui/icons";
 import {Link} from "react-router-dom";
-import {FaProductHunt, FaDollarSign} from "react-icons/fa"
+import {FaDollarSign} from "react-icons/fa"
 import Button from "@material-ui/core/Button";
 import StoreContext from "../StoreContext"
 import {
-  ButtonBase,
   Checkbox,
   Chip, Grid, Toolbar,
   IconButton,
   LinearProgress,
   Menu,
   MenuItem,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow
+  Paper
 } from "@material-ui/core";
-import PageAppBar from "../../../components/ActivityPrimaryAppBar";
-import AppToolBar from "../../../components/AppToolBar"
 import DataSource from "../../../DataSource"
 import {MdGroup} from "react-icons/md";
 import {FaMailBulk, FaUserCircle} from "react-icons/fa";
@@ -36,13 +28,10 @@ let styles = {
     justifyContent: "space-between"
   }
 };
-
-
 class TableProductsView extends React.Component {
   dataSource;
   constructor(props){
     super(props)
-
   }
   state = {
     anchorEl: undefined,
@@ -99,7 +88,6 @@ class TableProductsView extends React.Component {
   }
 
   closeMenu = (event) => {
-    event.persist()
     this.setState({anchorEl: null})
   }
 
@@ -112,6 +100,7 @@ class TableProductsView extends React.Component {
   deleteTransaction = () => {
     let {activeTransaction} = this.state
     this.dataSource.deleteStoreTransaction(activeTransaction._id).then(v => {
+      
     })
     this.closeMenu()
     this.loadTransactions()
@@ -132,8 +121,6 @@ class TableProductsView extends React.Component {
           <MenuItem onClick={this.closeMenu}>Complete</MenuItem>
         </Menu>
     )
-
-
     let selectedCategoriesOptionToolBar = (
         <Paper>
           <Toolbar>
@@ -148,7 +135,7 @@ class TableProductsView extends React.Component {
     );
 
     let defaultToolbar = (
-        <Paper style={{background:"rgba(0,0,0,.5)"}}>
+        <Paper style={{background:""}}>
           <Toolbar style={{ display:"flex", justifyContent:"space-between", alignItems:"center"}}>
             <Typography variant={"h6"}>
               Transactions
@@ -226,11 +213,14 @@ class TableProductsView extends React.Component {
         </React.Fragment>
     );
     let ordersNotAvailable = (
-        <div>
-          <Typography>
-            You dont have any products yet, click the button above to add some.
-          </Typography>
-        </div>
+      <div align="center">
+      <Typography align={"center"}>
+        You dont have any orders yet, click the button below to add some.
+      </Typography>
+      <Button to={`/stores/${this.context.store.id}/orders/new-transaction`} component={Link} style={{margin:"16px 0px"}}>
+        <Add/> CREATE
+      </Button>
+    </div>
     );
     return (
         <React.Fragment>

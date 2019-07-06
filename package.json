@@ -2,7 +2,7 @@
   "name": "l-magnet-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://joshuaGodsaves.github.io/Store-Builder",
+  "homepage": "/",
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^12.0.0",
     "@ckeditor/ckeditor5-react": "^1.1.1",

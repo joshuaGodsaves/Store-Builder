@@ -35,16 +35,14 @@ class App extends Component {
         this.setState({sentRequest: false})
 
         if(req.data.token){
-            alert("ddd")
-            alert(req.data.token)
-            console.log("user is loggedin")
+    
             let user= {
                 email: this.state.email,
                 token: req.data.token
             }
             
             window.localStorage.setItem("magnet-client-active-user", JSON.stringify(user))
-            window.location.replace(window.location.host)
+            window.location.replace("/")
         }
 
     };
@@ -67,19 +65,22 @@ class App extends Component {
 
         return (
             <React.Fragment>
-
                 <Grid container justify={"center"}>
-                    <Grid item sm={10} md={6} lg={4} style={{margin:"24px"}} >
+                    <Grid item style={{margin:"24px"}} >
                         <Typography align={"center"} style={{margin:"16px 0px"}}>Login User Account</Typography>
                         <Paper style={{padding:16}} elevation={1}>
-                            <FormControl fullWidth onChange={this.watch("email")}  style={{margin:"16px 0px"}}>
+                            <div>
+                            <FormControl  onChange={this.watch("email")}  style={{margin:"16px 0px"}}>
                                 <FormLabel>Email</FormLabel>
                                 <OutlinedInput />
                             </FormControl>
-                            <FormControl fullWidth style={{margin:"16px 0px"}}>
+                            </div>
+                            <div>
+                            <FormControl style={{margin:"16px 0px"}}>
                                 <FormLabel>Password</FormLabel>
                                 <OutlinedInput onChange={this.watch("password")}/>
                             </FormControl>
+                            </div>
                             <Button onClick={ this.loginUser} style={{width:"70%", margin:"8px 15%"}}> Login</Button>
                         </Paper>
                     </Grid>

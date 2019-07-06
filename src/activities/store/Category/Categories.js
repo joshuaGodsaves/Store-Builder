@@ -6,14 +6,13 @@ import {FaProductHunt} from "react-icons/fa/index"
 import {Link} from "react-router-dom";
 import StoreContext from "../StoreContext"
 import {
-    Avatar,
-    ButtonBase,
     Checkbox,
     IconButton,
     LinearProgress,
     Paper, Button,
-    Table, Toolbar,
-    TableRow, Grid, Chip
+ Toolbar,
+  Grid,
+  Avatar
 } from "@material-ui/core";
 import DataSource from "../../../DataSource"
 
@@ -114,7 +113,7 @@ class TableProductsView extends React.Component {
                 </IconButton>
                 <Button
                     variant={"contained"}
-                            to={"/stores/${this.context.store.id}/categories/new"}
+                            to={`/stores/${this.context.store.id}/categories/new`}
                             component={Link}>
                   <Add/>
                   CREATE
@@ -134,16 +133,18 @@ class TableProductsView extends React.Component {
                 <Grid item xs={12} md={6} style={{margin:"8px 0px"}}>
                         <Paper elevation={1}>
                             <Grid container alignItems={"center"} justify={"space-between"} spacing={8}>
-                                <Grid item>
+                                <Grid item style={{display:"flex"}}>
                                     <Checkbox
                                         color={"primary"}
                                         checked={this.state.selected.some(v2 => v2 == category._id)}
                                         onChange={this.selectSingle(category._id)}
                                     />
-                                    <IconButton>
-                                        <FaProductHunt/>
-                                    </IconButton>
-                                    {category.title}
+                                    <div style={{display:"flex", alignItems:"center"}}>
+                                      <Avatar src={category.mainImageLink}/>
+                                      <span style={{margin:"0px 12px"}}>
+                                      {category.title}
+                                      </span>
+                                    </div>
                                 </Grid>
                                 <Grid item>
                                     <IconButton component={Link}
@@ -156,22 +157,22 @@ class TableProductsView extends React.Component {
             </Grid>
         </React.Fragment>
     );
-    let productsNotAvailable = (
-        <div>
-          <Typography  align={"center"}>
-            You dont have any products yet, click the button above to add some.
-          </Typography>
-            <Button>
-                Create Category
-            </Button>
-        </div>
+    let itemsNotAvailable = (
+      <div align="center">
+      <Typography align={"center"}>
+        You dont have any category created yet, click the button below to add some.
+      </Typography>
+      <Button to={`/stores/${this.context.store.id}/categories/new`} component={Link} style={{margin:"16px 0px"}}>
+        <Add/> CREATE
+      </Button>
+    </div>
     );
     return (
         <React.Fragment>
           {this.state.loading? <LinearProgress/> :
               <div>
             {this.state.categories.length == 0
-                ? productsNotAvailable
+                ? itemsNotAvailable
                 : productsAvailable}
           </div>
           }

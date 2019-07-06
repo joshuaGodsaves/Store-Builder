@@ -145,7 +145,7 @@ export default class DataSource {
     async postStoreTransaction(data) {
         let result = await this.axios.post(`${this.API_URL}/${this.storeId}/transaction`, data)
         if (result) {
-            return result.data
+            return result
         } else {
             return false
         }
@@ -184,6 +184,16 @@ export default class DataSource {
     async deleteStoreProduct(id) {
         let result = await this.axios.delete(`${this.API_URL}/${this.storeId}/product/${id}`)
 
+        return result
+    }
+
+    async createStore (id){
+        let result= await this.axios.post(`${API_URL}/store`, {owner: id})
+        return result
+    }
+
+    async getStores (email){
+        let result= await this.axios.get(`${API_URL}/user/${email}/stores`)
         return result
     }
 

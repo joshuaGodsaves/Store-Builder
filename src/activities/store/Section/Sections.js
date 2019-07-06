@@ -6,17 +6,11 @@ import {FaProductHunt} from "react-icons/fa"
 import {Link} from "react-router-dom";
 import StoreContext from "../StoreContext"
 import {
-    Avatar,
-    ButtonBase,
+  Card, CardActionArea, CardContent,
     Checkbox,
     IconButton,
     LinearProgress,
-    Paper, Button,
-    Table, Toolbar,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow, Grid, Chip
+    Paper, Button,Toolbar,Grid,CardMedia,CardHeader, Divider
 } from "@material-ui/core";
 import DataSource from "../../../DataSource"
 
@@ -91,21 +85,21 @@ class TableProductsView extends React.Component {
   render() {
     let { classes } = this.props;
     let selectedCategoriesOptionToolBar = (
-        <Paper>
+        <div>
           <Toolbar>
               <Typography variant={"h6"}> Bulk Action</Typography>
             <div>
-              <IconButton><Delete/></IconButton>
-              <IconButton><Edit/></IconButton>
+              <IconButton color={"primary"}><Delete/></IconButton>
+              <IconButton color={"primary"}><Edit/></IconButton>
             </div>
             <div>
             </div>
           </Toolbar>
-        </Paper>
+        </div>
     );
 
     let defaultToolbar = (
-        <Paper>
+        <div>
           <Toolbar style={{display:'flex', justifyContent:"space-between"}}>
             <Typography variant={"h6"}>
               Store Sections
@@ -115,7 +109,8 @@ class TableProductsView extends React.Component {
                   <Refresh/>
                 </IconButton>
                 <Button
-                    variant={"contained"}
+                  color={"primary"}
+                
                             to={`/stores/${this.context.store.id}/sections/new`}
                             component={Link}>
                   <Add/>
@@ -123,7 +118,7 @@ class TableProductsView extends React.Component {
                 </Button>
             </div>
           </Toolbar>
-        </Paper>
+        </div>
     );
 
     let sectionsAvailable = (
@@ -132,27 +127,46 @@ class TableProductsView extends React.Component {
                 ? selectedCategoriesOptionToolBar
                 : defaultToolbar}
 
-            <Grid container spacing={8} justify={"center"}>
+            <Grid container spacing={8}>
                 {this.state.sections.map((section, i) => (
-                <Grid item xs={11} md={6}>
+                <Grid item xs={11} md={6} lg={4}>
+                        <Card>
+                          <CardContent>
+                            <div style={{minHeight:180, background:"url()"}}>
+                                <div>
+                                        <IconButton>
+                                            <FaProductHunt/>
+                                        </IconButton>
+                                        {section.label}
+                              </div>
+                            </div>
+                          </CardContent>
+                          <Divider/>
+                          <CardActionArea 
+                          style={{padding:16, display:"flex", justifyContent:"space-between"}}
+                          component={Link}
+                          to={`/stores/${this.context.store.id}/sections/${section._id}`}> 
+                            <div>
+                              View/ Edit
+                            </div>
+                            <div>
+                              </div>
+                          </CardActionArea>
+                        </Card>
                         <Paper style={{margin:"8px 0px"}} elevation={1}>
                             <Grid container alignItems={"center"} justify={"space-between"}>
                                 <Grid item>
                                     <Checkbox
+                                    disabled
                                         color={"primary"}
                                         checked={this.state.selected.some(v2 => v2 == section._id)}
                                         onChange={this.selectSingle(section._id)}
                                     />
                                 </Grid>
                                 <Grid item>
-                                    <IconButton>
-                                        <FaProductHunt/>
-                                    </IconButton>
-                                    {"sectiion.title product heere"}
-                                </Grid>
-                                <Grid item>
                                     <IconButton component={Link}
-                                                to={`/stores/${this.context.store.id}/sections/${section._id}`}><MoreHoriz/></IconButton>
+                                    disabled
+                                                to={``}><MoreHoriz/></IconButton>
                                 </Grid>
                             </Grid>
                         </Paper>
@@ -162,14 +176,14 @@ class TableProductsView extends React.Component {
         </React.Fragment>
     );
     let sectionsNotAvailable = (
-        <div align="center">
-          <Typography  align={"center"}>
-            You dont have any products yet, click the button above to add some.
-          </Typography>
-            <Button variant={"contained"} style={{margin:"16px 0px"}} component={Link} to={`/stores/${this.context.store.id}/sections/new`}>
-                Create Section
-            </Button>
-        </div>
+      <div align="center">
+      <Typography align={"center"}>
+        You dont have any sections yet, click the button above to add some.
+      </Typography>
+      <Button to={`/stores/${this.context.store.id}/sections/new`} component={Link}  style={{margin:"16px 0px"}}>
+        <Add/> CREATE
+      </Button>
+      </div>
     );
     return (
         <React.Fragment>

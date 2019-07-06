@@ -86,6 +86,7 @@ export default class Component extends React.Component{
                                     this.state.selected.some(siid=>siid==v._id) ? "1px solid black":"none"
                                 }}>
                                     <div style={{width:150, height:150}}>
+                                        <img src={v.mainImageLink} height={"100%"} width={"100%"}/>
                                     </div>
                                     <div style={{fontSize:10, padding:12}}>
                                         {v.title}

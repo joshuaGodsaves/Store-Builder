@@ -1,8 +1,8 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
-import AppToolBar from "../../../components/AppToolBar"
 import User from "@material-ui/icons/SupervisedUserCircle"
 import {
+    Snackbar, SnackbarContent,
     Button,
     ButtonBase,
     Card,
@@ -19,6 +19,7 @@ import {
     ListItem,
     OutlinedInput,
     Paper,
+    Toolbar,
     Table,
     TableBody,
     TableCell,
@@ -53,7 +54,10 @@ class CreateTransaction extends React.Component {
         productDialog: undefined,
         products: [],
         selectedProducts: [],
-        cart: []
+        cart: [],
+        creatingTransactions: false, 
+        message: undefined,
+        notify: false
     }
 
     async loadCategories() {
@@ -173,13 +177,26 @@ class CreateTransaction extends React.Component {
         items.forEach(v => {
             total += v.total
         })
+
+        this.setState({creatingTransactions:true})
         let result = await this.dataSource.postStoreTransaction({
             user: customer.user,
             customer: customer.id,
             items: items,
             total: total
         })
-        console.log(result)
+
+        this.setState({creatingTransactions:false})
+        
+        if(result.data){
+            this.setState({customer: undefined, cart: [], 
+                selectedProducts:[], 
+                notify:true,
+                messsage:"created orders successfully"});
+            setTimeout(()=>{
+                this.setState({notify:false})
+            }, 2000)
+        }
     }
 
     componentDidMount() {
@@ -199,6 +216,11 @@ class CreateTransaction extends React.Component {
             </List>
         )
 
+        const notifyBox= (
+            <Snackbar title={"Notification"}   open>
+                <SnackbarContent message={this.state.messsage}/>
+            </Snackbar>
+        )
 
         const customerDialog = (
             <React.Fragment>
@@ -265,9 +287,9 @@ class CreateTransaction extends React.Component {
                 </Dialog>
             </React.Fragment>
         )
-
         return (
             <React.Fragment>
+                {this.state.notify? notifyBox: ""}
                 {customerDialog}
                 {productDialog}
                 <Grid container justify={"center"}>
@@ -290,13 +312,21 @@ class CreateTransaction extends React.Component {
                     </Grid>
                     <Grid item xs={10} style={{position: 'relative', margin: "16px 0"}}>
                         <Paper style={{overflow: "hidden"}}>
-                            <AppToolBar>
+                            <Toolbar style={{display:"flex",justifyContent:"space-between"}}>
                                 <Typography> Cart </Typography>
-                                <div>
-                                    <Button variant={"outlined"} onClick={this.openProductDialog}>Add Item[s]</Button>
-                                    <Button onClick={this.addTransaction}>Save</Button>
-                                </div>
-                            </AppToolBar>
+                                <Grid container justify={"flex-end"} alignItems={"center"}> 
+                                    {this.state.creatingTransactions? <Grid item>
+                                            <CircularProgress/>
+                                        </Grid>
+                                    :""}
+                                    <Grid item>
+                                        <Button onClick={this.openProductDialog} color={"primary"}>Add Item[s]</Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button onClick={this.addTransaction} color={"primary"}>Save</Button>
+                                    </Grid>
+                                </Grid>
+                            </Toolbar>
                             <div style={{height: 280, overflowY: 'auto'}}>
                                 <Table>
                                     <TableHead>

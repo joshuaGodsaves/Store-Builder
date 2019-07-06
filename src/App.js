@@ -2,14 +2,15 @@ import React, {Component} from "react";
 import userIndex from "./activities/user/index"
 import storeIndex from "./activities/store/index"
 import loginPage from "./activities/user/Login"
-
 import withStyles from "@material-ui/core/styles/withStyles";
 import AppContext from "./AppContext"
 import {BrowserRouter, Route, Switch} from "react-router-dom";
+import axios from "axios"
 import "./App.css"
 let styles = theme => ({
 
 });
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -19,6 +20,7 @@ class App extends Component {
   }
 
 componentWillMount() {
+
    let user= JSON.parse(window.localStorage.getItem("magnet-client-active-user"))
   if(user && user.email) {
     //User is loggedIn Set token and email
