@@ -13,7 +13,9 @@ import {
     ButtonBase, Avatar,
     ListItemIcon, ListItemText
 } from "@material-ui/core"
-import { Message, Settings, Shop, Favorite, VerifiedUserOutlined} from "@material-ui/icons"
+import { Message, Settings, Shop, Favorite, 
+    VerifiedUserOutlined, Subscriptions, SubscriptionsRounded, 
+    SubscriptionsOutlined, Payment, CreditCard} from "@material-ui/icons"
 let styles = theme => ({
 
 });
@@ -37,6 +39,10 @@ class App extends Component {
                     <ListItem component={Link} to={"/"}>
                         <ListItemIcon><Favorite/></ListItemIcon>
                         <ListItemText> Favourites</ListItemText>
+                    </ListItem>
+                    <ListItem component={Link} to={"/"}>
+                        <ListItemIcon> <CreditCard/></ListItemIcon>
+                        <ListItemText> Subscriptions </ListItemText>
                     </ListItem>
                     <ListItem component={Link} to={"/"}>
                         <ListItemIcon> <Settings/></ListItemIcon>

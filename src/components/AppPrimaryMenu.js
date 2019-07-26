@@ -1,16 +1,27 @@
 import React, {Component} from "react";
 import Toolbar from "@material-ui/core/Toolbar";
-import {AppBar, IconButton, Menu, MenuItem, Button, Avatar, Grid, InputBase,Paper} from "@material-ui/core";
+import {AppBar, IconButton, Menu, MenuItem, 
+    Button, Avatar, Grid, InputBase,Paper,  Switch, Typography} from "@material-ui/core";
 import Link from "react-router-dom/Link"
 import withStyles from "@material-ui/core/styles/withStyles";
-import {Menu as MenuIcon, ArrowDropDown as ArrowDropDownIcon, MoreHoriz, Search, Notifications} from "@material-ui/icons";
+import {Menu as MenuIcon, MoreHoriz, Search, Notifications} from "@material-ui/icons";
 import axios from "axios"
 import AppContext from "../AppContext";
-import Typography from "@material-ui/core/Typography";
-
 import { APIURL } from './../DataSource';
 let styles = theme => ({
-
+    rootMenuMobile:{
+        [theme.breakpoints.up("sm")]:{
+            display: "none"
+        },
+        [theme.breakpoints.down("sm")]:{
+            display: "block"
+        },
+    },
+    mobileHidden:{
+        [theme.breakpoints.down("sm")]:{
+            display:"none"
+        }
+    }
 });
 
 class App extends Component {
@@ -47,7 +58,7 @@ class App extends Component {
 
     componentWillMount() {
         let email= this.context.user.email
-        axios.get(`${APIURL}user/${email}/stores`).then(v=>{
+        axios.get(`${APIURL}/user/${email}/stores`).then(v=>{
             this.setState({stores: v.data})
         }).catch(v=>{
             console.log(v)
@@ -58,7 +69,7 @@ class App extends Component {
         event.persist()
         this.setState({anchorEl: event.target})
     }
-    
+
       closeMenu = () => {
         this.setState({anchorEl: null})
       }
@@ -76,47 +87,36 @@ class App extends Component {
                         component={Link} to={"/login"}>logout</MenuItem>
             </Menu>
         )
-
+        
         return (
-           
-                    <AppBar style={{zIndex:2000}}>
+                    <AppBar style={{zIndex:2000}} elevation={0}>
                          {userMenu}
-                        <Toolbar style={{display:"flex", alignItems:"center", justifyContent:"space-between", color:"white"}}>
+                        <Toolbar 
+                        style={{display:"flex", alignItems:"center", justifyContent:"space-between", color:"white"}}>
                             <Grid container justify={"space-between"} alignItems={"center"}>
                                 <Grid sm={2} item>
                                     <IconButton onClick={this.props.triggerMenuClick} color={"inherit"}>
                                         <MenuIcon/>
                                     </IconButton>
                                 </Grid>
-                                <Grid item sm={7} md={5}>
+                                <Grid item xs={2} sm={3} md={5}>
                                     <Paper style={{padding:"4px 8px", background:"rgba(0,0,0,0.5)"}} elevation={0}>
                                         <InputBase style={{width:"100%", color:"white"}} startAdornment={<Search/>} color={"inherit"}/>
                                     </Paper>
                                 </Grid>
-                                <Grid item sm={2}>
+                                <Grid item sm={2} lg={4}>
                                     <div style={{display:"flex", justifyContent:"flex-end",alignItems:"center"}}>
-                                        <IconButton color={"inherit"}>
+                                        <Switch  className={classes.mobileHidden}/>
+                                        <IconButton color={"inherit"} className={classes.mobileHidden}>
                                             <Notifications/>
                                         </IconButton>
-                                       {/* <Button variant={"outlined"} onClick={this.selectStoreTrigger} style={{margin:"0px 8px"}} color={"inherit"}>
-                                            {this.state.selectedStore}
-                                            <ArrowDropDownIcon/>
-                                        </Button>
-                                        <Menu anchorEl={storeListElTrigger} id="simple-menu"
-                                              style={{zIndex:2100}}
-                                              open={Boolean(storeListElTrigger)}
-                                              onClose={this.closeStoresListTrigger}>
-                                            {this.state.stores.length == 0 ?
-                                                <MenuItem>Create Store</MenuItem> : null
-                                            }
-                                            {this.state.stores.map(v=>(
-                                                <MenuItem component={Link} to={`/stores/${v._id}`}>{v._id}</MenuItem>
-                                            ))}
-                                        </Menu>*/}
-                                        {/*<Typography color={"inherit"}>
-                                            {this.context.user.email}
-                                        </Typography>*/}
+                                        <Typography className={classes.mobileHidden}>
+                                            User Email
+                                        </Typography>
                                         <Avatar style={{margin:"0px 8px"}} onClick={this.openMenu}/>
+                                        <IconButton className={classes.rootMenuMobile}>
+                                            <MoreHoriz/>
+                                        </IconButton>
                                     </div>
                                 </Grid>
                             </Grid>
@@ -128,5 +128,3 @@ class App extends Component {
 }
 
 export default withStyles(styles)(App);
-
-

@@ -105,7 +105,7 @@ class App extends Component {
                                     </Grid>
                                 </Grid>
                             </Grid>
-                            <Grid item xs={7} >
+                            <Grid item xs={12} lg={6}>
                                 <div style={{padding:18, background:"ghostwhite", margin:"12px 0px"}}>
                                 <Typography>Primary Details</Typography>
                                 <Grid container>
@@ -122,7 +122,7 @@ class App extends Component {
                                 </div>
                             </Grid>
 
-                            <Grid item xs={5}>
+                            <Grid item xs={12} lg={6}>
                                 <div style={{padding:18, background:"ghostwhite", margin:"12px 0px"}}>
                                     <Typography> Social Media</Typography>
                                     <Grid container>
@@ -145,9 +145,10 @@ class App extends Component {
                                 </div>
                             </Grid>
 
-                            <Grid item xs={7}>
-                                <div style={{padding:18, background:"ghostwhite", margin:"12px 0px"}}>
-                                <ExpansionPanel>
+                            <Grid item xs={12} lg={12}>
+                                <Grid container style={{padding:18, background:"ghostwhite", margin:"12px 0px"}}>
+                                    <Grid  item xs={12} lg={6}>
+                                    <ExpansionPanel>
                                     <ExpansionPanelSummary expandIcon={<ArrowDownward/>}>Location</ExpansionPanelSummary>
                                     <ExpansionPanelDetails>
                                         <Grid container>
@@ -166,20 +167,24 @@ class App extends Component {
                                         </Grid>
                                     </ExpansionPanelDetails>
                                 </ExpansionPanel>
-                                </div>
+                                    </Grid>
+                                </Grid>
                             </Grid>
 
-                            <Grid item xs={7} style={{padding:18, background:"ghostwhite", margin:"12px 0px"}}>
-                                <ExpansionPanel>
-                                    <ExpansionPanelSummary expandIcon={<ArrowDownward/>}>UI</ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
-                                        <Grid container>
+                            <Grid item xs={12} lg={12} style={{padding:18, background:"ghostwhite", margin:"12px 0px"}}>
+                                <Grid container>
+                                    <Grid item xs={12} lg={6}>
+                                    <ExpansionPanel>
+                                        <ExpansionPanelSummary expandIcon={<ArrowDownward/>}>UI</ExpansionPanelSummary>
+                                        <ExpansionPanelDetails>
+                                            <Grid container>
 
-                                        </Grid>
-                                    </ExpansionPanelDetails>
-                                </ExpansionPanel>
+                                            </Grid>
+                                        </ExpansionPanelDetails>
+                                    </ExpansionPanel>
+                                    </Grid>
+                                </Grid>
                             </Grid>
-
                         </Grid>
                     </Grid>
                 </Grid>

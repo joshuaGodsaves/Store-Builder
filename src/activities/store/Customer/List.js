@@ -213,7 +213,7 @@ class TableProductsView extends React.Component {
       <Typography align={"center"}>
         You dont have any customers yet, click the button above to add some.
       </Typography>
-      <Button onClick={this.openCreateCustomer} style={{margin:"16px 0px"}}>
+      <Button onClick={this.openCreateCustomer} style={{margin:"16px 0px"}} color={"primary"}>
         <Add/> CREATE
       </Button>
       </div>

@@ -14,11 +14,33 @@ import categoryIndex from "./Category/Index"
 import customerIndex from "./Customer/Index"
 import settings from "./Settings"
 
-let drawerWidth = 220;
+import {VerifiedUserOutlined,  SupervisedUserCircle} from "@material-ui/icons";
+
+let drawerWidth = 225;
 
 let styles = theme => ({
     drawerPaper: {
+        width:drawerWidth,
+        [theme.breakpoints.up("sm")]:{
+            width: `calc( ${drawerWidth}px)`
+        },
+        [theme.breakpoints.down("sm")]:{
+            width: 0
+         }
+    },
+    drawerPaperOpen:{
         width: drawerWidth
+    },
+    container:{
+        margin:"0px",
+        [theme.breakpoints.between("sm","xl")]:{
+            width: `calc( 100% - ${drawerWidth}px )`,
+            marginLeft: `${drawerWidth}px`
+        },
+        [theme.breakpoints.between("xs", "sm")]:{
+            marginLeft: '0px',
+            width:"100%"
+        }
     }
 });
 
@@ -29,69 +51,40 @@ class App extends Component {
     }
 
     state={
-        menuOpen: true,
-        activateToggleMenuButton: false,
-        activeStore: undefined
-
+        menuOpen: false
     }
 
     openUserMenu = ()=>{
-        if(this.state.activateToggleMenuButton) {
-            this.setState({menuOpen: !this.state.menuOpen, disablePermanentDrawer: true})
-        }
+        this.setState({menuOpen: !this.state.menuOpen})
     }
+    closeMenu= ()=>(this.setState({menuOpen: false}))
 
     componentWillMount() {
         let {match: {params}} = this.props
         this.setState({activeStore: params.store})
     }
 
-    componentDidMount() {
-
-        let  reset = ()=>{
-            if(window.innerWidth < 800){
-                this.setState({menuOpen: false, disablePermanentDrawer: false, activateToggleMenuButton: true})
-            }else{
-                this.setState({menuOpen: true, disablePermanentDrawer: true, activateToggleMenuButton: false})
-            }
-        }
-        reset()
-        window.addEventListener("resize", function (){
-            reset()
-        })
-    }
-
     render() {
         let {classes}= this.props
-        let marginLeft=`0px`
-        let contentWidth= "100%"
-        if(this.state.menuOpen){
-            contentWidth= `calc(100% -${drawerWidth}px)`
-            marginLeft= `${drawerWidth}px`
-        }
-
-        if(this.state.activateToggleMenuButton){
-            contentWidth= "100%"
-            marginLeft=`0px`
-        }else{
-
-        }
+        let {menuOpen}= this.state
+        let {drawerPaper, drawerPaperOpen}= classes
         return (
             <StoreContext.Provider value={{store: {id: this.state.activeStore, token:"undefined"}}}>
                 <PrimaryMenu triggerMenuClick={ this.openUserMenu }/>
                 <AppBar position={"relative"} style={{zIndex:0}}><Toolbar></Toolbar></AppBar>
-                <Drawer open={this.state.menuOpen} style={{width:drawerWidth}} classes={{paper: classes.drawerPaper}}
-                        variant={this.state.disablePermanentDrawer? "persistent": "temporary"}
+                <Drawer open={menuOpen} style={{}} classes={{paper: menuOpen === true ? drawerPaperOpen : drawerPaper}}
+                        variant={"permanent"}
+                        onClose={this.closeMenu}
                 >
                     <Toolbar/>
                     <StorePrimaryMenu store={this.state.activeStore}>
                     </StorePrimaryMenu>
                 </Drawer>
-                    <div style={{width:contentWidth, marginLeft: marginLeft}}>
-                        <Grid container justify={"center"} style={{marginTop:24}} wrap={"wrap"}>
-                            <Grid item md={11}>
+                    <div className={classes.container}>
+                        <Grid container justify={"center"}>
+                            <Grid item xs={12} sm={12} md={12} style={{padding:"12px 12px"}}>
                                 <Switch>
-                                    <Route path={`/stores/${this.state.activeStore}` } exact  component={defaultStorePage}/>
+                                    <Route path={`/stores/${this.state.activeStore}`} exact  component={defaultStorePage}/>
                                     <Route path={`/stores/${this.state.activeStore}/products` }   component={productIndex}/>
                                     <Route path={`/stores/${this.state.activeStore}/orders` }   component={orderIndex}/>
                                     <Route path={`/stores/${this.state.activeStore}/categories` }   component={categoryIndex}/>

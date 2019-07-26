@@ -9,11 +9,31 @@ import UserMenuList from "./components/menu"
 import PrimaryMenu from "../../components/AppPrimaryMenu"
 import {VerifiedUserOutlined,  SupervisedUserCircle} from "@material-ui/icons";
 
-let drawerWidth = 220;
+let drawerWidth = 225;
 
 let styles = theme => ({
     drawerPaper: {
+        width:drawerWidth,
+        [theme.breakpoints.up("sm")]:{
+            width: `calc( ${drawerWidth}px)`
+        },
+        [theme.breakpoints.down("sm")]:{
+            width: 0
+         }
+    },
+    drawerPaperOpen:{
         width: drawerWidth
+    },
+    container:{
+        margin:"0px",
+        [theme.breakpoints.between("sm","xl")]:{
+            width: `calc( 100% - ${drawerWidth}px )`,
+            marginLeft: `${drawerWidth}px`
+        },
+        [theme.breakpoints.between("xs", "sm")]:{
+            marginLeft: '0px',
+            width:"100%"
+        }
     }
 });
 
@@ -24,58 +44,34 @@ class App extends Component {
     }
 
     state={
-        menuOpen: true,
+        menuOpen: false,
         activateToggleMenuButton: false
     }
 
     openUserMenu = ()=>{
-        if(this.state.activateToggleMenuButton) {
-            this.setState({menuOpen: !this.state.menuOpen, disablePermanentDrawer: true})
-        }
+        this.setState({menuOpen: !this.state.menuOpen})
     }
-
-    componentDidMount() {
-        let  reset = ()=>{
-            if(window.innerWidth < 800){
-                this.setState({menuOpen: false, disablePermanentDrawer: false, activateToggleMenuButton: true})
-            }else{
-                this.setState({menuOpen: true, disablePermanentDrawer: true, activateToggleMenuButton: false})
-            }
-        }
-        reset()
-        window.addEventListener("resize", function (){
-            reset()
-        })
-    }
+    closeMenu= ()=>(this.setState({menuOpen: false}))
 
     render() {
         let {classes}= this.props
-        let marginLeft=`0px`
-        let contentWidth= "100%"
-        if(this.state.menuOpen){
-            contentWidth= `calc(100% -${drawerWidth}px)`
-            marginLeft= `${drawerWidth}px`
-        }
-
-        if(this.state.activateToggleMenuButton){
-            contentWidth= "100%"
-                marginLeft=`0px`
-        }else{
-        }
+        let {drawerPaper, drawerPaperOpen} = classes
+        let {menuOpen}= this.state
         return (
             <React.Fragment>
                 <PrimaryMenu triggerMenuClick={ this.openUserMenu }/>
                 <AppBar position={"relative"} style={{zIndex:0}}><Toolbar></Toolbar></AppBar>
-                <Drawer open={this.state.menuOpen} style={{width:drawerWidth}} classes={{paper: classes.drawerPaper}}
-                        variant={this.state.disablePermanentDrawer? "persistent": "temporary"}
+                <Drawer open={menuOpen} style={{}} classes={{paper: menuOpen === true ? drawerPaperOpen : drawerPaper}}
+                        variant={"permanent"}
+                        onClose={this.closeMenu}
                 >
                     <Toolbar/>
                     <UserMenuList>
                     </UserMenuList>
                 </Drawer>
-                <div style={{width:contentWidth, marginLeft: marginLeft}}>
-                    <Grid container justify={"center"} style={{marginTop:24}} wrap={"wrap"}>
-                        <Grid item md={11}>
+                <div className={classes.container} >
+                    <Grid container justify={"center"} >
+                        <Grid item xs={12} sm={12} md={12} style={{padding:"12px 12px"}}>
                             <Switch>
                                 <Route path={"/" }  exact component={defaultUserActivity}/>
                                 <Route path={"/list-stores" } exact component={storeActivity}/>

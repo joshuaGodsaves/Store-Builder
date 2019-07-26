@@ -212,16 +212,22 @@ class TableProductsView extends React.Component {
           </div>
         </React.Fragment>
     );
+    
     let ordersNotAvailable = (
       <div align="center">
       <Typography align={"center"}>
         You dont have any orders yet, click the button below to add some.
       </Typography>
-      <Button to={`/stores/${this.context.store.id}/orders/new-transaction`} component={Link} style={{margin:"16px 0px"}}>
+      <Button to={`/stores/${this.context.store.id}/orders/new-transaction`}
+       component={Link}
+       color={"primary"}
+        style={{margin:"16px 0px"}}>
         <Add/> CREATE
       </Button>
     </div>
     );
+
+
     return (
         <React.Fragment>
           {this.state.loading? <LinearProgress/> :

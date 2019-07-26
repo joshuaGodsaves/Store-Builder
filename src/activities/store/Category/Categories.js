@@ -4,6 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import {Add, Collections as Group, Delete, Edit, MoreHoriz, Refresh} from "@material-ui/icons";
 import {FaProductHunt} from "react-icons/fa/index"
 import {Link} from "react-router-dom";
+import PageToolbarContainer from "../components/PageToolbarContainer"
 import StoreContext from "../StoreContext"
 import {
     Checkbox,
@@ -88,7 +89,7 @@ class TableProductsView extends React.Component {
   render() {
     let { classes } = this.props;
     let selectedCategoriesOptionToolBar = (
-        <Paper>
+        <PageToolbarContainer>
           <Toolbar>
               <Typography variant={"h6"}> Bulk Action</Typography>
             <div>
@@ -98,29 +99,33 @@ class TableProductsView extends React.Component {
             <div>
             </div>
           </Toolbar>
-        </Paper>
+        </PageToolbarContainer>
     );
 
     let defaultToolbar = (
-        <Paper>
-          <Toolbar style={{display:'flex', justifyContent:"space-between"}} >
-            <Typography variant={"h6"}>
-              Store categories
-            </Typography>
-            <div>
-                <IconButton>
-                  <Refresh/>
-                </IconButton>
-                <Button
-                    variant={"contained"}
-                            to={`/stores/${this.context.store.id}/categories/new`}
-                            component={Link}>
-                  <Add/>
-                  CREATE
-                </Button>
-            </div>
-          </Toolbar>
-        </Paper>
+        <PageToolbarContainer>
+            <Grid container justify="space-between" alignItems={"center"}>
+              <Grid item>
+                <Typography variant={"h6"}>
+                  Store categories
+                </Typography>
+              </Grid>
+            
+              <Grid item>
+                  <IconButton  color={"primary"}>
+                    <Refresh/>
+                  </IconButton>
+                  <Button
+                      variant={"flat"}
+                      color={"primary"}
+                              to={`/stores/${this.context.store.id}/categories/new`}
+                              component={Link}>
+                    <Add/>
+                    CREATE
+                  </Button>
+              </Grid>
+            </Grid>
+        </PageToolbarContainer>
     );
 
     let productsAvailable = (
@@ -148,6 +153,7 @@ class TableProductsView extends React.Component {
                                 </Grid>
                                 <Grid item>
                                     <IconButton component={Link}
+                                     color={"primary"}
                                                 to={`/stores/${this.context.store.id}/categories/${category._id}`}><MoreHoriz/></IconButton>
                                 </Grid>
                             </Grid>

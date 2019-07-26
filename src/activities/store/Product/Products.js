@@ -3,6 +3,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Typography from "@material-ui/core/Typography";
 import {Add, Delete, Edit, MoreHoriz, SearchRounded} from "@material-ui/icons";
 import {Link} from "react-router-dom";
+import PageToolbarContainer from "../components/PageToolbarContainer"
 import AppContext from "../StoreContext"
 import {
   Avatar, Toolbar,
@@ -15,19 +16,9 @@ import {
   LinearProgress,
   Menu,
   MenuItem,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow
+  Paper
 } from "@material-ui/core";
-
-import PageAppBar from "../../../components/ActivityPrimaryAppBar";
-import AppToolBar from "../../../components/AppToolBar"
 import DataSource from "../../../DataSource"
-
-import {MdGroup, MdCollections, MdRefresh} from "react-icons/md";
 import {FaMailBulk, FaProductHunt, FaDollarSign} from "react-icons/fa";
 
 import Products from "../Category/Categories";
@@ -131,21 +122,20 @@ class TableProductsView extends React.Component {
           <MenuItem>Mute</MenuItem>
         </Menu>
     )
+
     let selectedProductOptionToolBar = (
-        <Paper>
-          <Toolbar>
+          <PageToolbarContainer>
             <div>
               <IconButton><Delete/></IconButton>
               <IconButton><Edit/></IconButton>
             </div>
             <Typography>Bulk Action</Typography>
-          </Toolbar>
-        </Paper>
+          </PageToolbarContainer>
     );
 
+
     let defaultToolbar = (
-        <Paper>
-          <Toolbar>
+          <PageToolbarContainer>
               <Grid container alignContent={"center"} alignItems={"center"} justify={"space-between"}>
                 <Grid item>
                   <Grid container alignItems={"center"}>
@@ -170,8 +160,7 @@ class TableProductsView extends React.Component {
                     </div>
                 </Grid>
               </Grid>
-          </Toolbar>
-        </Paper>
+          </PageToolbarContainer>
     );
 
     let productsAvailable = (
@@ -183,7 +172,7 @@ class TableProductsView extends React.Component {
 
 
         <Grid container justify={"center"}>
-          <Grid item xs={12}>
+          <Grid item xs={12} xl={12}>
             {this.state.products.map((product, i) => (
                 <Paper style={{margin:"8px 0px", padding:4}} elevation={1}>
                   <Grid container alignItems={"center"} justify={"space-between"}>
@@ -240,7 +229,9 @@ class TableProductsView extends React.Component {
         <Typography align={"center"}>
           You dont have any products yet, click the button above to add some.
         </Typography>
-        <Button to={`/stores/${this.context.store.id}/products/new`} component={Link} style={{margin:"16px 0px"}}>
+        <Button to={`/stores/${this.context.store.id}/products/new`} 
+        component={Link} style={{margin:"16px 0px"}} 
+        color={"primary"}>
           <Add/> CREATE
         </Button>
       </div>

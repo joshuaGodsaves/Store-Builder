@@ -4,7 +4,6 @@ import { APIURL } from './../../../DataSource';
 import StoreContext from "../StoreContext"
 
 export default class Component extends React.Component{
-
     static contextType= StoreContext
     state= {
         file: undefined,

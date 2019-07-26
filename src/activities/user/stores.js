@@ -37,14 +37,13 @@ class App extends Component {
     
     componentWillMount() {
         axios.get(`${APIURL}/user/${this.context.user.email}/stores`).then(v=>{
-            alert(v.data[0])
             this.setState({stores: v.data})
         })
     }
 
     openStore= (id)=>{
         return ()=>{
-            window.location.replace(`http://localhost:3000/stores/${id}`)
+            window.location.replace(`/stores/${id}`)
         }
     }
 
@@ -56,9 +55,8 @@ class App extends Component {
         return (
             <React.Fragment>
                 <Grid container spacing={8}>
-
                     {this.state.stores.map(v=>(
-                        <Grid item md={6}>
+                        <Grid item xs={12} sm={6}  md={6}>
                             <Card>
                                 <CardContent style={{ padding: 0}}>
                                     <div style={{padding:"16px 16px", background:"lightblue"}}>

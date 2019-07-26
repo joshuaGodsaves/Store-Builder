@@ -4,27 +4,19 @@ import Grid from "@material-ui/core/Grid";
 import Chip from "@material-ui/core/Chip";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import {FaMailBulk, FaProductHunt, FaDollarSign, FaTextWidth} from "react-icons/fa";
+import {FaDollarSign} from "react-icons/fa";
 import {APIURL} from "../../../DataSource"
 import ExternalImages from "../../../components/ExternalImages"
 import FileUploader from "../components/FileUpload"
 import {CloudUpload as UploadIcon, Link as LinkIcon, SelectAll as SelectIcon } from "@material-ui/icons";
 import {
-    ButtonBase,
-    Checkbox,
-    Dialog,
     CircularProgress,
-    DialogActions,
-    DialogContent,
     Divider,
     FormControl,
     FormHelperText,
     FormLabel,
     IconButton,
     InputBase,
-    List,
-    ListItem,
-    ListItemText,
     OutlinedInput as Input,
     Paper,
     Switch,
@@ -41,6 +33,8 @@ import axios from "axios";
 
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
+import {ProductInputContainer} from "../components/ProductComponents"
 
 let styles = {
     listItem: {
@@ -168,9 +162,7 @@ class Product extends React.Component {
         this.setState({saveingProduct: true})
         axios
             .post(
-                `http://localhost:5000/api/store/${
-                    this.context.store.id
-                    }/product`,
+                `${APIURL}/store/${this.context.store.id}/product`,
                 this.state.product,
                 {
                     headers: {
@@ -179,11 +171,9 @@ class Product extends React.Component {
                 }
             ).then(v => {
                 //After saveing product reload with product id
-                console.log(v.data)
                 this.setState({saveingProduct: false})
 
                 window.location.replace(`/stores/${this.context.store.id}/products`)
-            
         })
     };
 
@@ -266,9 +256,6 @@ class Product extends React.Component {
     externalAssetSelectCancelProcess = ()=>{
         this.setState({externalImages: false})
     }
-
-
-
     // Category Component functions
     saveCategory= (categories)=>{
         this.setState(state=>{state.product.categories= categories; state.openCategory= false; return state})
@@ -277,11 +264,7 @@ class Product extends React.Component {
     openCategory= ()=>{
         this.setState({openCategory: true})
     }
-
     componentDidMount() {
-        alert(JSON.stringify(this.state.product))
-
-
         let {match: {params}} = this.props
         if (params.product == "new") {
             this.setState({isNewProduct: true})
@@ -317,22 +300,16 @@ class Product extends React.Component {
                 {this.state.externalImages ? <ExternalImages open={this.state.externalImages} finishProcess={this.externalAssetSelectFinishProcess} cancelProcess={this.externalAssetSelectCancelProcess}/> : null}
                 <Grid container spacing={24} style={{background:"rgba(0,0,0,.5)"}}>
                     <Grid item sm={12} xs={12} md={6}>
+
                             <Paper  style={{padding: 24}} elevation={1}>
-                                <FormControl fullWidth className={classes.rootFormControls}>
-                                    <FormLabel> Produc title</FormLabel>
-                                    <Input
-                                        value={product.title}
-                                        onChange={this.watchInput("title")}
-                                    />
-                                </FormControl>
-                                <FormControl fullWidth className={classes.rootFormControls}>
-                                    <FormLabel>Product caption</FormLabel>
-                                    <Input
-                                        value={product.caption}
-                                        onChange={this.watchInput("caption")}
-                                    />
-                                </FormControl>
+                                <ProductInputContainer label={"Produc title"} 
+                                                        onChange={this.watchInput("caption")}  
+                                                        value={product.caption}/>
+                                <ProductInputContainer label={"Product caption"} 
+                                                        onChange={this.watchInput("title")}  
+                                                        value={product.title}/>
                             </Paper>
+                            
                             <Paper style={{display: "flex", justifyContent: "space-between", padding: 24}}
                                    elevation={1} className={classes.ymargin}>
                                 <FormControl fullWidth className={classes.rootFormControls}
@@ -455,30 +432,6 @@ class Product extends React.Component {
             </React.Fragment>
         );
 
-        let visualComponent = (
-            <React.Fragment>
-                {this.state.selectGalleryItemDrawer ?
-                    <ImageSelectionComponent
-                        open={this.state.selectGalleryItemDrawer}
-                        selectSingle={this.selectSingleGalleryItem}
-                        closeingDrawer={this.closeingGalleryImageDrawer}/> : null}
-                <Grid container className={classes.primarySpacing} spacing={12}>
-                    <Grid item xs={12}>
-                        <Typography variant={"h6"}>Gallery</Typography>
-                        <Grid container spacing={8}>
-                            {this.state.product.gallery.map((url, index) => (
-                                <Grid item >
-                                    <ButtonBase onClick={this.openGalleryItemDrawer(index)} style={{width: "200px", height: "200px", background: "red"}}></ButtonBase>
-                                </Grid>
-                            ))}
-                        </Grid>
-                    </Grid>
-                    <Grid item>
-                        <Typography variant={"h6"}>Video </Typography>
-                    </Grid>
-                </Grid>
-            </React.Fragment>
-        )
         return (
             <React.Fragment>
                 <PageAppBar nospacing>
@@ -489,10 +442,6 @@ class Product extends React.Component {
                         onChange={this.tabChange}
                     >
                         <Tab label={"Primary"} style={{color: '#404040'}}/>
-                        <Tab
-                            label={"Visuals"}
-                            style={{color: '#404040'}}
-                        />
                         <Tab label={"Advanced"} style={{color: '#404040'}}/>
                     </Tabs>
                     <div style={{display:"flex", alignContent:"center", alignItems:"center"}}>
@@ -506,7 +455,6 @@ class Product extends React.Component {
                 <Grid container style={{padding: "12px 12px"}} justify={"center"}>
                     <Grid item xs={12}  sm={10} md={12} >
                     {this.state.currentTab == 0 && primaryComponent}
-                    {this.state.currentTab == 1 && visualComponent}
                     </Grid>
                 </Grid>
 

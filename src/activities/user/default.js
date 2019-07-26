@@ -5,12 +5,11 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import {
     CircularProgress, List, ListItem,
     Grid, Typography, ListItemText, ListItemIcon,
-    Button,Paper, ExpansionPanel, ExpansionPanelSummary,
-    ExpansionPanelActions, ExpansionPanelDetails, IconButton
+    Button
 } from "@material-ui/core"
-import {FaUserCircle} from "react-icons/fa"
-import {ArrowDownward, ArrowDropDown, MessageOutlined, Store} from "@material-ui/icons"
+import {MessageOutlined, Store} from "@material-ui/icons"
 import {Switch, Link, Route} from "react-router-dom";
+import AppExpansionComponent from "./components/AppExpansionComponent"
 
 let drawerWidth = 220;
 
@@ -47,7 +46,6 @@ class App extends Component {
         if(result.data.length== 0){
             // no stores available
         }else{
-            alert(JSON.stringify(result.data))
             // stores loaded
             this.setState({loading: false, stores:result.data})
         }
@@ -67,33 +65,19 @@ class App extends Component {
 
     render() {
         let {stores, loading, createingStore}= this.state
+
+
         return (
             <React.Fragment>
                 <Grid container spacing={8}>
-                    <Grid item md={12}>
-                        <Paper style={{padding: 24, height: 300, display:"flex", alignItems:"flex-end"}}>
-                            <div>
-                                <div style={{width:150, height:150, 
-                                    borderRadius:100, background:"ghostwhite",
-                                     margin:"16px 0px", display:'flex',alignItems:"center", justifyItems:"center", justifyContent:"center"}}> 
-                                    <FaUserCircle style={{fontSize:100}}/>
-                                </div>
-                                <Typography variant={"h4"}>  User Name</Typography>
-                            </div>
-                            <div>
-                               
-                            </div>
-                        </Paper>
-                    </Grid>
-
-                    <Grid item sm={11} md={6}>
-                        <ExpansionPanel >
-                            <ExpansionPanelSummary expandIcon={<ArrowDownward/>}  style={{background:"ghostwhite"}}>
-                                <Store style={{marginRight:"12px", color:"grey"}}/>
-                                <Typography> Stores </Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                
+                    <Grid item xs={11} sm={6}  md={6}>
+                        <AppExpansionComponent header={
+                            <>
+                            <Store style={{marginRight:"12px", color:"grey"}}/>
+                            <Typography> Stores </Typography>
+                            </>
+                        } content={
+                            <>
                                 {loading? <CircularProgress/>:""}
 
                                 {stores.length==0 
@@ -111,8 +95,9 @@ class App extends Component {
                                     )
                                 )}
                                 </List>
-                            </ExpansionPanelDetails>
-                            <ExpansionPanelActions style={{alignItems:"center"}}>
+                            </>
+                        } actions={
+                            <>
                                 <span style={{display:"flex",alignItems:"center"}}>
                                     {createingStore? <CircularProgress/> :""}
                                     <Button onClick={this.createStore}>
@@ -120,22 +105,24 @@ class App extends Component {
                                     </Button>
                                 </span>
                                 <Button>Visit</Button>
-                            </ExpansionPanelActions>
-                        </ExpansionPanel>
+                            </>
+                        }/>
                     </Grid>
-                    <Grid item  sm={11}  md={6}>
-                        <ExpansionPanel>
-                            <ExpansionPanelSummary expandIcon={<ArrowDownward/> } style={{background:"ghostwhite"}}>
+                    <Grid item xs={11} sm={6}  md={6}>
+                        <AppExpansionComponent actions={
+                            <> 
+                                <Button>Open</Button>
+                            </>
+                        } header={
+                            <>
                                 <MessageOutlined  style={{marginRight:"12px", color:"grey"}}/>
                                 <Typography> Messages </Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                <Typography> No Messages available</Typography>
-                            </ExpansionPanelDetails>
-                            <ExpansionPanelActions>
-                                <Button>Open</Button>
-                            </ExpansionPanelActions>
-                        </ExpansionPanel>
+                            </>
+                        } content={
+                            <>
+                            <Typography> No Messages available</Typography>
+                            </>
+                        }/>
                     </Grid>
 
                 </Grid>
