@@ -39,7 +39,7 @@ class App extends Component {
                 <Grid container spacing={8}>
                     <Grid item md={12}>
                         <Paper style={{padding: 24}}>
-                            <Typography variant={"h4"}> Realtime Analytics Still on development</Typography>
+                            
                         </Paper>
                     </Grid>
                     <Grid item md={6}>

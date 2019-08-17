@@ -1,0 +1,74 @@
+import React from "react";
+import { Drawer, AppBar, Toolbar, IconButton } from "@material-ui/core";
+import {Menu} from "@material-ui/icons"
+import withStyles from "@material-ui/core/styles/withStyles";
+
+
+
+
+
+const width= 225;
+
+let styles = theme => ({
+    rootDrawer:{
+        width: `${width}px`,
+        [theme.breakpoints.up("sm")]:{
+        },
+        [theme.breakpoints.down("sm")]:{
+            width: 0
+         }
+    },
+    drawerOpen: {
+        width: `${width}px`,
+        [theme.breakpoints.up("sm")]:{
+        },
+        [theme.breakpoints.down("sm")]:{
+            width: "225px"
+         }
+    },
+    toggler:{
+        position:"absolute",
+        right:"100%",
+        zIndex:"5000"
+    }
+})
+
+class AppDrawer extends React.Component {
+
+    state= {
+        open: false
+    }
+
+    closeDrawer=()=> {
+        this.setState({close:false});
+    }
+    openDrawer=()=>{
+        this.setState({close:true});
+    }
+
+    componentDidMount(){
+        let props= this.props;
+        var ch= props.triggerOpen ? props.triggerOpen(this.openDrawer) : "";
+        var chc= props.triggerClose ? props.triggerClose(this.closeDrawer) : "";
+    }
+    
+    render() {
+        let {classes}=this.props;
+
+        let {open} = this.state;
+        return (
+            <Drawer classes={{paper: open ? classes.drawerOpen : classes.rootDrawer}} variant={"permanent"} 
+            open= {this.open}
+            onClose={this.closeDrawer}>
+                <AppBar position={"relative"}  elevation={0} style={{background:"darkblue"}}>
+                    <Toolbar/>
+                </AppBar>
+                <div style={{width:"100%"}}>
+                        {this.props.children}
+                </div>
+            </Drawer>
+        )
+    }
+}
+
+export default withStyles(styles)(AppDrawer);

@@ -40,8 +40,6 @@ componentWillMount() {
             <Route path={"/login"} exact  component={loginPage} />
             <Route path={"/stores/:store"}   component={storeIndex} />
             <Route path={"/"}   component={userIndex} />
-            {/*<Route path={"/store/:store"} exact component={storeIndexPage}/>*/}
-            {/*<Route path={"/store/:store"} exact component={storeIndexPage}/>*/}
           </Switch>
         </AppContext.Provider>
       </BrowserRouter>

@@ -29,7 +29,7 @@ class App extends Component {
             <React.Fragment>
                 <List>
                     <ListItem component={Link} to={"/list-stores"} >
-                        <ListItemIcon><Shop/> </ListItemIcon>
+                        <ListItemIcon color={"secondary"}><Shop/> </ListItemIcon>
                         <ListItemText> Stores</ListItemText>
                     </ListItem>
                     <ListItem component={Link} to={"/"}>

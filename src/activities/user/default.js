@@ -25,7 +25,7 @@ class App extends Component {
     constructor(props) {
         super(props);
     }
-
+    
     state={
         menuOpen: true,
         stores:[],
@@ -39,8 +39,11 @@ class App extends Component {
         this.loadUserStores()
     }
 
+
     loadUserStores= async ()=>{
+
         this.setState({loading: true})
+
         let result = await this.dataSource.getStores(this.context.user.email);
         this.setState({loading: false})
         if(result.data.length== 0){
@@ -60,7 +63,7 @@ class App extends Component {
     }
 
     loadRoute=(route)=>{
-        return ()=>{window.location.replace(`/stores/${route}`); alert()}
+        return ()=>{window.location.replace(`/stores/${route}`);}
     }
 
     render() {
@@ -82,7 +85,6 @@ class App extends Component {
 
                                 {stores.length==0 
                                     && loading !=true? <Typography> No Stores Available</Typography>:""}
-
                                 <List>
                                 {stores.map(v=>
                                     (

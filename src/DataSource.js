@@ -19,6 +19,9 @@ export default class DataSource {
     constructor(accessToken, storeId) {
         this.API_URL = `${API_URL}/store`
         this.storeId = storeId
+        
+        console.log(accessToken)
+
         this.axios = axios.create({
             headers: {
                 "X-auth-license": accessToken
@@ -85,8 +88,9 @@ export default class DataSource {
     }
 
     async getStoreProducts() {
+     
         let categories = await this.axios.get(`${this.API_URL}/${this.storeId}/product`)
-
+        alert('Store')
         return categories;
     }
 
@@ -189,11 +193,13 @@ export default class DataSource {
 
     async createStore (id){
         let result= await this.axios.post(`${API_URL}/store`, {owner: id})
+       
         return result
     }
 
     async getStores (email){
         let result= await this.axios.get(`${API_URL}/user/${email}/stores`)
+
         return result
     }
 

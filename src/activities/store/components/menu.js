@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-
 import {Link} from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import ListItemIcon from "@material-ui/core/es/ListItemIcon/ListItemIcon";
@@ -9,11 +8,13 @@ import Divider from "@material-ui/core/Divider";
 import {FaLayerGroup} from "react-icons/fa"
 import { CategorySharp} from "@material-ui/icons";
 import StoreContext from "../StoreContext"
+
 import {
     ListSubheader,
     ListItem, ButtonBase,
     List
 } from "@material-ui/core"
+
 import {
     AddShoppingCartRounded as AddShoppingCart, Business, PeopleOutline
 } from "@material-ui/icons"

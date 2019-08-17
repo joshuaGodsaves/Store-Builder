@@ -12,6 +12,7 @@
     "dotenv": "^8.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.7.0",
+    "react-chartist": "^0.13.3",
     "react-dom": "^16.7.0",
     "react-icons": "^3.7.0",
     "react-pose": "^4.0.8",

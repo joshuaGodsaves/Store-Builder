@@ -11,6 +11,7 @@ let styles = theme => ({
     boxShadow: "none"
   }
 });
+
 class CustomSystemAppBar extends React.Component {
   render() {
     let { classes } = this.props;
