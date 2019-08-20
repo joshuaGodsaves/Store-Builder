@@ -60,10 +60,10 @@ class AppDrawer extends React.Component {
             <Drawer classes={{paper: open ? classes.drawerOpen : classes.rootDrawer}} variant={"permanent"} 
             open= {this.open}
             onClose={this.closeDrawer}>
-                <AppBar position={"relative"}  elevation={0} style={{background:"darkblue"}}>
+                <AppBar position={"fixed"}  elevation={0} style={{background:"darkblue"}}>
                     <Toolbar/>
                 </AppBar>
-                <div style={{width:"100%"}}>
+                <div style={{width:"100%", paddingTop:64, left:0, background:"ghostwhite", overflowY:"scroll"}}>
                         {this.props.children}
                 </div>
             </Drawer>

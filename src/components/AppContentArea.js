@@ -5,7 +5,6 @@ import withStyles from "@material-ui/core/styles/withStyles";
 const width= 225;
 let styles = theme => ({
     rootArea:{
-        background:"orange",
         margin:0,
         padding:0,
         marginTop:"70px",
