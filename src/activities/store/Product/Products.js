@@ -1,41 +1,40 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Typography from "@material-ui/core/Typography";
-import {Add, Delete, Edit, MoreHoriz, SearchRounded} from "@material-ui/icons";
-import {Link} from "react-router-dom";
-import PageToolbarContainer from "../components/PageToolbarContainer"
+import { Add, Delete, Edit, MoreHoriz, SearchRounded } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 import AppContext from "../StoreContext"
+import PageToolbarContainer from "../components/PageToolbarContainer"
 import {
-  Avatar, Toolbar,
-  Button,
-  Checkbox,
-  Chip,
-  IconButton,
+  Avatar, Toolbar, AppBar,
+  Typography,
+  Button, FormControl, Checkbox, Chip, IconButton,
   InputBase,
-    Grid,
+  Grid,
   LinearProgress,
   Menu,
   MenuItem,
   Paper
 } from "@material-ui/core";
 import DataSource from "../../../DataSource"
-import {FaMailBulk, FaProductHunt, FaDollarSign} from "react-icons/fa";
-
-import Products from "../Category/Categories";
-
+import { FaDollarSign } from "react-icons/fa";
 let styles = {
   ProductItemRoot: {
     padding: 8
   },
-  toolbar: {
-    display: "flex",
-    justifyContent: "space-between"
+  rootInput: {
+    paddingLeft: 8,
+    paddingRigh: 8,
+    paddingTop: 8,
+    paddingBottom: 8,
+    fontSize: 16,
+    fontWeight: 500,
+    color: "ghostwhite"
   }
 };
 
 class TableProductsView extends React.Component {
   dataSource;
-  constructor(props){
+  constructor(props) {
     super(props)
 
   }
@@ -50,12 +49,12 @@ class TableProductsView extends React.Component {
   selectAll = (event, checked) => {
     if (checked) {
       this.setState(state => {
-        state.selected= state.products.map(v=> v._id)
+        state.selected = state.products.map(v => v._id)
         return state;
       });
     } else {
       this.setState(state => {
-        state.selected= []
+        state.selected = []
         return state;
       });
     }
@@ -64,12 +63,12 @@ class TableProductsView extends React.Component {
   selectSingle = itemKey => {
     return (event, checked) => {
       this.setState(state => {
-        if(checked){
+        if (checked) {
           //push
           state.selected.push(itemKey)
-        }else{
+        } else {
           //Pull out
-          state.selected= state.selected.filter(v=> v!=itemKey)
+          state.selected = state.selected.filter(v => v != itemKey)
         }
         return state;
       });
@@ -77,10 +76,10 @@ class TableProductsView extends React.Component {
   };
 
   loadProducts = () => {
-    this.dataSource.getStoreProducts().then(v=>{
-      this.setState({products: v.data.items, loading: false})
-    }).catch(v=> console.log(v))
-    this.setState({loading: true})
+    this.dataSource.getStoreProducts().then(v => {
+      this.setState({ products: v.data.items, loading: false })
+    }).catch(v => console.log(v))
+    this.setState({ loading: true })
   }
 
   componentWillMount() {
@@ -89,22 +88,22 @@ class TableProductsView extends React.Component {
     this.loadProducts()
   }
 
-  static contextType= AppContext
+  static contextType = AppContext
 
   openMenu = (product) => {
     return (event) => {
-      this.setState({activeProduct: product})
+      this.setState({ activeProduct: product })
       event.persist()
-      this.setState({anchorEl: event.target, activeProduct: product})
+      this.setState({ anchorEl: event.target, activeProduct: product })
     }
   }
 
   closeMenu = () => {
-    this.setState({anchorEl: null})
+    this.setState({ anchorEl: null })
   }
 
   deleteProduct = async () => {
-    let {activeProduct} = this.state
+    let { activeProduct } = this.state
     let result = await this.dataSource.deleteStoreProduct(activeProduct._id)
     this.closeMenu()
     this.loadProducts()
@@ -113,112 +112,112 @@ class TableProductsView extends React.Component {
 
   render() {
     let { classes } = this.props;
-    let {anchorEl, activeProduct} = this.state
+    let { anchorEl, activeProduct } = this.state
     let productMenu = (
-        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} id="simple-menu" onClose={this.closeMenu}>
-          <MenuItem onClick={this.closeMenu}
-                    component={Link} to={`/stores/${this.context.store.id}/products/${activeProduct ? activeProduct._id : undefined}`}>View</MenuItem>
-          <MenuItem onClick={this.deleteProduct}>Delete</MenuItem>
-          <MenuItem>Mute</MenuItem>
-        </Menu>
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} id="simple-menu" onClose={this.closeMenu}>
+        <MenuItem onClick={this.closeMenu}
+          component={Link} to={`/stores/${this.context.store.id}/products/${activeProduct ? activeProduct._id : undefined}`}>View</MenuItem>
+        <MenuItem onClick={this.deleteProduct}>Delete</MenuItem>
+        <MenuItem>Mute</MenuItem>
+      </Menu>
     )
 
-    let selectedProductOptionToolBar = (
-          <PageToolbarContainer>
-            <div>
-              <IconButton><Delete/></IconButton>
-              <IconButton><Edit/></IconButton>
+    let defaultToolbarArea = (
+      <PageToolbarContainer>
+        <Grid container justify={"center"}>
+          <Grid item xs={11} sm={10} md={10}>
+            <div style={{ margin: "16px 0px" }}>
+              <Typography variant={"h5"} align={"center"}>Products Page</Typography>
             </div>
-            <Typography>Bulk Action</Typography>
-          </PageToolbarContainer>
-    );
-
-
-    let defaultToolbar = (
-          <PageToolbarContainer>
-              <Grid container alignContent={"center"} alignItems={"center"} justify={"space-between"}>
-                <Grid item>
-                  <Grid container alignItems={"center"}>
-                    <Typography variant={"h6"}>
-                      Products
-                    </Typography>
-                  </Grid>
-                </Grid>
-
-                <Grid item sm={6}>
-                  <Paper style={{overflow:"hidden", position:'relative', padding:"0px 0px", background:"rgba(0,0,0,.5)"}} elevation={0}>
-                    <InputBase style={{ padding:'4px 8px', position:'relative', width:"100%"}}
-                    startAdornment={<SearchRounded/>}/>
+            <div style={{ margin: "16px 0px"}}>
+              <Grid container justify={"center"}>
+                <Grid item xs={12} sm={12} md={8} lg={6} xl={6}>
+                  <Paper style={{ background: "transparent" }}>
+                    <FormControl fullWidth>
+                      <InputBase
+                        style={{ color: "ghostwhite" }}
+                        startAdornment={<SearchRounded color={"inherit"} />}
+                        endAdornment={
+                          <Button style={{ color: "ghostwhite" }} size={"small"} color={"inherit"}>Search</Button>
+                        }
+                        classes={{ input: classes.rootInput }}
+                        style={{ background: "rgba(0,0,0,.5)", padding: "4px 12px", borderRadius: "4px" }} />
+                    </FormControl>
                   </Paper>
                 </Grid>
+              </Grid>
+              <Grid container justify={"center"}>
                 <Grid item>
-                    <div>
-                      <Button to={`/stores/${this.context.store.id}/products/new`} component={Link} variant={"contained"} size={"large"}>
-                        <Add/>
-                        <Typography color={"inherit"}>CREATE</Typography>
-                      </Button>
-                    </div>
+                  <Button>
+                    Bulk Add
+                    </Button>
+                </Grid>
+                <Grid item>
+                  <Button component={Link} to={`/stores/${this.context.store.id}/products/new`}>
+                    New Product
+                    </Button>
                 </Grid>
               </Grid>
-          </PageToolbarContainer>
+            </div>
+          </Grid>
+        </Grid>
+      </PageToolbarContainer>
     );
 
     let productsAvailable = (
       <React.Fragment>
         {productMenu}
-        {this.state.selected.length !== 0
-            ? selectedProductOptionToolBar
-            : defaultToolbar }
-
-
+        {defaultToolbarArea}
         <Grid container justify={"center"}>
-          <Grid item xs={12} xl={12}>
+          <Grid item xs={12} sm={10}>
             {this.state.products.map((product, i) => (
-                <Paper style={{margin:"8px 0px", padding:4}} elevation={1}>
-                  <Grid container alignItems={"center"} justify={"space-between"}>
-                    <Grid item xs={12} md={6}>
-                      <Grid container>
-                        <Grid item>
-                          <Checkbox
-                              color={"primary"}
-                              checked={this.state.selected.some(v2 => v2 == product._id)}
-                              onChange={this.selectSingle(product._id)}
-                          />
-                        </Grid>
-                        <Grid item style={{display:"flex", alignItems:"center"}} >
-                          <span>
-                          <Avatar src={product.mainImageLink}/>
-                          </span>
-                          <span style={{margin:"0px 12px"}}>
-                          {product.title}
-                            </span>
-                        </Grid>
+              <Paper style={{ margin: "8px 0px", padding: 4 }} elevation={1}>
+                <Grid container alignItems={"center"} alignContent={"center"} justify={"space-between"}>
+                  <Grid item xs={12} md={6}>
+                    <Grid container>
+                      <Grid item>
+                        <Checkbox
+                          color={"primary"}
+                          checked={this.state.selected.some(v2 => v2 == product._id)}
+                          onChange={this.selectSingle(product._id)}
+                        />
                       </Grid>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Grid container justify={"space-between"} alignItems={"center"}>
-                        <Grid>
-                          <Chip variant={"outlined"} label={"avail"} color={"primary"}/>
-                        </Grid>
-                        <Grid item>
-                          {new Date().toDateString()}
-                        </Grid>
-                        <Grid item>
-                          <div>
-                            <Chip label={product.categories.length} color={"primary"}/>
-                          </div>
-                        </Grid>
-                        <Grid item>
-                          <Chip label={product.sellingPrice || "$00.00"} variant={"outlined"} icon={<FaDollarSign/>} color={"primary"}/>
-                        </Grid>
-                        <Grid item>
-                          <IconButton color={"primary"}  onClick={this.openMenu(product)}><MoreHoriz/></IconButton>
-                        </Grid>
+                      <Grid item style={{ display: "flex", alignItems: "center" }} >
+                        <span>
+                          <Avatar src={product.mainImageLink} />
+                        </span>
+                        <span style={{ margin: "0px 12px" }}>
+                          {product.title}
+                        </span>
                       </Grid>
                     </Grid>
                   </Grid>
-                </Paper>
-                ))}
+                  <Grid item xs={12} md={6}>
+                    <Grid container justify={"space-between"} alignItems={"center"}>
+                      <Grid item style={{paddingLeft:"12px"}}>
+                        {"Category"}
+                      </Grid>
+                      <Grid item>
+                        <div>
+                          <Chip label={product.categories.length} color={"primary"} />
+                        </div>
+                      </Grid>
+                      <Grid item>
+                        <div>
+                          <Chip label={product.categories.length} color={"primary"} />
+                        </div>
+                      </Grid>
+                      <Grid item>
+                        <Chip label={product.sellingPrice || "$00.00"} variant={"outlined"} icon={<FaDollarSign />} color={"primary"} />
+                      </Grid>
+                      <Grid item>
+                        <IconButton color={"primary"} onClick={this.openMenu(product)}><MoreHoriz /></IconButton>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Paper>
+            ))}
           </Grid>
         </Grid>
       </React.Fragment>
@@ -229,22 +228,22 @@ class TableProductsView extends React.Component {
         <Typography align={"center"}>
           You dont have any products yet, click the button above to add some.
         </Typography>
-        <Button to={`/stores/${this.context.store.id}/products/new`} 
-        component={Link} style={{margin:"16px 0px"}} 
-        color={"primary"}>
-          <Add/> CREATE
+        <Button to={`/stores/${this.context.store.id}/products/new`}
+          component={Link} style={{ margin: "16px 0px" }}
+          color={"primary"}>
+          <Add /> CREATE
         </Button>
       </div>
     );
 
     return (
       <React.Fragment>
-        {this.state.loading? <LinearProgress/> :
-            <div>
-              {this.state.products.length == 0
-                  ? productsNotAvailable
-                  : productsAvailable}
-            </div>
+        {this.state.loading ? <LinearProgress /> :
+          <div>
+            {this.state.products.length == 0
+              ? productsNotAvailable
+              : productsAvailable}
+          </div>
         }
       </React.Fragment>
     );

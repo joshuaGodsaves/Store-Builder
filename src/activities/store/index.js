@@ -14,6 +14,7 @@ import categoryIndex from "./Category/Index"
 import customerIndex from "./Customer/Index"
 import settings from "./Settings"
 
+import CoreLayout from "../../components/CoreLayout"
 import AppDrawer from "../../components/AppDrawer"
 import AppContentArea from "../../components/AppContentArea"
 
@@ -49,30 +50,29 @@ class App extends Component {
         let {menuOpen}= this.state
         let {drawerPaper, drawerPaperOpen}= classes
         return (
-            <StoreContext.Provider value={{store: {id: this.state.activeStore, token:"undefined"}}}>
-                <PrimaryMenu triggerMenuClick={ this.openUserMenu }/>
-                <AppDrawer>
-                    <StorePrimaryMenu store={this.state.activeStore}>
-                    </StorePrimaryMenu>
-                </AppDrawer>
-                 
-                 <AppContentArea>
-                 <Grid container justify={"center"}>
-                            <Grid item xs={12} sm={12} md={12}>
-                                <Switch>
-                                    <Route path={`/stores/${this.state.activeStore}`} exact  component={defaultStorePage}/>
-                                    <Route path={`/stores/${this.state.activeStore}/products` }   component={productIndex}/>
-                                    <Route path={`/stores/${this.state.activeStore}/orders` }   component={orderIndex}/>
-                                    <Route path={`/stores/${this.state.activeStore}/categories` }   component={categoryIndex}/>
-                                    <Route path={`/stores/${this.state.activeStore}/customers` }   component={customerIndex}/>
-                                    <Route path={`/stores/${this.state.activeStore}/sections` }   component={sectionIndex}/>
-                                    <Route path={`/stores/${this.state.activeStore}/settings` }   component={settings}/>
-                                </Switch>
-                            </Grid>
+      
+            <StoreContext.Provider value={{ store: { id: this.state.activeStore, token: "undefined" } }}>
+
+                <CoreLayout
+                    drawerItems={
+                        <StorePrimaryMenu store={this.state.activeStore}>
+                        </StorePrimaryMenu>
+                    }
+                    content={
+                        <Grid item xs={12} sm={12} md={12}>
+                            <Switch>
+                                <Route path={`/stores/${this.state.activeStore}`} exact component={defaultStorePage} />
+                                <Route path={`/stores/${this.state.activeStore}/products`} component={productIndex} />
+                                <Route path={`/stores/${this.state.activeStore}/orders`} component={orderIndex} />
+                                <Route path={`/stores/${this.state.activeStore}/categories`} component={categoryIndex} />
+                                <Route path={`/stores/${this.state.activeStore}/customers`} component={customerIndex} />
+                                <Route path={`/stores/${this.state.activeStore}/sections`} component={sectionIndex} />
+                                <Route path={`/stores/${this.state.activeStore}/settings`} component={settings} />
+                            </Switch>
                         </Grid>
-                 </AppContentArea>
-                       
-                    
+                    }
+                />
+
             </StoreContext.Provider>
 
         );

@@ -24,8 +24,6 @@ import {
     Tabs
 } from "@material-ui/core";
 import CategoryLite from '../components/CategoryLite'
-
-
 import  ImageSelectionComponent from "../../../components/ImageSelectionComponent"
 import PageAppBar from "../../../components/ActivityPrimaryAppBar"
 import StoreContext from "../StoreContext"
@@ -204,6 +202,7 @@ class Product extends React.Component {
             return state;
         })
     }
+    
     selectMainImage = (url) => {
         this.setState(state => {
             state.product.mainImageLink = url

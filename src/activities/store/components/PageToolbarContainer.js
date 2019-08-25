@@ -1,17 +1,28 @@
 import React from "react"
-import withStyles from "@material-ui/core/styles/withStyles"
-import {Toolbar} from "@material-ui/core"
+import withStyles from "@material-ui/core/styles/withStyles";
+
+import {Toolbar, Grid, AppBar} from "@material-ui/core";
+
 let styles= {
 
 }
+
 class PageToolBarContainer extends React.Component{
 
     render(){
         return(
             <>
-                <Toolbar  style={{borderBottom:"2px solid blue"}} variant={"dense"}>
-                    {this.props.children}
-                </Toolbar>
+                <Grid container style={{
+                    height: "200px", background: "darkblue"
+                }} alignContent={"flex-end"}>
+                    <Grid item sm={12}>
+                        {/* <AppBar position={"relative"}>
+                            <Toolbar variant={"dense"}> */}
+                                {this.props.children}
+                            {/* </Toolbar>
+                        </AppBar> */}
+                    </Grid>
+                </Grid>
             </>
         )
     }

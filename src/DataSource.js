@@ -90,7 +90,6 @@ export default class DataSource {
     async getStoreProducts() {
      
         let categories = await this.axios.get(`${this.API_URL}/${this.storeId}/product`)
-        alert('Store')
         return categories;
     }
 
