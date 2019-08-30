@@ -91,7 +91,7 @@ class GeneralTab extends React.Component {
         let {classes, product, categoryChange, tagsChange, watchText, selectMainImage, brandChange, brands} = this.props;
 
         const productTypeMenu = (
-            <Menu anchorEl={typeAnchorEl} open={typeAnchorEl ? true : false} onClose={this.closeType}>
+            <Menu anchorEl={typeAnchorEl} open={typeAnchorEl ? true : typeAnchorEl} onClose={this.closeType}>
                 <MenuItem onClick={this.closeType}>Type 1</MenuItem>
                 <MenuItem onClick={this.closeType}>Type 2</MenuItem>
             </Menu>
@@ -240,12 +240,8 @@ class GeneralTab extends React.Component {
 class Component extends React.Component {
 
     static contextType = StoreContext;
-
-
     state = {
-        tabIndex: 0
-    };
-    state = {
+        tabIndex: 0,
         product: {
             image: null, title: null, caption: null, description: null,
             categories: [], brand: null, sellingPrice: null, costPrice: null,
@@ -290,7 +286,7 @@ class Component extends React.Component {
                         "X-auth-license": this.context.store.token
                     }
                 }
-            ).then(v => {
+            ).then(() => {
             this.setState({saveingProduct: false, loading: false});
             this.setState({updated: true});
                 setTimeout(() => {
@@ -298,7 +294,7 @@ class Component extends React.Component {
                 }, 2000);
                 this.loadProduct(params.product)
 
-            }).catch(v => console.log(v))
+            }).catch(()=>{})
 
     };
 

@@ -2,38 +2,30 @@ import React, {Component} from "react";
 import StoreContext from "./StoreContext"
 import withStyles from "@material-ui/core/styles/withStyles";
 import axios from "axios"
+import AppInput from "../../components/AppInput"
+import AppPaper from "../../components/AppPaper"
 import {APIURL} from "../../DataSource";
+import DataSource from "../../DataSource"
 import {
-    Grid,
-    Typography,
-    AppBar,
-    Toolbar,
-    Drawer,
-    ButtonBase,
-    List,
     Button,
-    Paper,
-    Avatar,
     ExpansionPanel,
-    ExpansionPanelSummary,
-    InputLabel,
-    FormControl,
-    InputBase,
-    Input,
-    FilledInput,
-    ExpansionPanelActions,
+    Select, MenuItem,
     ExpansionPanelDetails,
-    IconButton,
-    Card,
-    CardContent,
-    Divider,
-    CardActions,
-    FormControlLabel,
-    FormLabel
+    ExpansionPanelSummary,
+    Tab, Tabs,
+    FilledInput,
+    FormControl,
+    OutlinedInput,
+    FormLabel,
+    TextField,
+    Grid,
+    InputBase,
+    Toolbar,
+    Typography
 } from "@material-ui/core"
 
-import {FaFacebook, FaInstagram, FaTwitter, FaWhatsapp, FaTelegram,FaGooglePlusG} from "react-icons/fa";
-import {ArrowDownward, ArrowDropDown, SupervisedUserCircle, NotificationImportantOutlined, NewReleasesOutlined} from "@material-ui/icons"
+import {FaFacebook, FaInstagram, FaWhatsapp, FaTwitter} from "react-icons/fa";
+import {ArrowDownward} from "@material-ui/icons"
 
 let drawerWidth = 220;
 
@@ -42,20 +34,10 @@ let styles = theme => ({
         width: drawerWidth
     }, inputRoot: {
         padding: "20px 8px 8px 8px"
-    },yMargin: {
+    }, yMargin: {
         margin: "12px 0px"
     }
 });
-
-function EditableInput (props){
-     return   (
-         <FormControl fullWidth>
-             <FormLabel htmlFor={"business_name"}>{props.label}</FormLabel>
-             <FilledInput id={"business_name"} classes={{input: props.classes.inputRoot}}  value={props.value}/>
-         </FormControl>
-     )
-
-}
 
 class App extends Component {
 
@@ -63,131 +45,154 @@ class App extends Component {
         super(props);
     }
 
-    state={
+    state = {
+        social: {},
+        siteDetails: {},
+        title: undefined,
+        description: undefined,
+        location: {},
+        phone: undefined,
+        email: undefined,
+        status: undefined
+    }
+
+    static contextType = StoreContext
+    watchText = (prop) => {
+        return (e) => {
+            e.persist();
+            this.setState(state => {
+                state[prop] = e.target.value;
+                return state;
+            })
+
+        }
+    }
+    watchSocial = (prop) => {
+        return (e) => {
+            e.persist();
+            this.setState(state => {
+                state.social[prop] = e.target.value;
+                return state;
+            })
+        }
+    }
+
+    save = async () => {
+        let data = this.state;
+        console.log(this.state)
+        let store = await axios.put(`${APIURL}/store/${this.context.store.id}`,
+            this.state,
+            {
+                headers: {
+                    "X-auth-license": this.context.store.token
+                }
+            });
+
+        console.log(store.data)
+
+
+    }
+
+    componentWillMount() {
+
+        axios.get(`${APIURL}/store/${this.context.store.id}`).then(v => {
+            console.log(v.data)
+            this.setState({...v.data})
+        })
+
+    }
+
+    componentDidMount() {
+
 
     }
 
     static contextType= StoreContext
 
-
-    componentWillMount() {
-        axios.get(`${APIURL}/store/${this.context.store.id}`).then(v=>{
-            console.log(v.data)
-            this.setState({...v.data})
-        })
-    }
-
-    componentDidMount() {
-
-    }
-
     render() {
 
         let {classes} = this.props
-        return (
-            <React.Fragment>
-                <Grid container >
-                    <Grid item xs={12} style={{padding:24, background:"white"}}>
-                        <Toolbar style={{ display:"flex", justifyContent:"flex-end"}}>
-                            <Button color={"primary"}>Save</Button>
-                        </Toolbar>
-                        <Grid container spacing={8} >
-                            <Grid item xs={12}>
-                                <Grid container>
-                                    <Grid item xs={4}>
+        let state = this.state;
+        let {social} = this.state;
 
+
+        let storePrimaries = (
+            <Grid container>
+                <Grid item xs={12}>
+                    {/*DEFINE CORE STORE PROPERTIES HERE*/}
+                    <AppPaper labe={"Basic Details"} title={"Basic details"}>
+                        <Grid container spacing={8}>
+                            <Grid item xs={12} md={6}>
+                                <AppInput label={"Store name"} onChange={this.watchText("title")} value={state.title}/>
+                                <AppInput label={"Store status"} onChange={this.watchText("status")} value={state.status}/>
+                                <AppInput label={"Store description"} onChange={this.watchText("description")} multiline
+                                          value={state.description}/>
+                                <Grid container spacing={8}>
+                                    <Grid item xs={6}>
+                                        <AppInput label={"phone"} onChange={this.watchText("phone")} value={state.phone} />
                                     </Grid>
-                                    <Grid item xs={4}>
-
-                                    </Grid>
-                                    <Grid item xs={4}>
-
+                                    <Grid item xs={6}>
+                                        <AppInput label={"email"} onChange={this.watchText("email")} value={state.email}/>
                                     </Grid>
                                 </Grid>
                             </Grid>
-                            <Grid item xs={12} lg={6}>
-                                <div style={{padding:18, background:"ghostwhite", margin:"12px 0px"}}>
-                                <Typography>Primary Details</Typography>
-                                <Grid container>
-                                    <Grid item xs={12} className={classes.yMargin}>
-                                        <EditableInput label={"Business name"} classes={classes}/>
-                                    </Grid>
-                                    <Grid item xs={12} className={classes.yMargin}>
-                                        <EditableInput label={"Caption"} classes={classes}/>
-                                    </Grid>
-                                    <Grid item xs={12} className={classes.yMargin}>
-                                        <EditableInput label={"phone"} classes={classes}/>
-                                    </Grid>
-                                </Grid>
-                                </div>
-                            </Grid>
+                            <Grid item xs={12} md={6}>
 
-                            <Grid item xs={12} lg={6}>
-                                <div style={{padding:18, background:"ghostwhite", margin:"12px 0px"}}>
-                                    <Typography> Social Media</Typography>
-                                    <Grid container>
-                                        <Grid item xs={12}>
-                                            <FormControl>
-                                            <InputBase startAdornment={<FaWhatsapp style={{margin:"0px 4px"}}/>} style={{padding:"8px 12px", borderRadius:40, background:"rgba(0,0,0,.12)"}}/>
-                                            </FormControl>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <FormControl>
-                                            <InputBase startAdornment={<FaInstagram style={{margin:"0px 4px"}}/>} style={{padding:"8px 12px", borderRadius:40, background:"rgba(0,0,0,.12)"}}/>
-                                            </FormControl>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <FormControl>
-                                            <InputBase startAdornment={<FaFacebook style={{margin:"0px 4px"}}/>} style={{padding:"8px 12px", borderRadius:40, background:"rgba(0,0,0,.12)"}}/>
-                                            </FormControl>
-                                        </Grid>
-                                    </Grid>
-                                </div>
-                            </Grid>
-
-                            <Grid item xs={12} lg={12}>
-                                <Grid container style={{padding:18, background:"ghostwhite", margin:"12px 0px"}}>
-                                    <Grid  item xs={12} lg={6}>
-                                    <ExpansionPanel>
-                                    <ExpansionPanelSummary expandIcon={<ArrowDownward/>}>Location</ExpansionPanelSummary>
-                                    <ExpansionPanelDetails>
-                                        <Grid container>
-                                            <Grid item xs={12} className={classes.yMargin}>
-                                                <EditableInput label={"Nationality"} classes={classes}/>
-                                            </Grid>
-                                            <Grid item xs={12} className={classes.yMargin}>
-                                                <EditableInput label={"Country"} classes={classes}/>
-                                            </Grid>
-                                            <Grid item xs={12} className={classes.yMargin}>
-                                                <EditableInput label={"City"} classes={classes}/>
-                                            </Grid>
-                                            <Grid item xs={12} className={classes.yMargin}>
-                                                <EditableInput label={"zip code"} classes={classes}/>
-                                            </Grid>
-                                        </Grid>
-                                    </ExpansionPanelDetails>
-                                </ExpansionPanel>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-
-                            <Grid item xs={12} lg={12} style={{padding:18, background:"ghostwhite", margin:"12px 0px"}}>
-                                <Grid container>
-                                    <Grid item xs={12} lg={6}>
-                                    <ExpansionPanel>
-                                        <ExpansionPanelSummary expandIcon={<ArrowDownward/>}>UI</ExpansionPanelSummary>
-                                        <ExpansionPanelDetails>
-                                            <Grid container>
-
-                                            </Grid>
-                                        </ExpansionPanelDetails>
-                                    </ExpansionPanel>
-                                    </Grid>
-                                </Grid>
                             </Grid>
                         </Grid>
-                    </Grid>
+                    </AppPaper>
                 </Grid>
+                <Grid item style={{margin: "0px 12px"}} xs={12}>
+                    <Grid container spacing={8}>
+                        <Grid item xs={12}>
+                            <Typography variant={"h5"} style={{margin: "12px 0px", marginBottom: 0}}>Social
+                                Media</Typography>
+                        </Grid>
+                        <Grid item>
+                            <AppInput label={"Facebook"} startAdornment={<FaFacebook/>}
+                                      onChange={this.watchSocial("facebook")} value={state.social.facebook}/>
+                        </Grid>
+                        <Grid item>
+                            <AppInput label={"Instagram"} startAdornment={<FaInstagram/>}
+                                      onChange={this.watchSocial("instagram")} value={state.social.instagram}/>
+                        </Grid>
+                        <Grid item>
+                            <AppInput label={"Whatsapp"} startAdornment={<FaWhatsapp/>}
+                                      onChange={this.watchSocial("whatsapp")} value={state.social.facebook}/>
+                        </Grid>
+                        <Grid item>
+                            <AppInput label={"Twitter"} startAdornment={<FaTwitter/>}
+                                      onChange={this.watchSocial("twitter")} value={state.social.facebook}/>
+                        </Grid>
+                    </Grid>
+
+                </Grid>
+            </Grid>
+        )
+        return (
+            <React.Fragment>
+                <div style={{margin: "12px 16px "}}>
+                    <Grid container justify={"space-between"} alignContent={"center"} alignItems={"center"}>
+                        <Typography variant={"headline"} style={{margin: "16px 0px"}}>Settings page </Typography>
+                        <Button color={"primary"} onClick={this.save}>Save</Button>
+                    </Grid>
+
+                    <Grid container>
+                        <Grid item>
+                            <Tabs value={0} >
+                                <Tab label={"Basics"}/>
+                                
+                                <Tab label={"Site"}/>
+                                <Tab label={"Notifications"}/>
+                            </Tabs>
+                        </Grid>
+                        <Grid item>
+                            {storePrimaries}
+                        </Grid>
+                    </Grid>
+
+
+                </div>
             </React.Fragment>
         );
     }

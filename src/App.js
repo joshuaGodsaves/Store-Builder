@@ -5,8 +5,8 @@ import loginPage from "./activities/user/Login"
 import withStyles from "@material-ui/core/styles/withStyles";
 import AppContext from "./AppContext"
 import {BrowserRouter, Route, Switch} from "react-router-dom";
-import axios from "axios"
 import "./App.css"
+
 let styles = theme => ({
 
 });
@@ -15,13 +15,11 @@ class App extends Component {
   constructor(props) {
     super(props);
   }
-  state={
 
-  }
+  state={};
 
 componentWillMount() {
-
-   let user= JSON.parse(window.localStorage.getItem("magnet-client-active-user"))
+    let user = JSON.parse(window.localStorage.getItem("magnet-client-active-user"));
   if(user && user.email) {
     //User is loggedIn Set token and email
     this.setState({user: user.email, token: user.token})
@@ -39,7 +37,7 @@ componentWillMount() {
           <Switch>
             <Route path={"/login"} exact  component={loginPage} />
             <Route path={"/stores/:store"}   component={storeIndex} />
-            <Route path={"/"}   component={userIndex} />
+            <Route path={"/"}   component={storeIndex} />
           </Switch>
         </AppContext.Provider>
       </BrowserRouter>

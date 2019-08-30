@@ -1,14 +1,15 @@
 import React from "react"
 import withStyles from "@material-ui/core/styles/withStyles"
 import {} from "@material-ui/icons"
-import { FormControl, InputBase, FormLabel } from "@material-ui/core"
+import { FormControl, InputBase, FormLabel, OutlinedInput } from "@material-ui/core"
 
 let styles = theme => ({
     inputRoot: {
-        padding: "12px 12px",
-        background: "rgba(0,0,0,.1)",
-        borderRadius: "5px",
-        borderBottom: "1px solid blue"
+        padding:"12px 0px",
+        paddingLeft:8
+    },
+    startAd:{
+        paddingRight:12
     },
     rootForm: {
         margin: "12px 0px"
@@ -17,15 +18,20 @@ let styles = theme => ({
 
 class AppInput extends React.Component {
     render() {
-        let { classes, onChange, label, value } = this.props
-        value = value || ""
+        let { classes, onChange, label, value, multiline, startAdornment } = this.props
+        value = value || "";
+
         return (
             <FormControl fullWidth className={classes.rootForm}>
                 <FormLabel>{label}</FormLabel>
-                <InputBase classes={{ input: classes.inputRoot }} onChange={onChange} value={value}/>
+                <OutlinedInput
+                    style={{}}
+                    classes={{input: classes.inputRoot, inputAdornedStart: classes.startAd, adornedStart: classes.startAd}}
+
+                           onChange={onChange} value={value} multiline={multiline? true : false} rows={2}
+                startAdornment={startAdornment ? startAdornment : false}/>
             </FormControl>
         )
-
     }
 }
 

@@ -63,7 +63,7 @@ class AppDrawer extends React.Component {
                 <AppBar position={"fixed"}  elevation={0} style={{background:"darkblue"}}>
                     <Toolbar/>
                 </AppBar>
-                <div style={{width:"100%", paddingTop:64, left:0, background:"ghostwhite", overflowY:"scroll"}}>
+                <div style={{width:"100%", paddingTop:64, left:0, background:"ghostwhite", overflowY:"auto"}}>
                         {this.props.children}
                 </div>
             </Drawer>

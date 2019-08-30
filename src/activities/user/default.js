@@ -2,13 +2,9 @@ import React, {Component} from "react";
 import DataSource from "../../DataSource"
 import UserContext from "../../AppContext"
 import withStyles from "@material-ui/core/styles/withStyles";
-import {
-    CircularProgress, List, ListItem,
-    Grid, Typography, ListItemText, ListItemIcon,
-    Button
-} from "@material-ui/core"
+import {Button, CircularProgress, Grid, List, ListItem, ListItemIcon, ListItemText, Typography} from "@material-ui/core"
 import {MessageOutlined, Store} from "@material-ui/icons"
-import {Switch, Link, Route} from "react-router-dom";
+import {Link} from "react-router-dom";
 import AppExpansionComponent from "./components/AppExpansionComponent"
 
 let drawerWidth = 220;
@@ -21,7 +17,7 @@ let styles = theme => ({
 
 class App extends Component {
 
-    static contextType= UserContext
+    static contextType = UserContext;
     constructor(props) {
         super(props);
     }
@@ -31,10 +27,10 @@ class App extends Component {
         stores:[],
         loading: false,
         createingStore: false
-    }
+    };
 
     componentDidMount() {
-        this.dataSource=new DataSource(this.context.user.token, this.context.user.email)
+        this.dataSource = new DataSource(this.context.user.token, this.context.user.email);
 
         this.loadUserStores()
     }
@@ -42,32 +38,39 @@ class App extends Component {
 
     loadUserStores= async ()=>{
 
-        this.setState({loading: true})
+        this.setState({loading: true});
 
         let result = await this.dataSource.getStores(this.context.user.email);
-        this.setState({loading: false})
+        this.setState({loading: false});
         if(result.data.length== 0){
             // no stores available
         }else{
             // stores loaded
             this.setState({loading: false, stores:result.data})
         }
-    }
+    };
 
     createStore= async ()=>{
-        this.setState({createingStore: true})
-        let result= await this.dataSource.createStore(this.context.user.email)
+
+        this.setState({createingStore: true});
+        let result = await this.dataSource.createStore(this.context.user.email);
         if(result.data){
-            this.setState({createingStore: false})
+            this.setState(state => {
+                alert(result.data._id);
+                state.stores.push(result.data);
+                state.createStore = false;
+                return state
+            })
         }
-    }
+
+    };
 
     loadRoute=(route)=>{
         return ()=>{window.location.replace(`/stores/${route}`);}
-    }
+    };
 
     render() {
-        let {stores, loading, createingStore}= this.state
+        let {stores, loading, createingStore} = this.state;
 
 
         return (

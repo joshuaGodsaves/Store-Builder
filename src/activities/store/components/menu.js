@@ -82,13 +82,6 @@ class App extends Component {
                         </ListItemIcon>
                         <ListItemText primary={"theme"} />
                     </ListItem>
-                    <ListSubheader component={ButtonBase}> Payments</ListSubheader>
-                    <ListItem  component={Link} to={`/stores/${this.context.store.id}/themes`}>
-                        <ListItemIcon>
-                            <BlogIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={"Subscription"} />
-                    </ListItem>
                     <ListSubheader> Utilities</ListSubheader>
                     <Divider />
                     <ListItem component={Link} to={`/stores/${this.context.store.id}/blog`} disabled>

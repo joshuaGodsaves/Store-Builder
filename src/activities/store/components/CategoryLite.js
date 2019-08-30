@@ -1,83 +1,84 @@
 import React from "react"
 import {
-    Dialog, Typography,
+    Avatar,
+    Button,
+    ButtonBase,
+    Chip,
+    Dialog,
+    DialogActions,
     DialogContent,
-    Divider, List, ListItem,
-    DialogContentText,
-    DialogTitle,
-    DialogActions, Paper,
+    Divider,
     Grid,
-    Button, ButtonBase,
-    Checkbox, Chip,
     InputBase,
-    Toolbar, ListItemAvatar, ListItemText
+    List,
+    ListItem,
+    Typography
 } from "@material-ui/core"
-import {SearchOutlined} from "@material-ui/icons";
 import DataSource from "../../../DataSource";
 import StoreContext from "../StoreContext"
 
 export default class Component extends React.Component{
 
-    static contextType= StoreContext
+    static contextType = StoreContext;
 
     state= {
         newCategory: undefined,
         createCategory: false,
         selected: [],
         categories: []
-    }
+    };
 
     onSelected= (id)=>{
         return ()=>{
-            let check= this.state.selected.some(v=> v==id)
+            let check = this.state.selected.some(v => v == id);
             if(check){
-                let filtered= this.state.selected.filter(v=> v != id)
+                let filtered = this.state.selected.filter(v => v != id);
                 this.setState({selected: filtered})
             }else{
                 this.setState(state=>
                 {
-                    state.selected.push(id)
+                    state.selected.push(id);
                     return state
                 })
             }
         }
-    }
+    };
     onFinish= ()=>{
         this.props.closeCategorySelector(this.state.selected)
-    }
+    };
     componentWillMount() {
-        let open=  this.props.open
-        let initialSelectedCategories= this.props.categories
+        let open = this.props.open;
+        let initialSelectedCategories = this.props.categories;
         this.setState({open: open, selected: initialSelectedCategories})
     }
 
     componentDidMount() {
-        this.dataSource = new DataSource(this.context.store.token, this.context.store.id)
+        this.dataSource = new DataSource(this.context.store.token, this.context.store.id);
         this.loadCategories()
     }
 
     createCategory= ()=>{
     this.setState({createCategory: !this.state.createCategory})
-    }
+    };
 
     saveCategory= async  ()=>{
-       let newCategory=await  this.dataSource.postStoreCategory({title: this.state.newCategory})
+        let newCategory = await this.dataSource.postStoreCategory({title: this.state.newCategory});
         if(newCategory){
+            this.setState({newCategory: "", createCategory: false});
             this.loadCategories()
-            this.setState({newCategory: "", createCategory: false})
         }
-    }
+    };
     watch= (e)=>{
-        e.persist()
+        e.persist();
         this.setState({newCategory: e.target.value})
-    }
+    };
 
     loadCategories = () => {
         this.dataSource.getStoreCategories().then(v=>{
             this.setState({categories: v.data.items, loading: false})
-        }).catch(v=> console.log(v))
+        }).catch(v => console.log(v));
         this.setState({loading: true})
-    }
+    };
 
     render(){
         let newCategoryComponent= (
@@ -92,7 +93,7 @@ export default class Component extends React.Component{
                     <Button size={"small"} color={"primary"} onClick={this.saveCategory}>Save</Button>
                 </Grid>
             </Grid>
-        )
+        );
 
         return (
             <Dialog open={this.state.open} maxWidth={"xs"} fullWidth style={{zIndex:10000}}>
@@ -108,14 +109,14 @@ export default class Component extends React.Component{
 
                 </DialogActions>
                 <Divider/>
-                <DialogContent>
+                <DialogContent style={{padding: "12px 0px"}}>
                     <List>
                         {this.state.categories.map(v=>(
                             <ListItem item onClick={this.onSelected(v._id)}
                                       component={ButtonBase}
                                       style={{background: this.state.selected.some(id=> id== v._id)? "rgba(100,100,100,.5)": ""}}>
-                                {/*<ListItemAvatar/>*/}
-                                <Typography>{v.title}</Typography>
+                                <Avatar/>
+                                <Typography style={{padding: "0px 8px"}} variant={"button"}> {v.title} </Typography>
                             </ListItem>
                         ))}
                     </List>

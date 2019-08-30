@@ -7,7 +7,7 @@ let styles = theme => ({
     rootArea:{
         margin:0,
         padding:0,
-        marginTop:"70px",
+        marginTop:"68px",
         [theme.breakpoints.up("sm")]:{
             width:`calc(100% - ${width}px)`,
             float:"right"

@@ -1,20 +1,23 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Typography from "@material-ui/core/Typography";
-import {Add, Collections as Group, Delete, Edit, MoreHoriz, Refresh} from "@material-ui/icons";
+import {Add, Collections as Group, Delete, Edit, MoreHoriz, Refresh, SearchRounded} from "@material-ui/icons";
 import {FaProductHunt} from "react-icons/fa/index"
 import {Link} from "react-router-dom";
 import PageToolbarContainer from "../components/PageToolbarContainer"
 import StoreContext from "../StoreContext"
 import {
-    Checkbox,
-    IconButton,
-    LinearProgress,
-    Paper, Button,
- Toolbar,
+  Tab,
+  Checkbox,
+  IconButton,
+  LinearProgress,
+  Paper, Button,
+  Toolbar,
   Grid,
-  Avatar
+  Avatar, FormControl, InputBase, Tabs
 } from "@material-ui/core";
+import ProductCategories from "../components/TabComponents/ProductCategoriesTabComponent"
+
 import DataSource from "../../../DataSource"
 
 let styles = {
@@ -88,100 +91,72 @@ class TableProductsView extends React.Component {
 
   render() {
     let { classes } = this.props;
-    let selectedCategoriesOptionToolBar = (
-        <PageToolbarContainer>
-          <Toolbar>
-              <Typography variant={"h6"}> Bulk Action</Typography>
-            <div>
-              <IconButton><Delete/></IconButton>
-              <IconButton><Edit/></IconButton>
-            </div>
-            <div>
-            </div>
-          </Toolbar>
-        </PageToolbarContainer>
-    );
 
-    let defaultToolbar = (
-        <PageToolbarContainer>
-            <Grid container justify="space-between" alignItems={"center"}>
-              <Grid item>
-                <Typography variant={"h6"}>
-                  Store categories
-                </Typography>
-              </Grid>
-            
-              <Grid item>
-                  <IconButton  color={"primary"}>
-                    <Refresh/>
-                  </IconButton>
-                  <Button
-                      variant={"flat"}
-                      color={"primary"}
-                              to={`/stores/${this.context.store.id}/categories/new`}
-                              component={Link}>
-                    <Add/>
-                    CREATE
-                  </Button>
-              </Grid>
-            </Grid>
-        </PageToolbarContainer>
-    );
+    let searchBox= (
+        <Paper style={{ background: "transparent" }}>
+          <FormControl fullWidth>
+            <InputBase
+                style={{ color: "ghostwhite" }}
+                startAdornment={<SearchRounded color={"inherit"} />}
+                endAdornment={
+                  <Button style={{ color: "ghostwhite" }} size={"small"} color={"inherit"}>Search</Button>
+                }
+                classes={{ input: classes.rootInput }}
+                style={{ background: "rgba(0,0,0,.5)", padding: "4px 12px", borderRadius: "4px" }} />
+          </FormControl>
+        </Paper>
+    )
 
-    let productsAvailable = (
-        <React.Fragment>
-            {this.state.selected.length !== 0
-                ? selectedCategoriesOptionToolBar
-                : defaultToolbar}
-            <Grid container spacing={8} style={{margin:"16px 0px"}}>
-                {this.state.categories.map((category, i) => (
-                <Grid item xs={12} md={6} style={{margin:"8px 0px"}}>
-                        <Paper elevation={1}>
-                            <Grid container alignItems={"center"} justify={"space-between"} spacing={8}>
-                                <Grid item style={{display:"flex"}}>
-                                    <Checkbox
-                                        color={"primary"}
-                                        checked={this.state.selected.some(v2 => v2 == category._id)}
-                                        onChange={this.selectSingle(category._id)}
-                                    />
-                                    <div style={{display:"flex", alignItems:"center"}}>
-                                      <Avatar src={category.mainImageLink}/>
-                                      <span style={{margin:"0px 12px"}}>
-                                      {category.title}
-                                      </span>
-                                    </div>
-                                </Grid>
-                                <Grid item>
-                                    <IconButton component={Link}
-                                     color={"primary"}
-                                                to={`/stores/${this.context.store.id}/categories/${category._id}`}><MoreHoriz/></IconButton>
-                                </Grid>
-                            </Grid>
-                        </Paper>
+    let actionsBoxGridContainer=(
+        <Grid container justify={"center"}>
+          <Grid item>
+            <Button>
+              Bulk Add
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button component={Link} to={`/stores/${this.context.store.id}/categories/new`}>
+              New Category
+            </Button>
+          </Grid>
+        </Grid>
+    )
+
+    let defaultToolbarArea = (
+        <PageToolbarContainer>
+          <Grid container justify={"center"}>
+            <Grid item xs={11} sm={10} md={10}>
+              <div style={{ margin: "16px 0px" }}>
+                <Typography variant={"h5"} align={"center"}>Categories Page</Typography>
+              </div>
+              <div style={{ margin: "16px 0px", marginBottom:0}}>
+                <Grid container justify={"center"}>
+                  <Grid item xs={12} sm={12} md={8} lg={6} xl={6}>
+                    {searchBox}
+                  </Grid>
                 </Grid>
-                ))}
+                <Grid container justify={"center"}>
+                  <Grid item>
+                    <Tabs value={0} variant={"scrollable"}>
+                      <Tab label={"Products cat"}></Tab>
+                      <Tab label={"Brands"}></Tab>
+                      <Tab label={"Products type"}></Tab>
+                    </Tabs>
+                  </Grid>
+                </Grid>
+              </div>
             </Grid>
-        </React.Fragment>
+          </Grid>
+        </PageToolbarContainer>
     );
-    let itemsNotAvailable = (
-      <div align="center">
-      <Typography align={"center"}>
-        You dont have any category created yet, click the button below to add some.
-      </Typography>
-      <Button to={`/stores/${this.context.store.id}/categories/new`} component={Link} style={{margin:"16px 0px"}}>
-        <Add/> CREATE
-      </Button>
-    </div>
-    );
+
     return (
         <React.Fragment>
-          {this.state.loading? <LinearProgress/> :
-              <div>
-            {this.state.categories.length == 0
-                ? itemsNotAvailable
-                : productsAvailable}
+          {this.state.loading? <LinearProgress/> :""}
+          {defaultToolbarArea}
+          <div style={{margin:"12px 0px"}}>
+            <ProductCategories/>
           </div>
-          }
 
         </React.Fragment>
     );

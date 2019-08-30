@@ -1,17 +1,14 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 
+import StoreContext from "./StoreContext"
 import withStyles from "@material-ui/core/styles/withStyles";
 import {Link} from "react-router-dom";
 import {ChevronRight} from "@material-ui/icons"
-import {
-    Grid, Typography,
-    Button, Paper, ExpansionPanel, ExpansionPanelSummary,
-    ExpansionPanelActions, ExpansionPanelDetails, Card, CardContent, Divider, CardActions
-} from "@material-ui/core"
+import {Button, Grid} from "@material-ui/core"
 
 import Context from "./StoreContext"
 
-import { ArrowDownward, NotificationImportantOutlined, NewReleasesOutlined } from "@material-ui/icons"
+import OrderAnalytics from "./components/Chart"
 
 let styles = theme => ({
     xMargin:{
@@ -54,7 +51,7 @@ let styles = theme => ({
 });
 
 function CoreComponentBox(props){
-    let {classes, to, details}= props
+    let {classes, to, details} = props;
     return (
         <Grid item xs={11} sm={6} md={4} className={classes.itemContainer}>
         <div className={classes.itemContent}>
@@ -80,24 +77,25 @@ class App extends Component {
         super(props);
     }
 
-    static contextType= Context
+    static contextType = StoreContext;
 
     state = {
         menuOpen: true
-    }
+    };
 
     componentDidMount() {
 
     }
+
     render() {
-        let { classes } = this.props
-        let storeId= this.context.store.id
+        let {classes} = this.props;
+        let storeId = this.context.store.id;
         return (
             <React.Fragment>
                 <Grid container justify={'center'}>
                     <Grid item xs={12}>
                         <div className={classes.jumboArea}>
-
+                            <OrderAnalytics/>
                         </div>
                     </Grid>
                     <Grid item xs={12} sm={11} md={10}>

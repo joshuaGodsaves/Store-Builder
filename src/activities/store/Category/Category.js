@@ -1,296 +1,308 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
+import Colors from "@material-ui/core/colors"
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import {
-
-  FormLabel, Paper,
-  FormHelperText,
-  OutlinedInput as Input,
-  InputBase,
-
-  Tab, Divider,
-  Tabs, IconButton
-} from "@material-ui/core";
+import {LinearProgress, MenuItem, Select, Tab, Tabs} from "@material-ui/core";
 import PageAppBar from "../../../components/ActivityPrimaryAppBar";
 import FormControl from "@material-ui/core/FormControl";
-
-import CKEditor from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import ImageSelectionComponent from "../../../components/ImageSelectionComponent"
-import {CloudUpload as UploadIcon, Link as LinkIcon, SelectAll as SelectIcon} from "@material-ui/icons";
+import AppPaper from "../../../components/AppPaper"
+import AppInput from "../../../components/AppInput"
+import {CloudUpload as UploadIcon} from "@material-ui/icons";
 import axios from "axios";
 import StoreContext from "../StoreContext";
 import FileUploader from "../components/FileUpload"
-import { APIURL } from "../../../DataSource";
+import {APIURL} from "../../../DataSource";
 
 let styles = {
-  listItem: {
-
-  },
-  xPadding: {
-    padding: "0px 16px"
-  },
-  margin: {
-    marginBottom: 8,
-    marginTop: 8
-  },
-  ymargin: {
-    marginTop: 16,
-    marginBottom: 16
-  },
-  toolBar: {
-    background: "white",
-    display: "flex",
-    justifyContent: "space-between"
-  },
-  primaryFormArea: {
-    padding: "12px 18px"
-  },
-  rootFormControls: {
-    margin: "4px 0"
-  },
-  flexBetween: {
-    display: "flex",
-    justifyContent: "space-between",
-    justifyItems: "space-between"
-  }
+    xPadding: {
+        padding: "0px 16px"
+    },
+    margin: {
+        marginBottom: 8,
+        marginTop: 8
+    },
+    ymargin: {
+        marginTop: 16,
+        marginBottom: 16
+    },
+    flexBetween: {
+        display: "flex",
+        justifyContent: "space-between",
+        justifyItems: "space-between"
+    }
 };
 
 class Category extends React.Component {
-  static contextType = StoreContext;
-  state = {
-    uploadFile: false,
-    currentTab: 0,
-    categoryDialogOpen: false,
-    category: {
-       title: undefined,
-      caption: undefined,
-      description: undefined,
-      products: [],
-      tags: []
-    },
-    selectMainImageDrawerOpen: false
-  };
-  toggleCategoryDialog = () => {
-    this.setState(state => {
-      state.categoryDialogOpen = !state.categoryDialogOpen;
-      return state;
-    });
-  };
-
-  tabChange = (e, v) => {
-    this.setState({ currentTab: v });
-  };
-  watchInput = propName => {
-    return event => {
-      event.persist();
-      this.setState(state => {
-        state.category[propName] = event.target.value;
-        return state;
-      });
+    static contextType = StoreContext;
+    state = {
+        uploadFile: false,
+        currentTab: 0,
+        type: "",
+        categoryDialogOpen: false,
+        category: {
+            title: undefined,
+            caption: undefined,
+            description: undefined,
+            type: undefined,
+            products: [],
+            tags: []
+        },
+        selectMainImageDrawerOpen: false
     };
-  };
 
-  update = () => {
-    let {match: {params}} = this.props
-    axios
-        .put(
-            `${APIURL}/store/${this.context.store.id}/category/${params.category}`,
+    tabChange = (e, v) => {
+        this.setState({currentTab: v});
+    };
+
+    watchInput = propName => {
+        return event => {
+            event.persist();
+            this.setState(state => {
+                state.category[propName] = event.target.value;
+                return state;
+            });
+        };
+    };
+
+    update = () => {
+        let {match: {params}} = this.props
+        axios
+            .put(
+                `${APIURL}/store/${this.context.store.id}/category/${params.category}`,
+                this.state.category,
+                {
+                    headers: {
+                        "X-auth-license": this.context.user.token
+                    }
+                }
+            ).then(v => {
+            console.log(v)
+            this.setState({updated: true})
+            setTimeout(() => {
+                this.setState({updated: false})
+            }, 2000)
+            this.loadCategory(params.category)
+        }).catch(v => console.log(v))
+
+    };
+
+    uploadingEvent = () => {
+        this.setState({uploading: true});
+        alert("uploading")
+    }
+
+    selectImage = (url) => {
+        this.setState(state => {
+            state.category.mainImageLink = url
+            state.category.image = url
+            state.uploading = false;
+            return state
+        })
+    }
+
+    uploadFile = () => {
+        this.setState({uploadFile: true})
+    }
+
+
+    loadCategory = async (catID) => {
+        let category;
+        category = await axios.get(`${APIURL}/store/${this.context.store.id}/category/${catID}`)
+        if (!category) {
+            console.log("error")
+            return
+        }
+        if (category.data) {
+            this.setState({category: category.data, mainCategoryObj: category.data})
+            return true
+        }
+        return false
+    }
+
+    componentDidMount() {
+        let {match: {params, query}} = this.props;
+        let catType = ""
+        if (params.category == "new") {
+            var squery = window.location.search;
+            var search = squery.substring(1, squery.length);
+            let arrQ = search.split("=");
+            let qObj = {};
+            arrQ.forEach(function (v, i) {
+                if ((i / 2 !== 0 || i == 0) && i != 1) {
+                    qObj[v] = "";
+                    return;
+                } else {
+                    qObj[arrQ[i - 1]] = v;
+                    catType = qObj.type;
+                    return;
+                }
+            })
+
+            //alert(search[0])
+            this.setState({isNewCategory: true, type: qObj.type})
+            // Init new product
+        } else {
+            this.setState({isNewCategory: false})
+            this.loadCategory(params.category).then(v => {
+                if (v) {
+                    this.setState(state => {
+                        if (catType) {
+                            state.category.type = catType;
+                        }
+                        return state;
+                    })
+                } else {
+                }
+            })
+            this.setState({categoryID: params.category})
+            //load product
+        }
+    }
+
+    save = async () => {
+        let category = await axios.post(`${APIURL}/store/${this.context.store.id}/category`,
             this.state.category,
             {
-              headers: {
-                "X-auth-license": this.context.user.token
-              }
-            }
-        ).then(v => {
-      console.log(v)
-      this.setState({updated: true})
-      setTimeout(() => {
-        this.setState({updated: false})
-      }, 2000)
-      this.loadCategory(params.category)
-    }).catch(v => console.log(v))
-
-  };
-
-
-  closeingMainImageDrawer= ()=>{
-    this.setState({selectMainImageDrawerOpen: false})
-  }
-
-  selectMainImage = (url) => {
-    this.setState(state => {
-        state.category.mainImageLink = url
-        return state
-    })
-}
-uploadFile = ()=>{
-  this.setState({uploadFile: true})
-}
-
-
-  openSelectMainImageDrawer=()=>{
-    this.setState({selectMainImageDrawerOpen: true})
-  }
-
-  loadCategory = async (catID) => {
-    let category;
-      category = await axios.get(`${APIURL}/store/${this.context.store.id}/category/${catID}`)
-    if(!category){
-      console.log("error")
-      return
-    }
-    if (category.data) {
-      this.setState({category: category.data, mainCategoryObj:category.data})
-      return true
-    }
-    return false
-  }
-
-  componentDidMount() {
-    let {match: {params}} = this.props
-    if (params.category == "new") {
-      this.setState({isNewCategory: true})
-      // Init new product
-    } else {
-      this.setState({isNewCategory: false})
-      this.loadCategory(params.category).then(v => {
-        if (v) {
-          this.setState({categoryID: params.category})
-        } else {
-        }
-      })
-      this.setState({categoryID: params.category})
-      //load product
-    }
-  }
-  
-  save =async  ()=>{
-    let category = await axios.post(`${APIURL}/store/${this.context.store.id}/category`,
-        this.state.category,
-        {
-          headers: {
-            "X-auth-license": this.context.store.token
-          }
-        })
+                headers: {
+                    "X-auth-license": this.context.store.token
+                }
+            })
         window.location.replace(`/stores/${this.context.store.id}/categories`)
 
-      }
+    }
 
-  render() {
-    let { classes } = this.props;
-    let {category} = this.state
+    render() {
+        let {classes} = this.props;
+        let {category} = this.state
 
-    let primaryComponent = (
-      <React.Fragment>
-        {this.state.selectMainImageDrawerOpen ?
-            <ImageSelectionComponent
-                open={this.state.selectMainImageDrawerOpen}
-                selectSingle={this.selectMainImage}
-                closeingDrawer={this.closeingMainImageDrawer}/> : ""}
-        <Grid container>
-          <Grid item sm={6} xs={12}>
-            <div className={classes.primaryFormArea}>
-              <Paper style={{padding:16}}>
-                <FormControl fullWidth className={classes.rootFormControls}>
-                  <FormLabel>Category title</FormLabel>
-                  <Input
-                      value={this.state.category.title}
-                      onChange={this.watchInput("title")}
-                  />
-                  <FormHelperText></FormHelperText>
-                </FormControl>
-                <FormControl fullWidth className={classes.rootFormControls}>
-                  <FormLabel>Category Caption</FormLabel>
-                  <Input
-                      value={this.state.category.caption}
-                      onChange={this.watchInput("caption")}
-                  />
-                  <FormHelperText></FormHelperText>
-                </FormControl>
-              </Paper>
+        let primaryComponent = (
+            <React.Fragment>
+                <Grid container>
+                    <Grid item xs={12}>
+                        <AppPaper title={"Basic details"}>
+                            <Grid container spacing={16} alignContent={"start"}>
+                                <Grid item xs={6}>
+                                    <AppInput onChange={this.watchInput("title")} label={"Label"}
+                                              value={this.state.category.title}/>
+                                    <AppInput onChange={this.watchInput("caption")} label={"Category Caption"}
+                                              value={this.state.category.caption}/>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Grid container spacing={8}
+                                          style={{background: "rgba(200,200,200,.9)", borderRadius: 10}}
+                                          justify={"center"}>
+                                        <Grid item xs={12} style={{display: 'flex', justifyContent: "center"}}>
+                                            <FormControl>
+                                                <div style={{padding: 4, border: ".5px solid blue"}}> Type</div>
+                                                <Select variant={"standard"}
+                                                        value={this.state.category.type || this.state.type}
+                                                        onChange={this.typeChange}>
+                                                    <MenuItem value={"brand"}>brand</MenuItem>
+                                                    <MenuItem value={"product"}>product</MenuItem>
+                                                    <MenuItem value={"manufacturers"}>manufacturers</MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                        </Grid>
+                                        <Grid item>
+                                            {this.state.uploading ? <LinearProgress/> : ""}
+                                            <div style={{
+                                                width: 100,
+                                                height: 100,
+                                                background: "ghostwhite",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center"
+                                            }}>
 
-              <Paper  style={{padding:16, margin:"16px 0px"}}>
-                <Typography variant={"subtitle1"}> Category Description</Typography>
-                <CKEditor
-                    editor={ClassicEditor}
-                    style={{ width:"100%",height:"100%"}}
-                />
-              </Paper>
-              <div />
-            </div>
-          </Grid>
-          <Grid item sm={6} xs={12}
-                style={{}}
-          >
-            <Grid container>
-              <Grid item xs={12} style={{display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column"}}  className={classes.primaryFormArea}>
-                <Paper style={{width:"100%", display:"flex", justifyContent:"center"}}>
-                  <div>
-                    <div style={{width:200, height:200, background: "grey"}}>
-                      <img height={"100%"} width={"100%"} src={category.mainImageLink} alt={"main image"}/>
+                                                <Button onClick={() => {
+                                                    document.getElementById("fileSelectorElement").click();
+                                                }}
+                                                        size={"small"}
+                                                        color={"primary"}
+                                                >Picture
+                                                    <FileUploader
+                                                        onError={() => {
+                                                        }}
+                                                        onUploading={this.uploadingEvent}
+                                                        onFinish={this.selectImage}/>
+                                                    <UploadIcon/>
+                                                </Button>
+                                            </div>
+
+                                        </Grid>
+                                        <Grid item>
+                                            <div style={{
+                                                width: 100,
+                                                height: 100,
+                                                background: "ghostwhite",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center"
+                                            }}>
+                                                <Button onClick={() => {
+                                                    document.getElementById("fileSelectorElement").click();
+                                                }}
+                                                        size={"small"}
+                                                        color={"primary"}
+                                                >Icon
+                                                    <FileUploader
+                                                        onError={() => {
+                                                        }}
+                                                        onUploading={() => {
+                                                        }}
+                                                        onFinish={this.selectMainImage}/>
+                                                    <UploadIcon/>
+                                                </Button>
+                                            </div>
+
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </AppPaper>
+                    </Grid>
+                </Grid>
+
+            </React.Fragment>
+        );
+
+        let propertiesComponents = (
+            <React.Fragment>
+                <Grid container>
+                    <Grid item>
+                    </Grid>
+                </Grid>
+            </React.Fragment>
+        )
+
+        return (
+            <React.Fragment>
+                <PageAppBar nospacing>
+                    <Tabs
+                        style={{padding: 0}}
+                        variant={"scrollable"}
+                        value={this.state.currentTab}
+                        onChange={this.tabChange}
+                    >
+                        <Tab label={"Primary"} style={{color: "black"}}/>
+                        <Tab label={"Properties"} style={{color: "black"}}/>
+                    </Tabs>
+                    <div>
+                        <Button
+                            color={"primary"}
+                            onClick={this.state.isNewCategory ? this.save : this.update}> {this.state.isNewCategory ? "Save" : "Update"}</Button>
                     </div>
-                    <div style={{padding:"0px 0px"}}>
-                    <FileUploader
-                                    onError={()=>{}} 
-                                    onFinish={this.selectMainImage}/>
-                                    <IconButton onClick={()=>{document.getElementById("fileSelectorElement").click();}}>
-                                        <UploadIcon>
-
-                                        </UploadIcon>
-                                    </IconButton>
-
-                      <IconButton disabled onClick={this.openSelectMainImageDrawer}><SelectIcon/></IconButton>
-                      <IconButton><LinkIcon/></IconButton>
-                    </div>
-                  </div>
-                </Paper>
-              </Grid>
-              <Grid item  xs={12} className={classes.primaryFormArea}>
-                <Paper style={{padding: 12}}>
-                  <Typography> Core Options</Typography>
-                  <FormControl fullWidth>
-                    <InputBase
-                        multiline
-                        style={{ background: "white", padding: "16px" }}
-                    />
-                    <FormHelperText>
-                      Enter product tags and seperate with spaces
-                    </FormHelperText>
-                  </FormControl>
-                </Paper>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-      </React.Fragment>
-    );
-    return (
-      <React.Fragment>
-        <PageAppBar nospacing>
-            <Tabs
-              style={{ padding: 0 }}
-              variant={"scrollable"}
-              value={this.state.currentTab}
-              onChange={this.tabChange}
-            >
-              <Tab label={"Primary"} style={{ color: "black" }} />
-              <Tab label={"products"} style={{  color: "black" }} />
-            </Tabs>
-            <div>
-              <Button onClick={this.state.isNewCategory? this.save : this.update}> {this.state.isNewCategory? "Save" : "Update"}</Button>
-            </div>
-        </PageAppBar>
-        <Grid container style={{padding: "24px 0"}} justify={"center"}>
-          <Grid item xs={10}>
-        {this.state.currentTab == 0 && primaryComponent}
-          </Grid>
-        </Grid>
-      </React.Fragment>
-    );
-  }
+                </PageAppBar>
+                <Grid container style={{padding: "24px 0"}} justify={"center"}>
+                    <Grid item xs={10}>
+                        {this.state.currentTab == 0 && primaryComponent}
+                        {this.state.currentTab == 1 && primaryComponent}
+                    </Grid>
+                </Grid>
+            </React.Fragment>
+        );
+    }
 }
 
 export default withStyles(styles)(Category);
