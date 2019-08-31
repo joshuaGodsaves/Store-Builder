@@ -26,7 +26,7 @@ class App extends Component {
 
     state = {
 
-        email: undefined,
+        storeId: undefined,
         password: undefined,
         sentRequest: false,
         isLoggedIn: false,
@@ -39,21 +39,21 @@ class App extends Component {
 
     loginUser = async (event) => {
         this.setState({sentRequest: true});
-        let req = await axios.post(`${APIURL}/user/login`, {
-            email: this.state.email,
-            userName: this.state.email,
+        let req = await axios.post(`${APIURL}/store/login`, {
+            storeId: this.state.storeId,
             password: this.state.password
         });
-
         if (req.data.token) {
-            let user = {
-                email: this.state.email,
-                token: req.data.token
+            let store = {
+                email: req.data.store.owner,
+                token: req.data.token,
+                storeId: req.data.store._id,
+                store: req.data.store
             };
-            window.localStorage.setItem("magnet-client-active-user", JSON.stringify(user));
+            window.localStorage.setItem("magnet-client-active-store", JSON.stringify(store));
             window.location.replace("/")
         } else {
-            this.setState({failedLogin: true})
+            this.setState({failedLogin: true, sentRequest: false})
         }
     };
 
@@ -93,8 +93,8 @@ class App extends Component {
                                     </Grid>
                                 </Grid>
                                 <FormControl style={{margin: "16px 0px"}}>
-                                    <FormLabel>Email</FormLabel>
-                                    <OutlinedInput onChange={this.watch("email")}/>
+                                    <FormLabel>Store_ID</FormLabel>
+                                    <OutlinedInput onChange={this.watch("storeId")}/>
                                 </FormControl>
                             </div>
                             <div>

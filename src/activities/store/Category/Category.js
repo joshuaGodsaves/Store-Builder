@@ -1,10 +1,8 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
-import Colors from "@material-ui/core/colors"
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {LinearProgress, MenuItem, Select, Tab, Tabs} from "@material-ui/core";
-import PageAppBar from "../../../components/ActivityPrimaryAppBar";
+import {LinearProgress, MenuItem, Select, Tab, Tabs, Toolbar} from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import AppPaper from "../../../components/AppPaper"
 import AppInput from "../../../components/AppInput"
@@ -13,6 +11,7 @@ import axios from "axios";
 import StoreContext from "../StoreContext";
 import FileUploader from "../components/FileUpload"
 import {APIURL} from "../../../DataSource";
+import Divider from "@material-ui/core/Divider";
 
 let styles = {
     xPadding: {
@@ -66,7 +65,7 @@ class Category extends React.Component {
     };
 
     update = () => {
-        let {match: {params}} = this.props
+        let {match: {params}} = this.props;
         axios
             .put(
                 `${APIURL}/store/${this.context.store.id}/category/${params.category}`,
@@ -77,11 +76,11 @@ class Category extends React.Component {
                     }
                 }
             ).then(v => {
-            console.log(v)
-            this.setState({updated: true})
+            console.log(v);
+            this.setState({updated: true});
             setTimeout(() => {
                 this.setState({updated: false})
-            }, 2000)
+            }, 2000);
             this.loadCategory(params.category)
         }).catch(v => console.log(v))
 
@@ -90,39 +89,39 @@ class Category extends React.Component {
     uploadingEvent = () => {
         this.setState({uploading: true});
         alert("uploading")
-    }
+    };
 
     selectImage = (url) => {
         this.setState(state => {
-            state.category.mainImageLink = url
-            state.category.image = url
+            state.category.mainImageLink = url;
+            state.category.image = url;
             state.uploading = false;
             return state
         })
-    }
+    };
 
     uploadFile = () => {
         this.setState({uploadFile: true})
-    }
+    };
 
 
     loadCategory = async (catID) => {
         let category;
-        category = await axios.get(`${APIURL}/store/${this.context.store.id}/category/${catID}`)
+        category = await axios.get(`${APIURL}/store/${this.context.store.id}/category/${catID}`);
         if (!category) {
-            console.log("error")
+            console.log("error");
             return
         }
         if (category.data) {
-            this.setState({category: category.data, mainCategoryObj: category.data})
+            this.setState({category: category.data, mainCategoryObj: category.data});
             return true
         }
         return false
-    }
+    };
 
     componentDidMount() {
         let {match: {params, query}} = this.props;
-        let catType = ""
+        let catType = "";
         if (params.category == "new") {
             var squery = window.location.search;
             var search = squery.substring(1, squery.length);
@@ -131,19 +130,19 @@ class Category extends React.Component {
             arrQ.forEach(function (v, i) {
                 if ((i / 2 !== 0 || i == 0) && i != 1) {
                     qObj[v] = "";
-                    return;
+
                 } else {
                     qObj[arrQ[i - 1]] = v;
                     catType = qObj.type;
-                    return;
+
                 }
-            })
+            });
 
             //alert(search[0])
             this.setState({isNewCategory: true, type: qObj.type})
             // Init new product
         } else {
-            this.setState({isNewCategory: false})
+            this.setState({isNewCategory: false});
             this.loadCategory(params.category).then(v => {
                 if (v) {
                     this.setState(state => {
@@ -154,7 +153,7 @@ class Category extends React.Component {
                     })
                 } else {
                 }
-            })
+            });
             this.setState({categoryID: params.category})
             //load product
         }
@@ -167,14 +166,14 @@ class Category extends React.Component {
                 headers: {
                     "X-auth-license": this.context.store.token
                 }
-            })
+            });
         window.location.replace(`/stores/${this.context.store.id}/categories`)
 
-    }
+    };
 
     render() {
         let {classes} = this.props;
-        let {category} = this.state
+        let {category} = this.state;
 
         let primaryComponent = (
             <React.Fragment>
@@ -274,14 +273,20 @@ class Category extends React.Component {
                     </Grid>
                 </Grid>
             </React.Fragment>
-        )
+        );
 
         return (
             <React.Fragment>
-                <PageAppBar nospacing>
+                <Toolbar style={{
+                    borderBottom: "1px solid blue",
+                    paddingTop: 12,
+                    display: "flex",
+                    justifyContent: "space-between"
+                }} variant={"dense"}>
                     <Tabs
-                        style={{padding: 0}}
                         variant={"scrollable"}
+                        textColor={"primary"}
+                        indicatorColor={"primary"}
                         value={this.state.currentTab}
                         onChange={this.tabChange}
                     >
@@ -293,7 +298,8 @@ class Category extends React.Component {
                             color={"primary"}
                             onClick={this.state.isNewCategory ? this.save : this.update}> {this.state.isNewCategory ? "Save" : "Update"}</Button>
                     </div>
-                </PageAppBar>
+                </Toolbar>
+                <Divider/>
                 <Grid container style={{padding: "24px 0"}} justify={"center"}>
                     <Grid item xs={10}>
                         {this.state.currentTab == 0 && primaryComponent}

@@ -5,27 +5,9 @@ import axios from "axios"
 import AppInput from "../../components/AppInput"
 import AppPaper from "../../components/AppPaper"
 import {APIURL} from "../../DataSource";
-import DataSource from "../../DataSource"
-import {
-    Button,
-    ExpansionPanel,
-    Select, MenuItem,
-    ExpansionPanelDetails,
-    ExpansionPanelSummary,
-    Tab, Tabs,
-    FilledInput,
-    FormControl,
-    OutlinedInput,
-    FormLabel,
-    TextField,
-    Grid,
-    InputBase,
-    Toolbar,
-    Typography
-} from "@material-ui/core"
+import {Button, Grid, Tab, Tabs, Typography} from "@material-ui/core"
 
-import {FaFacebook, FaInstagram, FaWhatsapp, FaTwitter} from "react-icons/fa";
-import {ArrowDownward} from "@material-ui/icons"
+import {FaFacebook, FaInstagram, FaTwitter, FaWhatsapp} from "react-icons/fa";
 
 let drawerWidth = 220;
 
@@ -45,6 +27,8 @@ class App extends Component {
         super(props);
     }
 
+    static contextType = StoreContext;
+    static contextType = StoreContext;
     state = {
         social: {},
         siteDetails: {},
@@ -54,9 +38,8 @@ class App extends Component {
         phone: undefined,
         email: undefined,
         status: undefined
-    }
+    };
 
-    static contextType = StoreContext
     watchText = (prop) => {
         return (e) => {
             e.persist();
@@ -66,7 +49,8 @@ class App extends Component {
             })
 
         }
-    }
+    };
+
     watchSocial = (prop) => {
         return (e) => {
             e.persist();
@@ -75,11 +59,11 @@ class App extends Component {
                 return state;
             })
         }
-    }
+    };
 
     save = async () => {
         let data = this.state;
-        console.log(this.state)
+        console.log(this.state);
         let store = await axios.put(`${APIURL}/store/${this.context.store.id}`,
             this.state,
             {
@@ -91,27 +75,25 @@ class App extends Component {
         console.log(store.data)
 
 
-    }
-
-    componentWillMount() {
-
-        axios.get(`${APIURL}/store/${this.context.store.id}`).then(v => {
-            console.log(v.data)
-            this.setState({...v.data})
-        })
-
-    }
+    };
 
     componentDidMount() {
 
 
     }
 
-    static contextType= StoreContext
+    componentWillMount() {
+
+        axios.get(`${APIURL}/store/${this.context.store.id}`).then(v => {
+            console.log(v.data);
+            this.setState({...v.data})
+        })
+
+    }
 
     render() {
 
-        let {classes} = this.props
+        let {classes} = this.props;
         let state = this.state;
         let {social} = this.state;
 
@@ -158,17 +140,17 @@ class App extends Component {
                         </Grid>
                         <Grid item>
                             <AppInput label={"Whatsapp"} startAdornment={<FaWhatsapp/>}
-                                      onChange={this.watchSocial("whatsapp")} value={state.social.facebook}/>
+                                      onChange={this.watchSocial("whatsapp")} value={state.social.whatsapp}/>
                         </Grid>
                         <Grid item>
                             <AppInput label={"Twitter"} startAdornment={<FaTwitter/>}
-                                      onChange={this.watchSocial("twitter")} value={state.social.facebook}/>
+                                      onChange={this.watchSocial("twitter")} value={state.social.twitter}/>
                         </Grid>
                     </Grid>
 
                 </Grid>
             </Grid>
-        )
+        );
         return (
             <React.Fragment>
                 <div style={{margin: "12px 16px "}}>
@@ -181,7 +163,6 @@ class App extends Component {
                         <Grid item>
                             <Tabs value={0} >
                                 <Tab label={"Basics"}/>
-                                
                                 <Tab label={"Site"}/>
                                 <Tab label={"Notifications"}/>
                             </Tabs>

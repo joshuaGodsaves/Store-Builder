@@ -1,8 +1,6 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Typography, AppBar, Toolbar } from "@material-ui/core";
-import { Switch } from "react-router-dom";
-import { Route } from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 // Pages
 import ProductsActivity from "./Products";
 import ProductActivity from "./product-renov";
@@ -16,14 +14,14 @@ class Index extends React.Component {
     super(props);
   }
 
-  static contextType= StoreContext
+    static contextType = StoreContext;
 
   render() {
     return (
       <React.Fragment>
         <Switch>
-          <Route path={`/stores/${this.context.store.id}/products`} exact  component={ProductsActivity}/>
-          <Route path={`/stores/${this.context.store.id}/products/:product`} exact component={ProductActivity} />
+            <Route path={`/products`} exact component={ProductsActivity}/>
+            <Route path={`/products/:product`} exact component={ProductActivity}/>
         </Switch>
       </React.Fragment>
     );

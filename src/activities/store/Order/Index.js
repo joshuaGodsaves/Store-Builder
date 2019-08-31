@@ -11,13 +11,13 @@ let styles = {};
 class Index extends React.Component {
 
 
-    static  contextType= StoreContext
+    static  contextType = StoreContext;
   render() {
     return (
       <React.Fragment>
         <Switch>
-          <Route path={ `/stores/${this.context.store.id}/orders`} exact component={OrderPage} />
-            <Route path={`/stores/${this.context.store.id}/orders/new-transaction`} exact component={New}/>
+            <Route path={`/orders`} exact component={OrderPage}/>
+            <Route path={`/orders/new-transaction`} exact component={New}/>
         </Switch>
       </React.Fragment>
     );

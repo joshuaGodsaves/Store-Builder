@@ -1,22 +1,27 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
-import { Add, Delete, Edit, MoreHoriz, SearchRounded } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import {Add, MoreHoriz, SearchRounded} from "@material-ui/icons";
+import {Link} from "react-router-dom";
 import AppContext from "../StoreContext"
 import PageToolbarContainer from "../components/PageToolbarContainer"
 import {
-  Avatar, Toolbar, AppBar,
-  Typography,
-  Button, FormControl, Checkbox, Chip, IconButton,
-  InputBase,
-  Grid,
-  LinearProgress,
-  Menu,
-  MenuItem,
-  Paper
+    Avatar,
+    Button,
+    Checkbox,
+    Chip,
+    FormControl,
+    Grid,
+    IconButton,
+    InputBase,
+    LinearProgress,
+    Menu,
+    MenuItem,
+    Paper,
+    Typography
 } from "@material-ui/core";
 import DataSource from "../../../DataSource"
-import { FaDollarSign } from "react-icons/fa";
+import {FaDollarSign} from "react-icons/fa";
+
 let styles = {
   ProductItemRoot: {
     padding: 8
@@ -46,19 +51,7 @@ class TableProductsView extends React.Component {
     anchorEl: undefined,
     activeProduct: undefined
   };
-  selectAll = (event, checked) => {
-    if (checked) {
-      this.setState(state => {
-        state.selected = state.products.map(v => v._id)
-        return state;
-      });
-    } else {
-      this.setState(state => {
-        state.selected = []
-        return state;
-      });
-    }
-  };
+    static contextType = AppContext;
 
   selectSingle = itemKey => {
     return (event, checked) => {
@@ -75,44 +68,56 @@ class TableProductsView extends React.Component {
     };
   };
 
+    selectAll = (event, checked) => {
+        if (checked) {
+            this.setState(state => {
+                state.selected = state.products.map(v => v._id);
+                return state;
+            });
+        } else {
+            this.setState(state => {
+                state.selected = [];
+                return state;
+            });
+        }
+    };
+
   loadProducts = () => {
     this.dataSource.getStoreProducts().then(v => {
       this.setState({ products: v.data.items, loading: false })
-    }).catch(v => console.log(v))
+    }).catch(v => console.log(v));
     this.setState({ loading: true })
-  }
+  };
 
   componentWillMount() {
 
-    this.dataSource = new DataSource(this.context.store.token, this.context.store.id)
+      this.dataSource = new DataSource(this.context.store.token, this.context.store.id);
     this.loadProducts()
   }
-
-  static contextType = AppContext
 
   openMenu = (product) => {
     return (event) => {
-      this.setState({ activeProduct: product })
-      event.persist()
+        this.setState({activeProduct: product});
+        event.persist();
       this.setState({ anchorEl: event.target, activeProduct: product })
     }
-  }
+  };
 
   closeMenu = () => {
     this.setState({ anchorEl: null })
-  }
+  };
 
   deleteProduct = async () => {
-    let { activeProduct } = this.state
-    let result = await this.dataSource.deleteStoreProduct(activeProduct._id)
-    this.closeMenu()
+      let {activeProduct} = this.state;
+      let result = await this.dataSource.deleteStoreProduct(activeProduct._id);
+      this.closeMenu();
     this.loadProducts()
-  }
+  };
 
 
   render() {
     let { classes } = this.props;
-    let { anchorEl, activeProduct } = this.state
+      let {anchorEl, activeProduct} = this.state;
     let productMenu = (
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} id="simple-menu" onClose={this.closeMenu}>
         <MenuItem onClick={this.closeMenu}
@@ -120,7 +125,7 @@ class TableProductsView extends React.Component {
         <MenuItem onClick={this.deleteProduct}>Delete</MenuItem>
         <MenuItem>Mute</MenuItem>
       </Menu>
-    )
+    );
 
     let defaultToolbarArea = (
       <PageToolbarContainer>
@@ -224,22 +229,28 @@ class TableProductsView extends React.Component {
     );
 
     let productsNotAvailable = (
-      <div align="center">
-        <Typography align={"center"}>
-          You dont have any products yet, click the button above to add some.
-        </Typography>
-        <Button to={`/stores/${this.context.store.id}/products/new`}
-          component={Link} style={{ margin: "16px 0px" }}
-          color={"primary"}>
-          <Add /> CREATE
-        </Button>
-      </div>
+        <Grid container style={{height: "100vh"}} alignItems={"center"} justify={"center"}>
+            <Grid item>
+                <Paper style={{padding: "24px"}}>
+                    <div align="center">
+                        <Typography align={"center"} style={{margin: "16px 0px"}}>
+                            You dont have any products yet, click the button above to add some.
+                        </Typography>
+                        <Button to={`/products/new`}
+                                component={Link} style={{margin: "16px 0px"}}
+                                color={"primary"}>
+                            <Add/> CREATE
+                        </Button>
+                    </div>
+                </Paper>
+            </Grid>
+        </Grid>
     );
 
     return (
       <React.Fragment>
         {this.state.loading ? <LinearProgress /> :
-          <div>
+            <div style={{height: "100vh", background: '#404040'}}>
             {this.state.products.length == 0
               ? productsNotAvailable
               : productsAvailable}

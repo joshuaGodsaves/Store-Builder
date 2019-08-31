@@ -11,14 +11,13 @@ let styles = {};
 class Component extends React.Component {
 
     static contextType = StoreContext;
+    state = {
+        categories: []
+    };
 
     componentWillMount() {
         this.dataSource = new DataSource(this.context.store.token, this.context.store.id)
     }
-
-    state = {
-        categories: []
-    };
 
     componentDidMount() {
         this.dataSource.getStoreCategories().then(v => {
@@ -45,7 +44,7 @@ class Component extends React.Component {
                         </Grid>
                         <Grid item>
                             <Button component={Link}
-                                    to={`/categories/new?type=product`}>
+                                    to={`/categories/new?type=brand`}>
                                 New Category
                             </Button>
                         </Grid>

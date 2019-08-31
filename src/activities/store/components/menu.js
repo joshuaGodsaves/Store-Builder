@@ -3,102 +3,98 @@ import {Link} from "react-router-dom";
 import withStyles from "@material-ui/core/styles/withStyles";
 import ListItemIcon from "@material-ui/core/es/ListItemIcon/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import BlogIcon from "@material-ui/icons/TextFormat";
 import Divider from "@material-ui/core/Divider";
-import {FaLayerGroup} from "react-icons/fa"
-import { CategorySharp} from "@material-ui/icons";
+import {
+    AccessibleForward,
+    AddShoppingCartRounded as AddShoppingCart,
+    Business,
+    CategorySharp,
+    CreditCard,
+    Layers,
+    PeopleOutline,
+    Settings,
+    ShowChart
+} from "@material-ui/icons";
 import StoreContext from "../StoreContext"
 
-import {
-    ListSubheader,
-    ListItem, ButtonBase,
-    List
-} from "@material-ui/core"
+import {List, ListItem, ListSubheader} from "@material-ui/core"
 
-import {
-    AddShoppingCartRounded as AddShoppingCart, Business, PeopleOutline
-} from "@material-ui/icons"
 let styles = theme => ({
+    rootListItemContainer: {
+        color: "",
+        borderRadius: 8,
+        padding: "8px 12px",
+        background: "rgba(0,0,0,.7)",
+        margin: "8px 0px"
+    },
+    listIcon: {
+        color: "ghostwhite"
+    }
 
 });
+
+function AppListItem(props) {
+    return (
+        <ListItem component={Link} to={props.to} className={props.classes.rootListItemContainer}>
+            <ListItemIcon className={props.classes.listIcon}>{props.icon}</ListItemIcon>
+            <ListItemText>{props.label}</ListItemText>
+        </ListItem>
+    )
+}
 
 class App extends Component {
     constructor(props) {
         super(props);
     }
 
-    static contextType= StoreContext
-
-
+    static contextType = StoreContext;
     render() {
+        let {classes} = this.props;
         return (
             <React.Fragment>
-                <List style={{ paddingTop: 0 }}>
+                <List style={{
+                    justifyContent: "center",
+                    padding: "0px 12px",
+                    background: "linear-gradient(ghostwhite, white)"
+                }}>
                     <List>
-                        <ListSubheader style={{background: "ghostwhite"}}> Store </ListSubheader>
-                        <Divider />
-                        <ListItem component={Link} to={`/stores/${this.context.store.id}/Sections`}>
-                            <ListItemIcon>
-                                <FaLayerGroup/>
-                            </ListItemIcon>
-                            <ListItemText primary={"Section"} />
-                        </ListItem>
-                        <ListItem component={Link} to={`/stores/${this.context.store.id}/categories`}>
-                            <ListItemIcon>
-                                <CategorySharp/>
-                            </ListItemIcon>
-                            <ListItemText primary={"category"} />
-                        </ListItem>
-                        <ListItem component={Link} to={`/stores/${this.context.store.id}/products`}>
-                            <ListItemIcon>
-                                <AddShoppingCart/>
-                            </ListItemIcon>
-                            <ListItemText primary={"products"} />
-                        </ListItem>
-                        {/*<ListItem component={Link} to={"/services"}>*/}
-                        {/*<ListItemIcon>*/}
-                        {/*<RoomService/>*/}
-                        {/*</ListItemIcon>*/}
-                        {/*<ListItemText primary={"services"} />*/}
-                        {/*</ListItem>*/}
-                        <ListItem component={Link} to={`/stores/${this.context.store.id}/orders`}>
-                            <ListItemIcon>
-                                <Business/>
-                            </ListItemIcon>
-                            <ListItemText primary={"Sales"} />
-                        </ListItem>
-                        <ListItem component={Link} to={`/stores/${this.context.store.id}/customers`}>
-                            <ListItemIcon>
-                                <PeopleOutline/>
-                            </ListItemIcon>
-                            <ListItemText primary={"Customers"} />
-                        </ListItem>
+
+                        <AppListItem to={`/Sections`} label={"Section"} icon={<Layers/>} classes={classes}/>
+
+                        <AppListItem to={`/categories`} label={"Categories"} icon={<CategorySharp/>} classes={classes}/>
+
+                        <AppListItem to={`/products`} label={"Products"} icon={<AddShoppingCart/>} classes={classes}/>
+
+                        <AppListItem to={`/orders`} label={"Orders"} icon={<Business/>} classes={classes}/>
+
+                        <AppListItem to={`/customers`} label={"Customers"} icon={<PeopleOutline/>} classes={classes}/>
+
                     </List>
-                    <ListSubheader>Store Theme</ListSubheader>
-                    <Divider />
-                    <ListItem  component={Link} to={`/stores/${this.context.store.id}/themes`}>
-                        <ListItemIcon>
-                            <BlogIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={"theme"} />
-                    </ListItem>
                     <ListSubheader> Utilities</ListSubheader>
+                    <Divider/>
+                    <ListItem component={Link} to={`/blog`} disabled>
+                        <ListItemIcon>
+                            <ShowChart/>
+                        </ListItemIcon>
+                        <ListItemText primary={"Analytics"}/>
+                    </ListItem>
+                    <ListItem component={Link} to={`/assets`} disabled>
+                        <ListItemIcon>
+                            <AccessibleForward/>
+                        </ListItemIcon>
+                        <ListItemText primary={"Outreach"}/>
+                    </ListItem>
+                    <ListSubheader> Account</ListSubheader>
                     <Divider />
-                    <ListItem component={Link} to={`/stores/${this.context.store.id}/blog`} disabled>
+                    <ListItem component={Link} to={`/Settings`}>
                         <ListItemIcon>
-                            <BlogIcon />
+                            <CreditCard/>
                         </ListItemIcon>
-                        <ListItemText primary={"blog"} />
+                        <ListItemText>Billing</ListItemText>
                     </ListItem>
-                    <ListItem component={Link} to={`/stores/${this.context.store.id}/assets`}>
+                    <ListItem component={Link} to={`/Settings`}>
                         <ListItemIcon>
-                            <BlogIcon />
-                        </ListItemIcon>
-                        <ListItemText primary={"assets"} />
-                    </ListItem>
-                    <ListItem component={Link} to={`/stores/${this.context.store.id}/Settings`}>
-                        <ListItemIcon>
-                            <BlogIcon />
+                            <Settings/>
                         </ListItemIcon>
                         <ListItemText>Settings</ListItemText>
                     </ListItem>

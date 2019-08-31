@@ -1,6 +1,5 @@
 import React, {Component} from "react";
-import userIndex from "./activities/user/index"
-import storeIndex from "./activities/store/index"
+import StoreIndex from "./activities/store/index"
 import loginPage from "./activities/user/Login"
 import withStyles from "@material-ui/core/styles/withStyles";
 import AppContext from "./AppContext"
@@ -19,10 +18,11 @@ class App extends Component {
   state={};
 
 componentWillMount() {
-    let user = JSON.parse(window.localStorage.getItem("magnet-client-active-user"));
-  if(user && user.email) {
+    let data = JSON.parse(window.localStorage.getItem("magnet-client-active-store"));
+
+    if (data && data.email) {
     //User is loggedIn Set token and email
-    this.setState({user: user.email, token: user.token})
+        this.setState({user: data.email, token: data.token, store: data.store, storeId: data.storeId})
   }else{
     if(window.location.pathname !== "/login") {
       window.location.replace("/login")
@@ -33,12 +33,13 @@ componentWillMount() {
   render() {
     return (
       <BrowserRouter>
-        <AppContext.Provider value={{user:{email: this.state.user, user: this.state.user,  token: this.state.token}}}>
+          <AppContext.Provider
+              value={{user: {email: this.state.user}, store: {token: this.state.token, id: this.state.storeId}}}>
           <Switch>
             <Route path={"/login"} exact  component={loginPage} />
-            <Route path={"/stores/:store"}   component={storeIndex} />
-            <Route path={"/"}   component={storeIndex} />
-          </Switch>
+              <StoreIndex/>
+          </Switch>S
+
         </AppContext.Provider>
       </BrowserRouter>
     );

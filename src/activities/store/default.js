@@ -6,8 +6,6 @@ import {Link} from "react-router-dom";
 import {ChevronRight} from "@material-ui/icons"
 import {Button, Grid} from "@material-ui/core"
 
-import Context from "./StoreContext"
-
 import OrderAnalytics from "./components/Chart"
 
 let styles = theme => ({
@@ -100,10 +98,10 @@ class App extends Component {
                     </Grid>
                     <Grid item xs={12} sm={11} md={10}>
                         <Grid container justify={"center"} className={classes.itemsContainer}>
-                          
-                            <CoreComponentBox classes={classes} to={`/stores/${storeId}/products`} details={"detail"}/>
-                            <CoreComponentBox classes={classes} to={`/stores/${storeId}/customers`} details={"detail"}/>
-                            <CoreComponentBox classes={classes} to={`/stores/${storeId}/transactions`} details={"detail"}/>
+
+                            <CoreComponentBox classes={classes} to={`/products`} details={"detail"}/>
+                            <CoreComponentBox classes={classes} to={`/customers`} details={"detail"}/>
+                            <CoreComponentBox classes={classes} to={`/transactions`} details={"detail"}/>
                           
                         </Grid>
                     </Grid>

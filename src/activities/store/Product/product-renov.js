@@ -18,6 +18,7 @@ import {
     MenuItem,
     Tab,
     Tabs,
+    Toolbar,
     Typography
 } from '@material-ui/core';
 import Context from "../../../AppContext"
@@ -376,28 +377,32 @@ class Component extends React.Component {
         return (
             <>
                 {loading ? <LinearProgress/> : ""}
-                <div style={{margin: "4px 0px"}}></div>
-                <Grid container justify={"center"} style={{background: ""}}>
-                    <Grid item xs={10}>
-                        <Grid container>
-                            <Grid item xs={12} style={{ display: "flex", justifyContent: "space-between" }}>
-                                <div></div>
-                                <Button onClick={this.state.isNewProduct ? this.save : this.updateProduct}> {this.state.isNewProduct ? "Save" : "Update"} </Button>
-                            </Grid>
-                            <Grid item xs={10} style={{}}>
-                                <Tabs value={0} >
-                                    <Tab label={"General"} />
-                                    <Tab label={"Event"} />
-                                    <Tab label={"Advanced"} />
-                                    <Tab label={"Settings"} />
-                                </Tabs>
-                            </Grid>
+                <Toolbar style={{
+                    borderBottom: "1px solid blue",
+                    paddingTop: 12,
+                    display: "flex",
+                    justifyContent: "space-between"
+                }} variant={"dense"}>
+                    <Grid container justify={"space-between"} alignItems={"center"}>
+                        <Grid item xs={10} style={{}}>
+                            <Tabs value={0} variant={"scrollable"} indicatorColor={"primary"}>
+                                <Tab label={"General"}/>
+                                <Tab label={"Event"}/>
+                                <Tab label={"Advanced"}/>
+                                <Tab label={"Settings"}/>
+                            </Tabs>
                         </Grid>
+                        <Grid item style={{display: "flex", justifyContent: "space-between"}}>
+                            <div></div>
+                            <Button
+                                color={"primary"}
+                                onClick={this.state.isNewProduct ? this.save : this.updateProduct}> {this.state.isNewProduct ? "Save" : "Update"} </Button>
+                        </Grid>
+
                     </Grid>
-                </Grid>
+                </Toolbar>
                 <Grid container justify={"center"}>
                     <Grid item xs={11}>
-
                         <GeneralTab classes={classes} product={this.state.product}
                                     watchText={this.watchText}
                                     brandChange={this.watchBrand}
