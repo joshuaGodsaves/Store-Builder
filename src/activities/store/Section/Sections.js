@@ -143,7 +143,7 @@ class TableProductsView extends React.Component {
                                         <CardActionArea
                                             style={{padding: 16, display: "flex", justifyContent: "space-between"}}
                                             component={Link}
-                                            to={`/stores/${this.context.store.id}/sections/${section._id}`}>
+                                            to={`/sections/${section._id}`}>
                                             <div>
                                                 View/ Edit
                                             </div>

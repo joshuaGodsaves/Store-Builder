@@ -15,7 +15,7 @@ import {
     Settings,
     ShowChart
 } from "@material-ui/icons";
-import StoreContext from "../StoreContext"
+import StoreContext from "../../StoreContext"
 
 import {List, ListItem, ListSubheader} from "@material-ui/core"
 

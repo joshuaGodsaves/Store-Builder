@@ -314,7 +314,7 @@ class Component extends React.Component {
             ).then(v => {
                 //After saveing product reload with product id
             this.setState({saveingProduct: false});
-                window.location.replace(`/stores/${this.context.store.id}/products`)
+                window.location.replace(`/products`)
             })
     };
 

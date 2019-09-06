@@ -167,7 +167,7 @@ class Category extends React.Component {
                     "X-auth-license": this.context.store.token
                 }
             });
-        window.location.replace(`/stores/${this.context.store.id}/categories`)
+        window.location.replace(`/categories`)
 
     };
 

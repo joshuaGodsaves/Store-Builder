@@ -1,10 +1,9 @@
 import React, {Component} from "react";
-
 import StoreContext from "./StoreContext"
 import withStyles from "@material-ui/core/styles/withStyles";
 import {Link} from "react-router-dom";
 import {ChevronRight} from "@material-ui/icons"
-import {Button, Grid} from "@material-ui/core"
+import {Button, Grid, Paper} from "@material-ui/core"
 
 import OrderAnalytics from "./components/Chart"
 
@@ -51,20 +50,23 @@ let styles = theme => ({
 function CoreComponentBox(props){
     let {classes, to, details} = props;
     return (
-        <Grid item xs={11} sm={6} md={4} className={classes.itemContainer}>
-        <div className={classes.itemContent}>
-            <div className={classes.equalBox}>
-                <div style={{ width: "100%", height: "100%", position: "absolute", left:0, top:0}}>
-                    <div className={classes.contentHints}>
-                        // Brief details should stay here
+        <Grid item xs={11} sm={6} md={4}>
+            <Paper className={classes.itemContainer}>
+                <div className={classes.itemContent}>
+                <div className={classes.equalBox}>
+                    <div style={{ width: "100%", height: "100%", position: "absolute", left:0, top:0, backgroundImage:"url()"}}>
+                        <div className={classes.contentHints}>
+                            Brief details should stay here
+                        </div>
                     </div>
                 </div>
+                <Button color={"primary"} component={Link}    to={to}>
+                    Open
+                    <ChevronRight className={classes.xMargin}/>
+                </Button>
             </div>
-            <Button color={"primary"} component={Link}    to={to}>
-                Open
-                <ChevronRight className={classes.xMargin}/>
-            </Button>
-        </div>
+            </Paper>
+        
     </Grid>
     )
 }
@@ -97,7 +99,7 @@ class App extends Component {
                         </div>
                     </Grid>
                     <Grid item xs={12} sm={11} md={10}>
-                        <Grid container justify={"center"} className={classes.itemsContainer}>
+                        <Grid container justify={"center"} className={classes.itemsContainer} spacing={8}>
 
                             <CoreComponentBox classes={classes} to={`/products`} details={"detail"}/>
                             <CoreComponentBox classes={classes} to={`/customers`} details={"detail"}/>

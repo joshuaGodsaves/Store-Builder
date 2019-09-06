@@ -151,7 +151,7 @@ class TableProductsView extends React.Component {
     return (
         <React.Fragment>
           {this.state.loading? <LinearProgress/> :""}
-            <div style={{height: "100vh", background: '#404040'}}>
+            <div style={{height: "100vh"}}>
                 {defaultToolbarArea}
                 {this.state.tab == 0 ? <ProductCategories/> : ""}
                 {this.state.tab == 1 ? <BrandCategories/> : ""}

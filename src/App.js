@@ -30,6 +30,7 @@ componentWillMount() {
   }
 }
 
+
   render() {
     return (
       <BrowserRouter>
@@ -38,8 +39,7 @@ componentWillMount() {
           <Switch>
             <Route path={"/login"} exact  component={loginPage} />
               <StoreIndex/>
-          </Switch>S
-
+          </Switch>
         </AppContext.Provider>
       </BrowserRouter>
     );

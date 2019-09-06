@@ -16,9 +16,18 @@ let styles = theme => ({
     drawerOpen: {
         width: `${width}px`,
         [theme.breakpoints.up("sm")]:{
+
         },
         [theme.breakpoints.down("sm")]:{
             width: "225px"
+         }
+    },
+    drawerClose:{
+        [theme.breakpoints.up("sm")]:{
+            width: `${width}px`
+        },
+        [theme.breakpoints.down("sm")]:{
+            width: "0px"
          }
     },
     toggler:{
@@ -37,6 +46,7 @@ class AppDrawer extends React.Component {
     closeDrawer=()=> {
         this.setState({close:false});
     };
+
     openDrawer=()=>{
         this.setState({close:true});
     };
@@ -48,13 +58,14 @@ class AppDrawer extends React.Component {
     }
     
     render() {
-        let {classes}=this.props;
 
-        let {open} = this.state;
+        let {classes, open}=this.props;
+
         return (
-            <Drawer classes={{paper: open ? classes.drawerOpen : classes.rootDrawer}} variant={"permanent"} 
+            <Drawer classes={{paper: open ? classes.drawerOpen : classes.drawerClose}} variant={"permanent"} 
             open= {this.open}
-            onClose={this.closeDrawer}>
+            onClose={this.closeDrawer}
+            >
                 <AppBar position={"fixed"}  elevation={0} style={{background:"darkblue"}}>
                     <Toolbar>
                         <div style={{height: "100%", background: 'rgba(0,0,0,.6)'}}>
@@ -67,6 +78,7 @@ class AppDrawer extends React.Component {
                 </div>
             </Drawer>
         )
+
     }
 }
 

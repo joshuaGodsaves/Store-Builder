@@ -23,14 +23,26 @@ let styles = theme => ({
 })
 
 class CoreLayout extends React.Component {
+    state={
+        drawerOpen: false
+    }
+
+    
+    drawerOpener= ()=> {    
+        this.setState(state=>{
+            state.drawerOpen= !state.drawerOpen; return state;
+        });
+    }
+
     render() {
         let { classes, content, drawerItems } = this.props;
         return (
             <React.Fragment>
-                <AppPrimaryMenu>
+                <AppPrimaryMenu drawerOpener={this.drawerOpener} >
 
                 </AppPrimaryMenu>
-                <AppDrawer>
+
+                <AppDrawer onClose={this.drawerOpener} open={this.state.drawerOpen}>
                     {drawerItems}
                 </AppDrawer>
 

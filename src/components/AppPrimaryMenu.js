@@ -9,7 +9,16 @@ import AppContext from "../AppContext";
 import {APIURL} from './../DataSource';
 
 let styles = theme => ({
+    toggler: {
+        [theme.breakpoints.up('sm')]: {
+            display: "none"
+        },
+        [theme.breakpoints.down('sm')]: {
+            display: "block"
+        }
+    },
     rootMenu: {
+
         background: "darkblue",
         [theme.breakpoints.up('sm')]: {
             width: `calc(100% - 225px)`,
@@ -73,6 +82,11 @@ class App extends Component {
         this.setState({anchorEl: null})
     };
 
+
+    toggleDrawer= ()=>{
+
+    }
+
     render() {
         let {classes} = this.props;
         let {storeListElTrigger} = this.state;
@@ -88,14 +102,17 @@ class App extends Component {
             </Menu>
         );
 
+        let {drawerOpener}= this.props
+
         return (
+
             <AppBar style={{zIndex: 2000}} elevation={0} className={classes.rootMenu}>
                 {userMenu}
                 <Toolbar
                     style={{display: "flex", alignItems: "center", justifyContent: "space-between", color: "white"}}>
                     <Grid container justify={"space-between"} alignItems={"center"}>
                         <Grid item>
-                            <IconButton>
+                            <IconButton onClick={drawerOpener} className={classes.toggler}>
                                 <MenuIcon/>
                             </IconButton>
                         </Grid>

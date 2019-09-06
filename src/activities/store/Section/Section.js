@@ -129,11 +129,12 @@ class Section extends React.Component {
 
   loadSection = async (sectionID) => {
     let section;
-        section= await axios.get(`http://localhost:5000/api/store/${this.context.store.id}/section/${sectionID}`)
+        section= await axios.get(`${APIURL}/store/${this.context.store.id}/section/${sectionID}`)
     if(!section){
       console.log("error")
       return
     }
+    
     if (section.data) {
       this.setState({section: section.data})
       return true
@@ -172,7 +173,7 @@ class Section extends React.Component {
     let sectionid= data.items[data.items.length-1]._id;
     console.log(data.items.length);
 
-    window.location.replace(`http://localhost:3000/stores/${this.context.store.id}/sections/${sectionid}`);
+    window.location.replace(`/sections/${sectionid}`);
 
   }
   openProductsDialog= ()=>{
