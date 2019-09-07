@@ -17,20 +17,20 @@ import {
 } from "@material-ui/icons";
 import StoreContext from "../StoreContext"
 
-import {List, ListItem, ListSubheader} from "@material-ui/core"
+import {List, ListItem, ListSubheader, Typography} from "@material-ui/core"
 
 let styles = theme => ({
     rootListItemContainer: {
         color: "",
-        borderRadius: 8,
+        borderRadius: 4,
         padding: "8px 12px",
-        background: "rgba(0,0,0,.7)",
+        background: "rgba(0,0,0,.2)",
         margin: "8px 0px"
     },
     listIcon: {
-        color: "ghostwhite"
+        color: "darkblue"
     },
-    text:{color:'ghostwhite'}
+    text: {color: 'ghostwhite'}
 
 });
 
@@ -38,7 +38,9 @@ function AppListItem(props) {
     return (
         <ListItem component={Link} to={props.to} className={props.classes.rootListItemContainer}>
             <ListItemIcon className={props.classes.listIcon}>{props.icon}</ListItemIcon>
-            <ListItemText style={{color:'ghost'}} classes={{root:props.classes.text}}>{props.label}</ListItemText>
+            <ListItemText style={{margin: "0px 0px"}} classes={{root: props.classes.text}}>
+                <Typography align={"left"} style={{color: "darkblue"}}>{props.label}</Typography>
+            </ListItemText>
         </ListItem>
     )
 }

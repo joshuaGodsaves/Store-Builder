@@ -245,7 +245,7 @@ class TableProductsView extends React.Component {
             <React.Fragment>
                 {customerMenu}
                 {this.state.loading ? <LinearProgress/> :
-                    <div style={{height: "100vh", background: '#404040'}}>
+                    <div style={{height: "calc( 100vh - 64px)", background: '#404040'}}>
                         {this.state.customers.length == 0
                             ? customersNotAvailable
                             : customersAvailable}

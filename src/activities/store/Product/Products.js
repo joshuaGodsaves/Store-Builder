@@ -1,6 +1,7 @@
 import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import {Add, MoreHoriz, SearchRounded} from "@material-ui/icons";
+import {FaDollarSign, FaFilter} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import AppContext from "../StoreContext"
 import PageToolbarContainer from "../components/PageToolbarContainer"
@@ -20,7 +21,6 @@ import {
     Typography
 } from "@material-ui/core";
 import DataSource from "../../../DataSource"
-import {FaDollarSign} from "react-icons/fa";
 
 let styles = {
   ProductItemRoot: {
@@ -121,7 +121,7 @@ class TableProductsView extends React.Component {
     let productMenu = (
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} id="simple-menu" onClose={this.closeMenu}>
         <MenuItem onClick={this.closeMenu}
-          component={Link} to={`/stores/${this.context.store.id}/products/${activeProduct ? activeProduct._id : undefined}`}>View</MenuItem>
+                  component={Link} to={`/products/${activeProduct ? activeProduct._id : undefined}`}>View</MenuItem>
         <MenuItem onClick={this.deleteProduct}>Delete</MenuItem>
         <MenuItem>Mute</MenuItem>
       </Menu>
@@ -151,14 +151,17 @@ class TableProductsView extends React.Component {
                   </Paper>
                 </Grid>
               </Grid>
-              <Grid container justify={"center"}>
+                <Grid container justify={"center"} style={{marginTop: 8}} spacing={8}>
+                    <Grid item>
+                        <Button color={"primary"}>
+                            <FaFilter style={{marginRight: 8}}/>
+
+                            Filter
+                        </Button>
+                    </Grid>
+
                 <Grid item>
-                  <Button>
-                    Bulk Add
-                    </Button>
-                </Grid>
-                <Grid item>
-                  <Button component={Link} to={`/stores/${this.context.store.id}/products/new`}>
+                    <Button component={Link} to={`/products/new`} color={"primary"}>
                     New Product
                     </Button>
                 </Grid>
@@ -250,7 +253,7 @@ class TableProductsView extends React.Component {
     return (
       <React.Fragment>
         {this.state.loading ? <LinearProgress /> :
-            <div style={{height: "100vh"}}>
+            <div style={{height: "calc( 100vh - 64px)"}}>
             {this.state.products.length == 0
               ? productsNotAvailable
               : productsAvailable}

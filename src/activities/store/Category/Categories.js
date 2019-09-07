@@ -135,8 +135,8 @@ class TableProductsView extends React.Component {
                   <Grid item>
                       <Tabs value={this.state.tab} variant={"scrollable"} onChange={(e, v) => {
                           this.setState({tab: v});
-                      }}>
-                      <Tab label={"Products cat"}></Tab>
+                      }} textColor={"primary"} indicatorColor={"primary"}>
+                          <Tab label={"Products cat"}></Tab>
                       <Tab label={"Brands"}></Tab>
                       <Tab label={"Products type"}></Tab>
                     </Tabs>
@@ -151,7 +151,7 @@ class TableProductsView extends React.Component {
     return (
         <React.Fragment>
           {this.state.loading? <LinearProgress/> :""}
-            <div style={{height: "100vh"}}>
+            <div style={{height: "calc( 100vh - 64px)"}}>
                 {defaultToolbarArea}
                 {this.state.tab == 0 ? <ProductCategories/> : ""}
                 {this.state.tab == 1 ? <BrandCategories/> : ""}

@@ -1,5 +1,6 @@
 import React from "react";
-import {AppBar, Drawer, Toolbar} from "@material-ui/core";
+import {AppBar, Button, Drawer, Toolbar} from "@material-ui/core";
+import {Link} from "react-router-dom"
 import withStyles from "@material-ui/core/styles/withStyles";
 
 const width= 225;
@@ -68,9 +69,7 @@ class AppDrawer extends React.Component {
             >
                 <AppBar position={"fixed"}  elevation={0} style={{background:"darkblue"}}>
                     <Toolbar>
-                        <div style={{height: "100%", background: 'rgba(0,0,0,.6)'}}>
-
-                        </div>
+                        <Button component={Link} to={"/"}>Admin</Button>
                     </Toolbar>
                 </AppBar>
                 <div style={{width:"100%", paddingTop:64, left:0, background:"ghostwhite", overflowY:"auto"}}>

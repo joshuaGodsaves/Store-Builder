@@ -3,7 +3,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import {AppBar, Avatar, Grid, IconButton, Menu, MenuItem} from "@material-ui/core";
 import Link from "react-router-dom/Link"
 import withStyles from "@material-ui/core/styles/withStyles";
-import {Menu as MenuIcon, Notifications, Store, StoreMallDirectory} from "@material-ui/icons";
+import {Link as LinkIcon, Menu as MenuIcon, Notifications, Store} from "@material-ui/icons";
 import axios from "axios"
 import AppContext from "../AppContext";
 import {APIURL} from './../DataSource';
@@ -85,7 +85,7 @@ class App extends Component {
 
     toggleDrawer= ()=>{
 
-    }
+    };
 
     render() {
         let {classes} = this.props;
@@ -102,7 +102,7 @@ class App extends Component {
             </Menu>
         );
 
-        let {drawerOpener}= this.props
+        let {drawerOpener} = this.props;
 
         return (
 
@@ -119,17 +119,17 @@ class App extends Component {
                         <Grid item>
                             <Grid container alignItems={"center"}>
                                 <Grid item>
-                                    <IconButton>
+                                    <IconButton style={{color: "ghostwhite"}}>
                                         <Notifications/>
                                     </IconButton>
                                 </Grid>
                                 <Grid item>
-                                    <IconButton>
-                                        <StoreMallDirectory/>
+                                    <IconButton style={{color: "ghostwhite"}}>
+                                        <LinkIcon/>
                                     </IconButton>
                                 </Grid>
                                 <Grid item>
-                                    <Avatar sizes={"small"} style={{marginLeft:12}}/>
+                                    <Avatar sizes={"small"} style={{marginLeft: 12, color: "ghostwhite"}}/>
                                 </Grid>
                             </Grid>
                         </Grid>

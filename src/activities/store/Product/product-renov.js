@@ -385,7 +385,7 @@ class Component extends React.Component {
                 }} variant={"dense"}>
                     <Grid container justify={"space-between"} alignItems={"center"}>
                         <Grid item xs={10} style={{}}>
-                            <Tabs value={0} variant={"scrollable"} indicatorColor={"primary"}>
+                            <Tabs value={0} variant={"scrollable"} indicatorColor={"primary"} textColor={"primary"}>
                                 <Tab label={"General"}/>
                                 <Tab label={"Event"}/>
                                 <Tab label={"Advanced"}/>

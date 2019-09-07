@@ -1,11 +1,9 @@
 import React from "react"
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import {Toolbar, Grid, AppBar} from "@material-ui/core";
+import {Grid} from "@material-ui/core";
 
-let styles= {
-
-}
+let styles= {};
 
 class PageToolBarContainer extends React.Component{
 
@@ -13,7 +11,7 @@ class PageToolBarContainer extends React.Component{
         return(
             <>
                 <Grid container style={{
-                    height: "200px", background: "darkblue"
+                    height: "200px", background: "ghostwhite"
                 }} alignContent={"flex-end"}>
                     <Grid item sm={12}>
                         {/* <AppBar position={"relative"}>
