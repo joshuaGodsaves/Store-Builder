@@ -179,8 +179,8 @@ class TableProductsView extends React.Component {
         );
         return (
             <React.Fragment>
-                {this.state.loading ? <LinearProgress/> :
-                    <div style={{height: "100vh", background: '#404040'}}>
+                {this.state.loading ? <LinearProgress/> :   
+                    <div style={{height: "100vh"}}>
                         {this.state.sections.length == 0
                             ? sectionsNotAvailable
                             : sectionsAvailable}

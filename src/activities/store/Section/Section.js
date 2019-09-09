@@ -135,8 +135,8 @@ class Section extends React.Component {
       return
     }
     
-    if (section.data) {
-      this.setState({section: section.data})
+    if (section.data.success && section.data) {
+      this.setState({section: section.data.item})
       return true
     }
     return false
@@ -168,14 +168,13 @@ class Section extends React.Component {
           }
         });
     let sections = await axios.get(`${APIURL}/store/${this.context.store.id}/section`)
+
     let data= sections.data;
-    console.log(data);
-    let sectionid= data.items[data.items.length-1]._id;
-    console.log(data.items.length);
+    let sectionid= data[data.length-1].item._id
 
-    window.location.replace(`/sections/${sectionid}`);
-
+    window.history.pushState("","",`/sections/${sectionid}`)
   }
+
   openProductsDialog= ()=>{
     this.setState({productsDialogOpen: true})
   }
@@ -262,7 +261,9 @@ class Section extends React.Component {
                         <Checkbox/>
                       </Grid>
                       <Grid item>
-                        <FaProductHunt/>
+                      <FaProductHunt/>
+                      </Grid>
+                      <Grid item>
                         <Typography> Product Name</Typography>
                       </Grid>
                     </Grid>

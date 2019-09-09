@@ -21,7 +21,7 @@ class Component extends React.Component {
 
     componentDidMount() {
         this.dataSource.getStoreCategories().then(v => {
-            let categories = v.data.items;
+            let categories = v;
             this.setState({categories: categories});
             this.setState({loaded: true});
             this.setState({loading: false})

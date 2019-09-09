@@ -5,6 +5,7 @@ import {Delete, Edit, MoreHoriz, SearchRounded} from "@material-ui/icons";
 import {FaDollarSign, FaMailBulk, FaUserCircle} from "react-icons/fa"
 import Button from "@material-ui/core/Button";
 import StoreContext from "../StoreContext"
+import PaperNotification from "../components/PaperNotification"
 import {
     Checkbox,
     Chip,
@@ -228,14 +229,11 @@ class TableProductsView extends React.Component {
     
     let ordersNotAvailable = (
         <Grid container style={{height: "100vh"}} alignItems={"center"} justify={"center"}>
-            <Grid item>
-                <Paper style={{padding: "24px"}}>
-                    <div align="center">
-                        <Typography align={"center"} style={{margin: "16px 0px"}}>
-                            You dont have any orders yet
-                        </Typography>
-                    </div>
-                </Paper>
+            <Grid item sm={10} sm={8} md={6}>
+                <PaperNotification label={""} action={""}>
+                  <Typography>You do not have orders yet.</Typography>
+                  <Typography>When ever new orders are made to your store, you'll see theme here</Typography>
+                </PaperNotification>
             </Grid>
         </Grid>
     );

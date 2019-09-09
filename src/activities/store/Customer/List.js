@@ -4,6 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import {Add, Delete, Edit, MoreHoriz} from "@material-ui/icons";
 import {Link} from "react-router-dom";
 import StoreContext from "../StoreContext"
+import PaperNotification from "../components/PaperNotification"
 import {FaMailBulk, FaUserCircle} from "react-icons/fa"
 import {MdGroup, MdNotifications} from "react-icons/md"
 import {
@@ -227,17 +228,17 @@ class TableProductsView extends React.Component {
 
         let customersNotAvailable = (
             <Grid container style={{height: "100vh"}} alignItems={"center"} justify={"center"}>
-                <Grid item>
-                    <Paper style={{padding: "24px"}}>
-                        <div align="center">
-                            <Typography align={"center"} style={{margin: "16px 0px"}}>
+                <Grid item sm={10} sm={8} md={6}>
+                    <PaperNotification>
+                        <div>
+                            <Typography>
                                 You have not created any sections yes.
                             </Typography>
                             <Typography>
                                 Whenever a customer registers to you stor, you'll get notified and find them here.
                             </Typography>
                         </div>
-                    </Paper>
+                    </PaperNotification>
                 </Grid>
             </Grid>
         );
