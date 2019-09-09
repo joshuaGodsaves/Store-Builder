@@ -79,15 +79,17 @@ class TableProductsView extends React.Component {
     }
 
     componentDidMount() {
+
+        this.setState({loading: true})
+        
         this.dataSource.getStoreSections().then(v => {
-            let sections = v.data.items;
-            this.setState({sections: sections});
-            this.setState({loaded: true});
-            this.setState({loading: false})
+            this.setState({sections: v});
+            this.setState({loaded: true, loading: false});
         }).catch(v => {
             console.log(v);
         });
-        this.setState({loading: true})
+
+        
     }
 
     render() {

@@ -84,7 +84,7 @@ class TableProductsView extends React.Component {
 
   loadProducts = () => {
     this.dataSource.getStoreProducts().then(v => {
-      this.setState({ products: v.data.items, loading: false })
+      this.setState({ products: v, loading: false })
     }).catch(v => console.log(v));
     this.setState({ loading: true })
   };

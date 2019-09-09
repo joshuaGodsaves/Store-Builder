@@ -167,7 +167,7 @@ class GeneralTab extends React.Component {
                                     ))}
                                 </div>
                                 <div>
-                                    <ButtonBase onClick={this.openCategory}
+                                    <Button onClick={this.openCategory}
                                                 style={{
                                                     padding: "4px 12px",
                                                     borderRadius: 4,
@@ -175,7 +175,7 @@ class GeneralTab extends React.Component {
                                                     width: "100%"
                                                 }}>
                                         <Typography variant={"button"}>Product category</Typography>
-                                    </ButtonBase>
+                                    </Button>
                                 </div>
                             </div>
                             <Grid container style={{marginTop: "12px"}} spacing={8}>
@@ -289,10 +289,12 @@ class Component extends React.Component {
                 }
             ).then(() => {
             this.setState({saveingProduct: false, loading: false});
+
             this.setState({updated: true});
                 setTimeout(() => {
                     this.setState({ updated: false })
                 }, 2000);
+
                 this.loadProduct(params.product)
 
             }).catch(()=>{})
@@ -314,15 +316,16 @@ class Component extends React.Component {
             ).then(v => {
                 //After saveing product reload with product id
             this.setState({saveingProduct: false});
-                window.location.replace(`/products`)
+                window.history.back()
+               // window.location.replace(`/products`)
             })
     };
 
-
     loadProduct = async (productID) => {
         let product = await axios.get(`${APIURL}/store/${this.context.store.id}/product/${productID}`);
-        if (product.data) {
-            this.setState({product: product.data, mainProductObj: product.data});
+        if (product.data && product.data.success) {
+    
+            this.setState({product: product.data.item, mainProductObj: product.data.item});
             return true
         }
         return false

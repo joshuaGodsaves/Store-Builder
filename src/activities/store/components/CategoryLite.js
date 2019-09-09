@@ -75,7 +75,7 @@ export default class Component extends React.Component{
 
     loadCategories = () => {
         this.dataSource.getStoreCategories().then(v=>{
-            this.setState({categories: v.data.items, loading: false})
+            this.setState({categories: v, loading: false})
         }).catch(v => console.log(v));
         this.setState({loading: true})
     };

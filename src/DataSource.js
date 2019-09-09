@@ -30,23 +30,35 @@ export default class DataSource {
     }
 
     async getStoreCategories() {
-        let categories = await this.axios.get(`${this.API_URL}/${this.storeId}/category`)
-        return categories;
+        let result = await this.axios.get(`${this.API_URL}/${this.storeId}/category`)
+
+
+        let arr= result.data.map( v => v.item );
+
+        return arr;
+    
     }
 
     async getStoreSections() {
-        let sections = await this.axios.get(`${this.API_URL}/${this.storeId}/section`)
-        return sections;
+        let result = await this.axios.get(`${this.API_URL}/${this.storeId}/section`)
+       
+        let arr= result.data.map( v => v.item );
+
+        return arr;
     }
 
     async getStoreCategory(id) {
-        let category = await this.axios.get(`${this.API_URL}/${this.storeId}/category/${id}`)
-        return category;
+        let result = await this.axios.get(`${this.API_URL}/${this.storeId}/category/${id}`)
+
+        let arr= result.data.map( v => v.item );
+
+        return arr;
+        
     }
 
     async getStoreTransactions(filter) {
-
         let queryString = ''
+
         let $1stElementPassed = false
 
         // element must be a path in the model of this type of data
@@ -58,10 +70,15 @@ export default class DataSource {
                 $1stElementPassed = true
             }
         }
-        console.log('loggedQueryString')
-        console.log(queryString)
-        let transactions = await this.axios.get(`${this.API_URL}/${this.storeId}/transaction${queryString}`)
-        return transactions;
+        
+
+        var result = await this.axios.get(`${this.API_URL}/${this.storeId}/transaction${queryString}`)
+      
+        var arr= result.data.map( v => v.item );
+
+
+        return arr.filter(v=> v==true);
+    
     }
 
     async postStoreTransaction(data) {
@@ -70,6 +87,7 @@ export default class DataSource {
     }
 
     async postStoreCategory(data) {
+
         let result = await this.axios.post(`${this.API_URL}/${this.storeId}/category`, data)
         if (result) {
             return true
@@ -89,8 +107,11 @@ export default class DataSource {
 
     async getStoreProducts() {
      
-        let categories = await this.axios.get(`${this.API_URL}/${this.storeId}/product`)
-        return categories;
+        let result = await this.axios.get(`${this.API_URL}/${this.storeId}/product`)
+
+        let arr= result.data.map( v => v.item );
+
+        return arr;
     }
 
     async postStoreProduct(data) {
@@ -112,9 +133,12 @@ export default class DataSource {
     }
 
     async getStoreCustomers() {
-        let customers = await this.axios.get(`${this.API_URL}/${this.storeId}/customer`)
-        console.log(customers)
-        return customers;
+        let result = await this.axios.get(`${this.API_URL}/${this.storeId}/customer`)
+
+        let arr= result.data.map( v => v.item );
+
+        return arr;
+    
     }
 
     async createEPCustomer(data) {
