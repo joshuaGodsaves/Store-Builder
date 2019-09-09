@@ -43,13 +43,15 @@ class App extends Component {
             storeId: this.state.storeId,
             password: this.state.password
         });
-        if (req.data.token) {
+
+        if (req.data.token){
             let store = {
                 email: req.data.store.owner,
                 token: req.data.token,
                 storeId: req.data.store._id,
                 store: req.data.store
             };
+
             window.localStorage.setItem("magnet-client-active-store", JSON.stringify(store));
             window.location.replace("/")
         } else {
@@ -59,9 +61,11 @@ class App extends Component {
 
     watch = (prop) => {
         return (event) => {
+
             if (this.state.failedLogin) {
-                this.setState({failedLogin: false});
+                this.setState({failedLogin:false});
             }
+
             event.persist();
             this.setState(state => {
                 state[prop] = event.target.value;
@@ -77,17 +81,16 @@ class App extends Component {
 
         return (
             <React.Fragment>
-
                 <Grid container justify={"center"} style={{zIndex: "20000"}}>
                     <Grid item style={{margin: "24px"}}>
-                        <Typography align={"center"} style={{margin: "16px 0px"}}>Login User Account</Typography>
+                        <Typography align={"center"} style={{margin: "8px 0px"}}>Login User Account</Typography>
                         {this.state.failedLogin ?
-                            <div style={{padding: 8, color: "red", fontSize: "bold"}}> Wrong email or
-                                password </div> : ""}
+                            <Typography align={"center"} style={{padding: 8, color: "red", fontSize: "bold"}}> Wrong email or
+                                password </Typography> : ""}
                         <Paper style={{padding: 16, background: "white"}} elevation={1}>
                             <div>
                                 <Grid container justify={"center"}>
-                                    <Grid item style={{height: 100, display: "flex", alignItems: "center"}}>
+                                    <Grid item style={{height: 70, display: "flex", alignItems: "center"}}>
                                         {this.state.sentRequest ? <CircularProgress/> :
                                             <SupervisedUserCircle style={{fontSize: 30}}/>}
                                     </Grid>
