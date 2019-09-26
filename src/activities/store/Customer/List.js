@@ -242,6 +242,7 @@ class TableProductsView extends React.Component {
                 </Grid>
             </Grid>
         );
+        
         return (
             <React.Fragment>
                 {customerMenu}

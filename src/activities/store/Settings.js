@@ -107,13 +107,13 @@ class App extends Component {
                             <Grid item xs={12} md={6}>
                                 <AppInput label={"Store name"} onChange={this.watchText("title")} value={state.title}/>
                                 <AppInput label={"Store status"} onChange={this.watchText("status")} value={state.status}/>
-                                <AppInput label={"Store description"} onChange={this.watchText("description")} multiline
+                                <AppInput label={"Store description"} onChange={this.watchText("description")}
                                           value={state.description}/>
                                 <Grid container spacing={8}>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} sm={6}>
                                         <AppInput label={"phone"} onChange={this.watchText("phone")} value={state.phone} />
                                     </Grid>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} sm={6}>
                                         <AppInput label={"email"} onChange={this.watchText("email")} value={state.email}/>
                                     </Grid>
                                 </Grid>

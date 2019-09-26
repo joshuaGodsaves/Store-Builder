@@ -5,6 +5,7 @@ import {Add} from "@material-ui/icons";
 import {FaProductHunt} from "react-icons/fa"
 import {Link} from "react-router-dom";
 import StoreContext from "../StoreContext"
+import PaperNotification from "../components/PaperNotification"
 import {
     Button,
     Card,
@@ -99,12 +100,8 @@ class TableProductsView extends React.Component {
             <PageToolbarContainer>
                 <Grid container justify={"center"}>
                     <Grid item xs={11} sm={10} md={10}>
+                        <Typography variant={"h5"}  style={{margin: "16px 0px"}} align={"center"}>Sections Page</Typography>
                         <div style={{margin: "16px 0px"}}>
-                            <Typography variant={"h5"} align={"center"}>Sections Page</Typography>
-                        </div>
-                        <div style={{margin: "16px 0px"}}>
-                            <Grid container justify={"center"}>
-                            </Grid>
                             <Grid container justify={"center"} style={{margin: "12px 0px"}}>
                                 <Grid item>
                                     <Button
@@ -163,17 +160,17 @@ class TableProductsView extends React.Component {
 
         let sectionsNotAvailable = (
             <Grid container style={{height: "100vh"}} alignItems={"center"} justify={"center"}>
-                <Grid item>
-                    <Paper style={{padding: "24px"}}>
-                        <div align="center">
-                            <Typography align={"center"} style={{margin: "16px 0px"}}>
+                <Grid item sm={10} sm={8} md={6}>
+                    <PaperNotification style={{padding: "24px"}}>
+                        <div >
+                            <Typography style={{margin: "16px 0px"}}>
                                 You have not created any sections yes.
                             </Typography>
                             <Button to={`/sections/new`} component={Link} style={{margin: "16px 0px"}}>
                                 <Add/> CREATE
                             </Button>
                         </div>
-                    </Paper>
+                    </PaperNotification>
                 </Grid>
             </Grid>
         );
