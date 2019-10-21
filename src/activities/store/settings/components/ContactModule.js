@@ -2,7 +2,7 @@ import React from "react";
 import {} from "@material-ui/core";
 import withStyles from "@material-ui/core/styles/withStyles"
 import {StoreContext} from "../../StoreContext";
-import {APPPaper} from "../../../../components/AppPaper";
+import {APPPaper} from "../../../../components/AppPaper"
 
 let styles = {
 
@@ -25,4 +25,4 @@ export class _GeneralStoreDataComponent{
 }
 
 
-export const UIStoreDataComponent= withStyles(styles)(_GeneralStoreDataComponent)
+export const ContactStoreDataComponent= withStyles(styles)(_GeneralStoreDataComponent)

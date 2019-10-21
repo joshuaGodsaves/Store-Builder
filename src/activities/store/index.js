@@ -11,7 +11,7 @@ import orderIndex from "./Order/Index"
 import sectionIndex from "./Section/Index"
 import categoryIndex from "./Category/Index"
 import customerIndex from "./Customer/Index"
-import settings from "./Settings"
+import settings from "./settings/index"
 
 import CoreLayout from "../../components/CoreLayout"
 
