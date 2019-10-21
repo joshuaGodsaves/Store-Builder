@@ -1,7 +1,7 @@
 import React from "react"
 import withStyles from "@material-ui/core/styles/withStyles"
 import {} from "@material-ui/icons"
-import { FormControl, InputBase, FormLabel, OutlinedInput } from "@material-ui/core"
+import { FormControl, InputBase, FormLabel, OutlinedInput,Input, FilledInput} from "@material-ui/core"
 
 let styles = theme => ({
     inputRoot: {
@@ -23,14 +23,13 @@ class _AppInput extends React.Component {
         return (
             <FormControl fullWidth={noFull == true ? false: true } className={classes.rootForm}>
                 <FormLabel>{label}</FormLabel>
-                <OutlinedInput
+                <FilledInput
                     type={type? type: "text"}
                     endAdornment={endAdornment? endAdornment : false}
                     disabled={disabled}
-                    style={{}}
-                    classes={{input: classes.inputRoot, inputAdornedStart: classes.startAd, adornedStart: classes.startAd}}
-                           onChange={onChange} value={value} multiline={multiline? true : false} rows={2}
-                startAdornment={startAdornment ? startAdornment : false}/>
+                    classes={{inputAdornedStart: classes.startAd, adornedStart: classes.startAd}}
+                    onChange={onChange} value={value} multiline={multiline? true : false} rows={2}
+                    startAdornment={startAdornment ? startAdornment : false}/>
             </FormControl>
         )
     }
@@ -40,4 +39,4 @@ let component=  withStyles(styles)(_AppInput);
 
 export default component;
 
-export const AppInput= component
+export const AppFlatInput= component

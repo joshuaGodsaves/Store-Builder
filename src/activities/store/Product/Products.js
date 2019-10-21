@@ -13,6 +13,7 @@ import {
     FormControl,
     Grid,
     IconButton,
+    Zoom,
     InputBase,
     LinearProgress,
     Menu,
@@ -39,11 +40,8 @@ let styles = {
 };
 
 class TableProductsView extends React.Component {
+    static contextType = AppContext;
   dataSource;
-  constructor(props) {
-    super(props)
-
-  }
   state = {
     loading: false,
     loaded: false,
@@ -52,7 +50,11 @@ class TableProductsView extends React.Component {
     anchorEl: undefined,
     activeProduct: undefined
   };
-    static contextType = AppContext;
+
+  constructor(props) {
+    super(props)
+
+  }
 
   selectSingle = itemKey => {
     return (event, checked) => {
@@ -184,58 +186,60 @@ class TableProductsView extends React.Component {
       <React.Fragment>
         {productMenu}
         {defaultToolbarArea}
-        <Grid container justify={"center"}>
-          <Grid item xs={12} sm={10}>
-            {this.state.products.map((product, i) => (
-              <Paper style={{ margin: "8px 0px", padding: 4, background:"white" , boxShadow: "none", border:".5px solid gray"}} elevation={1}>
-                <Grid container alignItems={"center"} alignContent={"center"} justify={"space-between"}>
-                  <Grid item xs={12} md={6}>
-                    <Grid container>
-                      <Grid item>
-                        <Checkbox
-                          color={"primary"}
-                          checked={this.state.selected.some(v2 => v2 == product._id)}
-                          onChange={this.selectSingle(product._id)}
-                        />
-                      </Grid>
-                      <Grid item style={{ display: "flex", alignItems: "center" }} >
+          <Grid container justify={"center"}>
+              <Grid item xs={12} sm={10}>
+                  {this.state.products.map((product, i) => (
+                      <Zoom in timeout={150 * i}>
+                      <Paper style={{ margin: "8px 0px", padding: 4, background:"ghostwhite" , boxShadow: "none", border:".5px solid gray"}} elevation={1}>
+                          <Grid container alignItems={"center"} alignContent={"center"} justify={"space-between"}>
+                              <Grid item xs={12} md={6}>
+                                  <Grid container>
+                                      <Grid item>
+                                          <Checkbox
+                                              color={"primary"}
+                                              checked={this.state.selected.some(v2 => v2 == product._id)}
+                                              onChange={this.selectSingle(product._id)}
+                                          />
+                                      </Grid>
+                                      <Grid item style={{ display: "flex", alignItems: "center" }} >
                         <span>
                           <Avatar src={product.mainImageLink} />
                         </span>
-                        <span style={{ margin: "0px 12px" }}>
+                                          <span style={{ margin: "0px 12px" }}>
                           <Typography style={{fontWeight:700}}>{product.title}</Typography>
                         </span>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Grid container justify={"space-between"} alignItems={"center"}>
-                      <Grid item style={{paddingLeft:"12px"}}>
-                        <Typography>{"Category"}</Typography>
-                          <Typography variant={"caption"}>Main Category</Typography>
-                      </Grid>
-                      <Grid item>
-                        <div>
-                          <Typography >{product.count || 100}</Typography>
-                        </div>
-                          <Typography variant={"caption"}>SKU</Typography>
-                      </Grid>
-                      <Grid item>
-                      </Grid>
-                      <Grid item>
-                        <Typography>${product.sellingPrice || 100}</Typography>
-                          <Typography variant={"caption"}>Selling price</Typography>
-                      </Grid>
-                      <Grid item>
-                        <IconButton color={"primary"} onClick={this.openMenu(product)}><MoreHoriz /></IconButton>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Paper>
-            ))}
+                                      </Grid>
+                                  </Grid>
+                              </Grid>
+                              <Grid item xs={12} md={6}>
+                                  <Grid container justify={"space-between"} alignItems={"center"}>
+                                      <Grid item style={{paddingLeft:"12px"}}>
+                                          <Typography>{"Category"}</Typography>
+                                          <Typography variant={"caption"}>Main Category</Typography>
+                                      </Grid>
+                                      <Grid item>
+                                          <div>
+                                              <Typography >{product.count || 100}</Typography>
+                                          </div>
+                                          <Typography variant={"caption"}>SKU</Typography>
+                                      </Grid>
+                                      <Grid item>
+                                      </Grid>
+                                      <Grid item>
+                                          <Typography>${product.sellingPrice || 100}</Typography>
+                                          <Typography variant={"caption"}>Selling price</Typography>
+                                      </Grid>
+                                      <Grid item>
+                                          <IconButton color={"primary"} onClick={this.openMenu(product)}><MoreHoriz /></IconButton>
+                                      </Grid>
+                                  </Grid>
+                              </Grid>
+                          </Grid>
+                      </Paper>
+                      </Zoom>
+                  ))}
+              </Grid>
           </Grid>
-        </Grid>
       </React.Fragment>
     );
 

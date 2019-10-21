@@ -68,12 +68,7 @@ class Category extends React.Component {
         axios
             .put(
                 `${APIURL}/store/${this.context.store.id}/category/${params.category}`,
-                this.state.category,
-                {
-                    headers: {
-                        "X-auth-license": this.context.user.token
-                    }
-                }
+                this.state.category
             ).then(v => {
             console.log(v);
             this.setState({updated: true});
@@ -112,7 +107,7 @@ class Category extends React.Component {
             return
         }
         if (category.data) {
-            this.setState({category: category.data, mainCategoryObj: category.data});
+            this.setState({category: category.data.item, mainCategoryObj: category.data.item});
             return true
         }
         return false

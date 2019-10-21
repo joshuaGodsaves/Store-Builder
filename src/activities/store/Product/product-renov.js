@@ -2,7 +2,7 @@ import React from "react"
 import withStyles from "@material-ui/core/styles/withStyles"
 import {APIURL} from "../../../DataSource"
 import StoreContext from "../StoreContext"
-import {Button, Grid, LinearProgress, Tab, Tabs, Toolbar} from '@material-ui/core';
+import {Button, Grid, LinearProgress, Tab, Tabs, Toolbar, Zoom} from '@material-ui/core';
 
 import SEOTabContent from "./views/ProductSEOTab"
 

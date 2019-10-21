@@ -1,8 +1,12 @@
 import React from "react";
 
-export default React.createContext({
+let context= React.createContext({
     store: {
         id: undefined,
         token: undefined
     }
 });
+
+export default  context;
+
+export const StoreContext=  context

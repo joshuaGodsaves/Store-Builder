@@ -36,5 +36,8 @@ function Component(props) {
     )
 }
 
+let componet= withStyles(styles)(Component)
 
-export default withStyles(styles)(Component)
+export default componet;
+
+export const APPPaper = componet
