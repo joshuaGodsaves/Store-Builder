@@ -1,5 +1,5 @@
 import React from "react";
-import {AppBar, Button, Drawer, Toolbar} from "@material-ui/core";
+import {AppBar, Button, Drawer, Toolbar, Typography} from "@material-ui/core";
 import {Link} from "react-router-dom"
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -63,13 +63,13 @@ class AppDrawer extends React.Component {
         let {classes, open}=this.props;
 
         return (
-            <Drawer classes={{paper: open ? classes.drawerOpen : classes.drawerClose}} variant={"permanent"} 
+            <Drawer classes={{paper: open ? classes.drawerOpen : classes.drawerClose}} variant={"permanent"}
             open= {this.open}
             onClose={this.closeDrawer}
             >
-                <AppBar position={"fixed"}  elevation={0} style={{background:"darkblue"}}>
+                <AppBar position={"fixed"}  elevation={0} style={{background:"#404040"}}>
                     <Toolbar>
-                        <Button component={Link} to={"/"}>Admin</Button>
+                        <Typography variant={"h6"} style={{color:"white", fontSize:"bolder"}}>ADMIN</Typography>
                     </Toolbar>
                 </AppBar>
                 <div style={{width:"100%", paddingTop:64, left:0, background:"ghostwhite", overflowY:"auto"}}>

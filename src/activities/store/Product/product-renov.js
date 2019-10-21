@@ -1,34 +1,13 @@
 import React from "react"
 import withStyles from "@material-ui/core/styles/withStyles"
-import {AddAPhoto} from "@material-ui/icons"
 import {APIURL} from "../../../DataSource"
 import StoreContext from "../StoreContext"
-import {
-    Avatar,
-    Button,
-    ButtonBase,
-    Chip,
-    Grid,
-    GridList,
-    GridListTile,
-    GridListTileBar,
-    IconButton,
-    LinearProgress,
-    Menu,
-    MenuItem,
-    Tab,
-    Tabs,
-    Toolbar,
-    Typography
-} from '@material-ui/core';
-import Context from "../../../AppContext"
-import AppInput from "../../../components/AppInput"
+import {Button, Grid, LinearProgress, Tab, Tabs, Toolbar} from '@material-ui/core';
 
-import AppPaper from "../../../components/AppPaper"
+import SEOTabContent from "./views/ProductSEOTab"
 
-import CategoryLite from "../components/CategoryLite"
+import GeneralTabContent from "./views/ProductGeneralTabContent"
 
-import FileUploader from "../components/FileUpload"
 import axios from "axios"
 
 let styles = theme => ({
@@ -40,206 +19,7 @@ let styles = theme => ({
     }
 });
 
-
-class GeneralTab extends React.Component {
-
-    static contextType = Context;
-
-    state = {
-        categoryOpen: false,
-        brandSelectorAnchorEl: false,
-        openBrand: false,
-        typeAnchorEl: false,
-        uploading: false
-    };
-
-    openBrand = (e) => {
-        e.persist();
-        this.setState({brandSelectorAnchorEl: e.target, openBrand: true});
-    };
-    closeBrand = () => {
-        this.setState({brandSelectorAnchorEl: false});
-    };
-    openType = (e) => {
-        e.persist();
-        this.setState({typeAnchorEl: e.target, openType: true});
-    };
-    closeType = () => {
-        this.setState({typeAnchorEl: false});
-    };
-    uploading = () => {
-        this.setState({uploading: true})
-    };
-    openCategory = () => {
-        this.setState(state => {
-            state.categoryOpen = true;
-            return state;
-        })
-    };
-    closeCategory = () => {
-        this.setState({categoryOpen: false})
-    };
-
-    categoryChange = (v) => {
-        this.props.categoryChange(v);
-        this.closeCategory()
-    };
-
-    render() {
-
-        let {brandSelectorAnchorEl, typeAnchorEl} = this.state;
-
-        let {classes, product, categoryChange, tagsChange, watchText, selectMainImage, brandChange, brands} = this.props;
-
-        const productTypeMenu = (
-            <Menu anchorEl={typeAnchorEl} open={typeAnchorEl ? true : typeAnchorEl} onClose={this.closeType}>
-                <MenuItem onClick={this.closeType}>Type 1</MenuItem>
-                <MenuItem onClick={this.closeType}>Type 2</MenuItem>
-            </Menu>
-        );
-        return (
-            <>
-                {this.state.categoryOpen ? (
-                    <CategoryLite open={true}
-                                  categories={product.categories}
-                                  closeCategorySelector={this.categoryChange}/>
-                ) : ""}
-
-
-                <AppPaper nomargin title={"Basic details"}>
-                    <Grid container alignContent={"stretch"} spacing={16}>
-                        <Grid item xs={6} style={{margin: "12px 0px"}}>
-                            <div>
-                                <AppInput label={"Product name"} onChange={watchText("title")} value={product.title} />
-                                <AppInput label={"Product caption"} onChange={watchText("caption")} value={product.caption} />
-                                <Grid container spacing={8}>
-                                    <Grid item xs={6}>
-                                        <AppInput label={"Cost price"} onChange={watchText("costPrice")} value={product.costPrice} />
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <AppInput label={"Selling price"} onChange={watchText("sellingPrice")} value={product.sellingPrice} />
-                                    </Grid>
-                                </Grid>
-                            </div>
-                        </Grid>
-                        <Grid item xs={6} style={{ margin: "16px 0px" }}>
-                            <div style={{ border: ".5px solid ghostwhite" }}>
-                                <GridList style={{ flexDirection: "row", flexWrap: "nowrap", padding: "8px 0px", borderRadius: 4 }} >
-                                    <GridListTile className={classes.imageBox}>
-                                        {this.state.uploading ? <LinearProgress style={{zIndex: 2000}}/> : ""}
-                                        {/*  */}
-                                        <FileUploader
-                                            onError={() => { }}
-                                            onUploading={this.uploading}
-                                            onFinish={(v) => {
-                                                this.setState({uploading: false});
-                                                alert("ok");
-                                                selectMainImage(v)
-                                            }}/>
-
-                                        <img src={product.image} style={{height: "100%"}}/>
-
-                                        <GridListTileBar title={"Image"} subtitle={"main product image"} actionIcon={
-                                            // Triggers internal input element [type: file]
-                                            <IconButton style={{ color: 'white' }} onClick={() => { document.getElementById("fileSelectorElement").click() }}>
-                                                <AddAPhoto />
-                                            </IconButton>
-                                        } />
-                                    </GridListTile>
-                                    {[1, 2, 3, 4].map(v => (
-                                        <GridListTile className={classes.imageBox}>
-
-                                        </GridListTile>
-                                    ))}
-                                </GridList>
-                            </div>
-                        </Grid>
-                    </Grid>
-                </AppPaper>
-
-                <Grid container alignContent={"stretch"} spacing={16}>
-                    <Grid item xs={6} style={{ margin: "16px 0px" }}>
-                        <AppPaper nomargin title={"Basic classification"}>
-                            <div>
-                                <div style={{marginBottom: 12, background: "ghostwhite", minHeight: 80}}>
-                                    {product.categories.map(v => (
-                                        <Chip label="Category name" style={{margin: "8px 8px"}}/>
-                                    ))}
-                                </div>
-                                <div>
-                                    <Button onClick={this.openCategory}
-                                                style={{
-                                                    padding: "4px 12px",
-                                                    borderRadius: 4,
-                                                    background: "rgba(0,0,0,.2)",
-                                                    width: "100%"
-                                                }}>
-                                        <Typography variant={"button"}>Product category</Typography>
-                                    </Button>
-                                </div>
-                            </div>
-                            <Grid container style={{marginTop: "12px"}} spacing={8}>
-                                <Grid item xs={6}>
-                                    <Menu anchorEl={brandSelectorAnchorEl}
-                                          open={!brandSelectorAnchorEl ? false : true}
-                                          onClose={this.closeBrand}>
-                                        {brands.map(v => (
-                                            <MenuItem onClick={() => {
-                                                brandChange(v);
-                                                this.closeBrand()
-                                            }}>
-                                                <Avatar/>
-                                                <Typography style={{marginLeft: "12px"}}> Brand name </Typography>
-                                            </MenuItem>
-                                        ))}
-                                    </Menu>
-
-                                    <ButtonBase
-                                        onClick={this.openBrand}
-                                        style={{
-                                            padding: "4px 12px",
-                                            borderRadius: 4,
-                                            background: "rgba(0,0,0,.2)",
-                                            width: "100%",
-                                            display: "flex",
-                                            justifyContent: "space-between"
-                                        }}>
-                                        <Avatar style={{margin: "0px 12px"}}/> Brand
-                                    </ButtonBase>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    {productTypeMenu}
-                                    <ButtonBase
-                                        onClick={this.openType}
-                                        style={{
-                                            padding: "4px 12px",
-                                            borderRadius: 4,
-                                            background: "rgba(0,0,0,.2)",
-                                            width: "100%",
-                                            display: "flex",
-                                            justifyContent: "space-between"
-                                        }}>
-                                        <Avatar style={{margin: "0px 12px"}}/> Type
-                                    </ButtonBase>
-                                </Grid>
-                            </Grid>
-                            <AppInput label={"Tags"} nomargin onChange={tagsChange}
-                                      value={product.tags ? product.tags.join(" ") : ""}/>
-                        </AppPaper>
-                    </Grid>
-                    <Grid item xs={6} style={{ margin: "16px 0px" }} hidden>
-                        <AppPaper nomargin>
-                        </AppPaper>
-                    </Grid>
-                </Grid>
-            </>
-        )
-
-    }
-}
-
 class Component extends React.Component {
-
     static contextType = StoreContext;
     state = {
         tabIndex: 0,
@@ -251,7 +31,8 @@ class Component extends React.Component {
         loading: false
     };
 
-    tabChange = (v) => {
+    tabChange = (e, v) => {
+
         this.setState({tabIndex: v});
     };
 
@@ -291,13 +72,14 @@ class Component extends React.Component {
             this.setState({saveingProduct: false, loading: false});
 
             this.setState({updated: true});
-                setTimeout(() => {
-                    this.setState({ updated: false })
-                }, 2000);
+            setTimeout(() => {
+                this.setState({updated: false})
+            }, 2000);
 
-                this.loadProduct(params.product)
+            this.loadProduct(params.product)
 
-            }).catch(()=>{})
+        }).catch(() => {
+        })
 
     };
 
@@ -314,17 +96,17 @@ class Component extends React.Component {
                     }
                 }
             ).then(v => {
-                //After saveing product reload with product id
+            //After saveing product reload with product id
             this.setState({saveingProduct: false});
-                window.history.back()
-               // window.location.replace(`/products`)
-            })
+            window.history.back()
+            // window.location.replace(`/products`)
+        })
     };
 
     loadProduct = async (productID) => {
         let product = await axios.get(`${APIURL}/store/${this.context.store.id}/product/${productID}`);
         if (product.data && product.data.success) {
-    
+
             this.setState({product: product.data.item, mainProductObj: product.data.item});
             return true
         }
@@ -333,6 +115,7 @@ class Component extends React.Component {
     };
 
     watchBrand = (value) => {
+
         this.setState(state => {
             state.product.brand = value;
             return state
@@ -358,17 +141,17 @@ class Component extends React.Component {
     componentDidMount() {
         let {match: {params}} = this.props;
         if (params.product == "new") {
-            this.setState({ isNewProduct: true })
+            this.setState({isNewProduct: true})
             // Init new product
         } else {
             this.loadProduct(params.product).then(v => {
                 if (v) {
-                    this.setState({ productID: params.product })
+                    this.setState({productID: params.product})
                 } else {
                     // could not load product and error occured somewhere maybe in the network.
                 }
             });
-            this.setState({ productID: params.product })
+            this.setState({productID: params.product})
             //load product
         }
     }
@@ -388,13 +171,14 @@ class Component extends React.Component {
                 }} variant={"dense"}>
                     <Grid container justify={"space-between"} alignItems={"center"}>
                         <Grid item xs={10} style={{}}>
-                            <Tabs value={0} variant={"scrollable"} indicatorColor={"primary"} textColor={"primary"}>
+                            <Tabs value={this.state.tabIndex ? this.state.tabIndex : 0} variant={"scrollable"}
+                                  indicatorColor={"primary"} textColor={"primary"} onChange={this.tabChange}>
                                 <Tab label={"General"}/>
-                                <Tab label={"Event"}/>
-                                <Tab label={"Advanced"}/>
+                                <Tab label={"SEO"}/>
                                 <Tab label={"Settings"}/>
                             </Tabs>
                         </Grid>
+
                         <Grid item style={{display: "flex", justifyContent: "space-between"}}>
                             <div></div>
                             <Button
@@ -406,15 +190,15 @@ class Component extends React.Component {
                 </Toolbar>
                 <Grid container justify={"center"}>
                     <Grid item xs={11}>
-                        <GeneralTab classes={classes} product={this.state.product}
-                                    watchText={this.watchText}
-                                    brandChange={this.watchBrand}
-                                    categoryChange={this.watchCategory}
-                                    tagsChange={this.watchTags}
-                                    selectMainImage={this.selectMainImage}
-                                    brands={[1, 2, 3, 4]}
-                        />
-
+                        {this.state.tabIndex == 0 ? <GeneralTabContent classes={classes} product={this.state.product}
+                                                                watchText={this.watchText}
+                                                                brandChange={this.watchBrand}
+                                                                categoryChange={this.watchCategory}
+                                                                tagsChange={this.watchTags}
+                                                                selectMainImage={this.selectMainImage}
+                                                                brands={[1, 2, 3, 4]}
+                        /> : ""}
+                        {this.state.tabIndex == 1 ? <SEOTabContent  product={this.state.product} /> : ""}
                     </Grid>
                 </Grid>
             </>

@@ -6,14 +6,15 @@ import {ChevronRight} from "@material-ui/icons"
 import {Button, Grid, Paper} from "@material-ui/core"
 
 import OrderAnalytics from "./components/Chart"
+import Typography from "@material-ui/core/Typography";
 
 let styles = theme => ({
-    xMargin:{
-        margin:"0px 8px"
+    xMargin: {
+        margin: "0px 8px"
     },
     jumboArea: {
-        height: 400,
-        background: "#404040"
+        height: 300,
+        background: "linear-gradient(blue, white)"
     },
     itemContent: {
         position: "relative",
@@ -47,27 +48,38 @@ let styles = theme => ({
     }
 });
 
-function CoreComponentBox(props){
+function CoreComponentBox(props) {
     let {classes, to, details} = props;
     return (
         <Grid item xs={11} sm={6} md={4}>
-            <Paper className={classes.itemContainer}>
+            <Paper style={{overflow:"hidden"}}>
                 <div className={classes.itemContent}>
-                <div className={classes.equalBox}>
-                    <div style={{ width: "100%", height: "100%", position: "absolute", left:0, top:0, backgroundImage:"url()"}}>
-                        <div className={classes.contentHints}>
-                            Brief details should stay here
+                    <div className={classes.equalBox}>
+                        <div style={{
+                            width: "100%",
+                            height: "100%",
+                            position: "absolute",
+                            left: 0,
+                            top: 0,
+                            backgroundImage: "url()"
+                        }}>
+                            <div style={{padding:16}}>
+                                <Typography className={classes.contentHints}>
+                                    Brief details should stay here
+                                </Typography>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <Button color={"primary"} component={Link}    to={to}>
-                    Open
-                    <ChevronRight className={classes.xMargin}/>
-                </Button>
-            </div>
+                <div className={""} style={{padding: 12, background: "rgba(240,240,240,.9)"}}>
+                    <Button color={"primary"} component={Link} to={to}>
+                        Open
+                        <ChevronRight className={classes.xMargin}/>
+                    </Button>
+                </div>
             </Paper>
-        
-    </Grid>
+
+        </Grid>
     )
 }
 
@@ -93,18 +105,20 @@ class App extends Component {
         return (
             <React.Fragment>
                 <Grid container justify={'center'}>
+
                     <Grid item xs={12}>
                         <div className={classes.jumboArea}>
-                            <OrderAnalytics/>
+
                         </div>
                     </Grid>
+
                     <Grid item xs={12} sm={11} md={10}>
                         <Grid container justify={"center"} className={classes.itemsContainer} spacing={8}>
 
                             <CoreComponentBox classes={classes} to={`/products`} details={"detail"}/>
                             <CoreComponentBox classes={classes} to={`/customers`} details={"detail"}/>
                             <CoreComponentBox classes={classes} to={`/transactions`} details={"detail"}/>
-                          
+
                         </Grid>
                     </Grid>
                 </Grid>

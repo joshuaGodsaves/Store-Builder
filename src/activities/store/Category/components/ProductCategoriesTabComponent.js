@@ -1,6 +1,6 @@
 import React from "react"
 import withStyles from "@material-ui/core/styles/withStyles"
-import {Avatar, Button, Grid, IconButton, Paper} from "@material-ui/core";
+import {Avatar, Button, Grid, IconButton, Paper, Typography} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {MoreHoriz} from "@material-ui/icons";
 import StoreContext from "../../StoreContext";
@@ -13,15 +13,17 @@ class Component extends React.Component {
     static contextType = StoreContext;
 
     componentWillMount() {
-        this.dataSource = new DataSource(this.context.store.token, this.context.store.id)
+        this.dataSource = new DataSource(this.context.store.token, this.context.store.id);
     }
 
     state = {
+        loading: false,
+        loaded: false,
         categories: []
     };
 
     componentDidMount() {
-        this.dataSource.getStoreCategories().then(v => {
+        this.dataSource.getStoreCategories({type: "product"}).then(v => {
             let categories = v;
             this.setState({categories: categories});
             this.setState({loaded: true});
@@ -45,6 +47,9 @@ class Component extends React.Component {
                         </Grid>
                         <Grid item>
                             <Button component={Link}
+                                    variant={"contained"}
+                                    color={"primary"}
+                                    size={"medium"}
                                     to={`/categories/new?type=product`}>
                                 New Category
                             </Button>
@@ -58,9 +63,12 @@ class Component extends React.Component {
                                         <Grid item style={{display: "flex"}} xs={8}>
                                             <div style={{display: "flex", alignItems: "center", paddingLeft: 12}}>
                                                 <Avatar src={category.image}/>
-                                                <span style={{margin: "0px 12px"}}>
-                                      {category.title}
-                                      </span>
+                                                <div style={{margin: "0px 12px"}}>
+                                                    <Typography>
+                                                        {category.title}
+                                                    </Typography>
+                                                    <Typography variant={"caption"}>Label</Typography>
+                                                </div>
                                             </div>
                                         </Grid>
                                         <Grid item>

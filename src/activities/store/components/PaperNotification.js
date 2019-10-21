@@ -1,7 +1,7 @@
 import React from "react"
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import {Grid, Paper, Typography} from "@material-ui/core";
+import {Grid, Paper, Typography, Divider} from "@material-ui/core";
 
 let styles= {
     root:{
@@ -27,8 +27,9 @@ class Component extends React.Component{
             <>
               <Paper>
                 <div className={classes.labelRoot}>
-                    <Typography>{"Alert"} </Typography>
+                    <Typography>{"Alert"}</Typography>
                 </div>
+                <Divider/>
                 <div className={classes.contentRoot}>
                     {this.props.children}
                 </div>

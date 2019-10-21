@@ -3,24 +3,12 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import {
-  Paper,
-  ButtonBase,
-  FormLabel,
-  FormHelperText,
-  OutlinedInput as Input,
-  InputBase,
-  List,
-  ListItemText,
-  Tab, Divider,
-  Tabs, IconButton, ExpansionPanelDetails, ExpansionPanel, ExpansionPanelSummary, Checkbox, Chip
-} from "@material-ui/core";
+import {ButtonBase, Checkbox, FormLabel, IconButton, Paper, Tab, Tabs} from "@material-ui/core";
 import PageAppBar from "../../../components/ActivityPrimaryAppBar";
 import FormControl from "@material-ui/core/FormControl";
 import {InfoComponentForSectionIcon} from "../../../components/InformativeComponents";
-import ImageSelectionComponent from "../../../components/ImageSelectionComponent"
-import {CloudUpload as UploadIcon, Link as LinkIcon, MoreHoriz, SelectAll as SelectIcon,AddToQueue} from "@material-ui/icons";
-import {FaProductHunt, FaDollarSign, FaPlusCircle, FaPlus} from "react-icons/fa"
+import {CloudUpload as UploadIcon} from "@material-ui/icons";
+import {FaPlus, FaProductHunt} from "react-icons/fa"
 import axios from "axios";
 import StoreContext from "../StoreContext";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
@@ -197,12 +185,6 @@ class Section extends React.Component {
     let { classes } = this.props;
     let primaryComponent = (
       <React.Fragment>
-        {this.state.selectMainImageDrawerOpen ?
-            <ImageSelectionComponent
-                open={this.state.selectMainImageDrawerOpen}
-                selectSingle={this.selectMainImage}
-                closeingDrawer={this.closeingMainImageDrawer}/> : ""}
-
         <Grid container spacing={8}>
           <Grid item md={6}>
             <Paper style={{padding:24}}>

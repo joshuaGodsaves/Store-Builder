@@ -18,16 +18,17 @@ let styles = theme => ({
 
 class AppInput extends React.Component {
     render() {
-        let { classes, onChange, label, value, multiline, startAdornment } = this.props
+        let { classes, onChange, label, value, multiline, startAdornment , disabled, endAdornment ,noFull, type} = this.props
         value = value || "";
-
         return (
-            <FormControl fullWidth className={classes.rootForm}>
+            <FormControl fullWidth={noFull == true ? false: true } className={classes.rootForm}>
                 <FormLabel>{label}</FormLabel>
                 <OutlinedInput
+                    type={type? type: "text"}
+                    endAdornment={endAdornment? endAdornment : false}
+                    disabled={disabled}
                     style={{}}
                     classes={{input: classes.inputRoot, inputAdornedStart: classes.startAd, adornedStart: classes.startAd}}
-
                            onChange={onChange} value={value} multiline={multiline? true : false} rows={2}
                 startAdornment={startAdornment ? startAdornment : false}/>
             </FormControl>

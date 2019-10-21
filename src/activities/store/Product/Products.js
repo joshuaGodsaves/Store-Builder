@@ -32,8 +32,9 @@ let styles = {
     paddingTop: 8,
     paddingBottom: 8,
     fontSize: 16,
-    fontWeight: 500,
-    color: "ghostwhite"
+    fontWeight: 300,
+    color: "black",
+      alignLeft:"center"
   }
 };
 
@@ -84,6 +85,8 @@ class TableProductsView extends React.Component {
 
   loadProducts = () => {
     this.dataSource.getStoreProducts().then(v => {
+      console.log(v)
+      console.log("logged products")
       this.setState({ products: v, loading: false })
     }).catch(v => console.log(v));
     this.setState({ loading: true })
@@ -132,7 +135,7 @@ class TableProductsView extends React.Component {
         <Grid container justify={"center"}>
           <Grid item xs={11} sm={10} md={10}>
             <div style={{ margin: "16px 0px" }}>
-              <Typography variant={"h5"} align={"center"}>Products Page</Typography>
+              <Typography variant={"title"} align={"center"}>PRODUCTS PAGE</Typography>
             </div>
             <div style={{ margin: "16px 0px"}}>
               <Grid container justify={"center"}>
@@ -140,31 +143,36 @@ class TableProductsView extends React.Component {
                   <Paper style={{ background: "transparent" }}>
                     <FormControl fullWidth>
                       <InputBase
-                        style={{ color: "ghostwhite" }}
-                        startAdornment={<SearchRounded color={"inherit"} />}
+                        // style={{ color: "black" }}
+                        startAdornment={<SearchRounded color={"inherit"} style={{color:"gray"}} />}
                         endAdornment={
-                          <Button style={{ color: "ghostwhite" }} size={"small"} color={"inherit"}>Search</Button>
+                          <Button style={{ color: "gray" }} size={"small"}>Search</Button>
                         }
                         classes={{ input: classes.rootInput }}
-                        style={{ background: "rgba(0,0,0,.5)", padding: "4px 12px", borderRadius: "4px" }} />
+                        style={{ background: "white", padding: "4px 12px", borderRadius: "4px"}} />
                     </FormControl>
                   </Paper>
                 </Grid>
               </Grid>
-                <Grid container justify={"center"} style={{marginTop: 8}} spacing={8}>
+                <Grid container justify={"space-between"} style={{marginTop: 8}} spacing={8}>
                     <Grid item>
-                        <Button color={"primary"}>
-                            <FaFilter style={{marginRight: 8}}/>
-
-                            Filter
-                        </Button>
                     </Grid>
+                    <Grid item>
+                        <Grid container>
+                            <Grid item>
+                                <Button color={"primary"}>
+                                    <FaFilter style={{marginRight: 8}}/>
+                                    Filter
+                                </Button>
+                            </Grid>
 
-                <Grid item>
-                    <Button component={Link} to={`/products/new`} color={"primary"}>
-                    New Product
-                    </Button>
-                </Grid>
+                            <Grid item>
+                                <Button component={Link} to={`/products/new`} color={"primary"} variant={"contained"}>
+                                    New Product
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </Grid>
               </Grid>
             </div>
           </Grid>
@@ -179,7 +187,7 @@ class TableProductsView extends React.Component {
         <Grid container justify={"center"}>
           <Grid item xs={12} sm={10}>
             {this.state.products.map((product, i) => (
-              <Paper style={{ margin: "8px 0px", padding: 4 }} elevation={1}>
+              <Paper style={{ margin: "8px 0px", padding: 4, background:"white" , boxShadow: "none", border:".5px solid gray"}} elevation={1}>
                 <Grid container alignItems={"center"} alignContent={"center"} justify={"space-between"}>
                   <Grid item xs={12} md={6}>
                     <Grid container>
@@ -195,7 +203,7 @@ class TableProductsView extends React.Component {
                           <Avatar src={product.mainImageLink} />
                         </span>
                         <span style={{ margin: "0px 12px" }}>
-                          {product.title}
+                          <Typography style={{fontWeight:700}}>{product.title}</Typography>
                         </span>
                       </Grid>
                     </Grid>
@@ -203,20 +211,20 @@ class TableProductsView extends React.Component {
                   <Grid item xs={12} md={6}>
                     <Grid container justify={"space-between"} alignItems={"center"}>
                       <Grid item style={{paddingLeft:"12px"}}>
-                        {"Category"}
+                        <Typography>{"Category"}</Typography>
+                          <Typography variant={"caption"}>Main Category</Typography>
                       </Grid>
                       <Grid item>
                         <div>
-                          <Chip label={product.categories.length} color={"primary"} />
+                          <Typography >{product.count || 100}</Typography>
                         </div>
+                          <Typography variant={"caption"}>SKU</Typography>
                       </Grid>
                       <Grid item>
-                        <div>
-                          <Chip label={product.categories.length} color={"primary"} />
-                        </div>
                       </Grid>
                       <Grid item>
-                        <Chip label={product.sellingPrice || "$00.00"} variant={"outlined"} icon={<FaDollarSign />} color={"primary"} />
+                        <Typography>${product.sellingPrice || 100}</Typography>
+                          <Typography variant={"caption"}>Selling price</Typography>
                       </Grid>
                       <Grid item>
                         <IconButton color={"primary"} onClick={this.openMenu(product)}><MoreHoriz /></IconButton>

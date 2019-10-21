@@ -29,14 +29,13 @@ export default class DataSource {
         })
     }
 
-    async getStoreCategories() {
-        let result = await this.axios.get(`${this.API_URL}/${this.storeId}/category`)
-
-
+    async getStoreCategories(filter) {
+        let path;
+        let query= filter.type?  `?type=${filter.type}` : "";
+        let result = await this.axios.get(`${this.API_URL}/${this.storeId}/category${query}`)
         let arr= result.data.map( v => v.item );
-
+        console.log(result)
         return arr;
-    
     }
 
     async getStoreSections() {
@@ -44,6 +43,9 @@ export default class DataSource {
        
         let arr= result.data.map( v => v.item );
 
+        if(!arr[0]){
+            arr= [];
+        }
         return arr;
     }
 
@@ -51,7 +53,9 @@ export default class DataSource {
         let result = await this.axios.get(`${this.API_URL}/${this.storeId}/category/${id}`)
 
         let arr= result.data.map( v => v.item );
-
+        if(!arr[0]){
+            arr= [];
+        }
         return arr;
         
     }
@@ -76,6 +80,9 @@ export default class DataSource {
       
         var arr= result.data.map( v => v.item );
 
+        if(!arr[0]){
+            arr= [];
+        }
 
         return arr.filter(v=> v==true);
     
@@ -110,7 +117,9 @@ export default class DataSource {
         let result = await this.axios.get(`${this.API_URL}/${this.storeId}/product`)
 
         let arr= result.data.map( v => v.item );
-
+        if(!arr[0]){
+            return [];
+        }
         return arr;
     }
 
@@ -220,10 +229,5 @@ export default class DataSource {
         return result
     }
 
-    async getStores (email){
-        let result= await this.axios.get(`${API_URL}/user/${email}/stores`)
-
-        return result
-    }
 
 }

@@ -24,22 +24,25 @@ let styles = theme => ({
         color: "",
         borderRadius: 4,
         padding: "8px 12px",
-        background: "rgba(0,0,0,.2)",
+        background: "",
         margin: "8px 0px"
     },
     listIcon: {
-        color: "darkblue"
+        // color: "#404040"
+        color:"blue"
     },
-    text: {color: 'ghostwhite'}
-
+    text: {
+        // color: '#404040'
+    }
 });
 
 function AppListItem(props) {
+    let defaultColor= "gray"
     return (
-        <ListItem component={Link} to={props.to} className={props.classes.rootListItemContainer}>
+        <ListItem component={Link} to={props.to} className={props.classes.rootListItemContainer} style={{border:`0px solid ${defaultColor}`}}>
             <ListItemIcon className={props.classes.listIcon}>{props.icon}</ListItemIcon>
             <ListItemText style={{margin: "0px 0px"}} classes={{root: props.classes.text}}>
-                <Typography align={"left"} style={{color: "darkblue"}}>{props.label}</Typography>
+                <Typography align={"left"} style={{color: props.color}}>{props.label}</Typography>
             </ListItemText>
         </ListItem>
     )
@@ -48,6 +51,10 @@ function AppListItem(props) {
 class App extends Component {
     constructor(props) {
         super(props);
+    }
+
+    state={
+        activeLink: 0
     }
 
     static contextType = StoreContext;
@@ -62,7 +69,7 @@ class App extends Component {
                 }}>
                     <List>
 
-                        <AppListItem to={`/Sections`} label={"Section"} icon={<Layers/>} classes={classes}/>
+                        <AppListItem  to={`/Sections`} label={"Section"} icon={<Layers/>} classes={classes}/>
 
                         <AppListItem to={`/categories`} label={"Categories"} icon={<CategorySharp/>} classes={classes}/>
 

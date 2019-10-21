@@ -22,6 +22,7 @@ let styles = theme => ({
     }
 })
 
+
 class CoreLayout extends React.Component {
     state={
         drawerOpen: false

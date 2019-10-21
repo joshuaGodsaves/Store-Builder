@@ -7,8 +7,8 @@ import PageToolbarContainer from "../components/PageToolbarContainer"
 import StoreContext from "../StoreContext"
 import {Button, FormControl, Grid, InputBase, LinearProgress, Paper, Tab, Tabs} from "@material-ui/core";
 
-import ProductCategories from "../components/TabComponents/ProductCategoriesTabComponent"
-import BrandCategories from "../components/TabComponents/BrandCategoriesTabComponent"
+import ProductCategories from "./components/ProductCategoriesTabComponent"
+import BrandCategories from "./components/BrandCategoriesTabComponent"
 
 import DataSource from "../../../DataSource"
 
@@ -29,7 +29,7 @@ class TableProductsView extends React.Component {
 
   }
 
-    static contextType = StoreContext;
+  static contextType = StoreContext;
   state = {
       tab: 0,
     loading: false,
@@ -39,40 +39,10 @@ class TableProductsView extends React.Component {
     ]
   };
 
-  selectSingle = itemKey => {
-    return (event, checked) => {
-      this.setState(state => {
-        if(checked){
-          //push
-          state.selected.push(itemKey)
-        }else{
-          //Pull out
-          state.selected= state.selected.filter(v=> v!=itemKey)
-        }
-        return state;
-      });
-    };
-  };
-
   componentWillMount(){
     this.dataSource= new DataSource(this.context.store.token, this.context.store.id)
 
   }
-
-    selectAll = (event, checked) => {
-        if (checked) {
-            this.setState(state => {
-                state.selected = state.products.map(v => v._id);
-                return state;
-            });
-        } else {
-            this.setState(state => {
-                state.selected = [];
-                return state;
-            });
-        }
-    };
-
   componentDidMount() {
 
     this.dataSource.getStoreCategories().then(v=>{
@@ -93,30 +63,15 @@ class TableProductsView extends React.Component {
         <Paper style={{ background: "transparent" }}>
           <FormControl fullWidth>
             <InputBase
-                style={{ color: "ghostwhite" }}
+                style={{ color: "black" }}
                 startAdornment={<SearchRounded color={"inherit"} />}
                 endAdornment={
-                  <Button style={{ color: "ghostwhite" }} size={"small"} color={"inherit"}>Search</Button>
+                  <Button style={{ color: "gray" }} size={"small"} color={"inherit"}>Search</Button>
                 }
                 classes={{ input: classes.rootInput }}
-                style={{ background: "rgba(0,0,0,.5)", padding: "4px 12px", borderRadius: "4px" }} />
+                style={{ background: "white", padding: "4px 12px", borderRadius: "4px" }} />
           </FormControl>
         </Paper>
-    );
-
-    let actionsBoxGridContainer=(
-        <Grid container justify={"center"}>
-          <Grid item>
-            <Button>
-              Bulk Add
-            </Button>
-          </Grid>
-          <Grid item>
-              <Button component={Link} to={`/categories/new`}>
-              New Category
-            </Button>
-          </Grid>
-        </Grid>
     );
 
     let defaultToolbarArea = (
@@ -124,7 +79,7 @@ class TableProductsView extends React.Component {
           <Grid container justify={"center"}>
             <Grid item xs={11} sm={10} md={10}>
               <div style={{ margin: "16px 0px" }}>
-                <Typography variant={"h5"} align={"center"}>Categories Page</Typography>
+                <Typography variant={"title"} align={"center"}>CATEGORIES PAGE</Typography>
               </div>
               <div style={{ margin: "16px 0px", marginBottom:0}}>
                 <Grid container justify={"center"}>
@@ -137,9 +92,8 @@ class TableProductsView extends React.Component {
                       <Tabs value={this.state.tab} variant={"scrollable"} onChange={(e, v) => {
                           this.setState({tab: v});
                       }} textColor={"primary"} indicatorColor={"primary"}>
-                          <Tab label={"Products cat"}></Tab>
+                          <Tab label={"Products Categories"}></Tab>
                       <Tab label={"Brands"}></Tab>
-                      <Tab label={"Products type"}></Tab>
                     </Tabs>
                   </Grid>
                 </Grid>
@@ -151,7 +105,6 @@ class TableProductsView extends React.Component {
 
     return (
         <React.Fragment>
-          {this.state.loading? <LinearProgress/> :""}
             <div style={{height: "calc( 100vh - 64px)"}}>
                 {defaultToolbarArea}
                 {this.state.tab == 0 ? <ProductCategories/> : ""}

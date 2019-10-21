@@ -1,17 +1,18 @@
 import React, {Component} from "react";
-
 import withStyles from "@material-ui/core/styles/withStyles";
 import {
     Button,
     CircularProgress,
-    FormControl,
+    FormControl, FormHelperText,
     FormLabel,
     Grid,
     OutlinedInput,
     Paper,
-    Typography
+    Typography, Zoom
 } from "@material-ui/core"
-import {SupervisedUserCircle} from "@material-ui/icons"
+
+import AppInput from "../../components/AppInput"
+import {SupervisedUserCircle, ChevronRight, StoreRounded} from "@material-ui/icons"
 import axios from "axios";
 import {APIURL} from './../../DataSource';
 
@@ -19,6 +20,12 @@ let drawerWidth = 220;
 let styles = theme => ({
     drawerPaper: {
         width: drawerWidth
+    },
+    rootInput: {
+        padding: "12px 8px"
+    },
+    rootInputContainer: {
+        padding: "0px 6px",
     }
 });
 
@@ -26,37 +33,87 @@ class App extends Component {
 
     state = {
 
-        storeId: undefined,
+        store_id: undefined,
         password: undefined,
         sentRequest: false,
-        isLoggedIn: false,
-        failedLogin: false
-
+        validStoreName: undefined,
+        failedLogin: false,
+        checkingStore: false,
+        checkedStore: false,
+        noStoreWithStoreId: false,
     };
+
     constructor(props) {
         super(props);
     }
 
+    preLogin = async ()=>{
+
+        let response;
+
+        try{
+            response=await axios.post(`${APIURL}/store/check-store`,{store_id: this.state.store_id});
+            this.setState({store: response.data})
+        }catch (e) {
+            console.log(e);
+            throw e;
+            return;
+        }
+
+        console.log(response.data)
+        return response.data
+    }
+
+    checkStoreName= async ()=>{
+        this.setState({checkingStore:true})
+      let check= await this.preLogin();
+
+        this.setState({checkingStore:false, checkedStore: true})
+        if(check.success== false){
+            this.setState({noStoreWithStoreId: true})
+        }
+
+        console.log(check)
+
+        if(check.store_id){
+              this.setState({checkingStore:false, checkedStore: true, validStoreName: true, noStoreWithStoreId: false})
+        }
+
+    }
+
     loginUser = async (event) => {
+
         this.setState({sentRequest: true});
+
         let req = await axios.post(`${APIURL}/store/login`, {
-            storeId: this.state.storeId,
+            store_id: this.state.store_id,
             password: this.state.password
         });
 
+        this.setState({sentRequest: false});
+
+        console.log(req.data)
+
         if (req.data.token){
+            console.log(req.data)
+            this.setState({failedLogin: false });
             let store = {
-                email: req.data.store.owner,
+                email: this.state.store.owner,
                 token: req.data.token,
-                storeId: req.data.store._id,
-                store: req.data.store
+                $_id: this.state.store._id,
+                store: this.state.store
             };
 
             window.localStorage.setItem("magnet-client-active-store", JSON.stringify(store));
-            window.location.replace("/")
+
+            window.location.replace("/products");
+
+            console.log("redirected");
+
         } else {
             this.setState({failedLogin: true, sentRequest: false})
         }
+
     };
 
     watch = (prop) => {
@@ -76,42 +133,81 @@ class App extends Component {
 
 
     componentDidMount() {
+
     }
+
+
     render() {
 
-        return (
-            <React.Fragment>
-                <Grid container justify={"center"} style={{zIndex: "20000"}}>
-                    <Grid item style={{margin: "24px"}}>
-                        <Typography align={"center"} style={{margin: "8px 0px"}}>Login User Account</Typography>
-                        {this.state.failedLogin ?
-                            <Typography align={"center"} style={{padding: 8, color: "red", fontSize: "bold"}}> Wrong email or
-                                password </Typography> : ""}
-                        <Paper style={{padding: 16, background: "white"}} elevation={1}>
-                            <div>
-                                <Grid container justify={"center"}>
-                                    <Grid item style={{height: 70, display: "flex", alignItems: "center"}}>
-                                        {this.state.sentRequest ? <CircularProgress/> :
-                                            <SupervisedUserCircle style={{fontSize: 30}}/>}
-                                    </Grid>
-                                </Grid>
-                                <FormControl style={{margin: "16px 0px"}}>
-                                    <FormLabel>Store_ID</FormLabel>
-                                    <OutlinedInput onChange={this.watch("storeId")}/>
-                                </FormControl>
-                            </div>
-                            <div>
-                                <FormControl style={{margin: "16px 0px"}}>
-                                    <FormLabel>Password</FormLabel>
-                                    <OutlinedInput onChange={this.watch("password")} type={"password"}/>
-                                </FormControl>
-                            </div>
-                            <Button onClick={this.loginUser} style={{width: "70%", margin: "8px 15%"}}> Login</Button>
-                        </Paper>
-                    </Grid>
-                </Grid>
+        let {classes}= this.props
+        let collectStoreName= (
 
-            </React.Fragment>
+            <div>
+                <Zoom in>
+                    <Paper style={{padding:"24px 16px"}}>
+                        <Typography style={{marginBottom:16}} align={"center"} variant={"headline"} color={"primary"}>Login Admin</Typography>
+                        <FormControl>
+                            <OutlinedInput placeholder={"Store ID"}
+                                           onChange={this.watch("store_id")}
+                                           classes={{input:classes.rootInput, root:classes.rootInputContainer}} startAdornment={<StoreRounded color={"primary"}/>}/>
+                            <FormHelperText>Enter your Store id. </FormHelperText>
+                        </FormControl>
+
+                        {this.state.noStoreWithStoreId == true?
+                            <div style={{padding:12, margin:12, background: "rgba(200,10,10,.7)",borderRadius:10 }}>
+                                <Typography> The Store id you entered is incorrect</Typography>
+                            </div>: ""}
+
+                        <div style={{marginTop:"18px"}}>
+                            {
+                                this.state.checkingStore == false ?
+                                <Button size={"medium"} variant={"flat"} color={"primary"} onClick={this.checkStoreName}>Next <ChevronRight/></Button> :
+                                <CircularProgress/>
+                            }
+                        </div>
+                    </Paper>
+                </Zoom>
+            </div>
+        );
+
+        let collectStorePassword= (
+
+            <div>
+                <Zoom in>
+                    <Paper style={{padding:"24px 16px"}}>
+                        <Typography style={{marginBottom:16}} align={"center"} variant={"headline"} color={"primary"}>Login Admin</Typography>
+                        <FormControl>
+                            <OutlinedInput placeholder={"Password"}
+                                           type={"password"}
+                                           onChange={this.watch("password")}
+                                           classes={{input:classes.rootInput, root:classes.rootInputContainer}} startAdornment={<StoreRounded color={"primary"}/>}/>
+                            <FormHelperText>Your password</FormHelperText>
+                        </FormControl>
+
+
+                        <div style={{marginTop:"18px"}}>
+                            {
+                                this.state.sentRequest == false ?
+                                    <Button size={"medium"} variant={"flat"} color={"primary"} onClick={this.loginUser}>Login <ChevronRight/></Button> :
+                                    <CircularProgress/>
+                            }
+                        </div>
+                    </Paper>
+
+
+                </Zoom>
+            </div>
+        );
+
+
+        return (
+
+            <div style={{height:"100vh", display:"flex", alignItems:"center", justifyContent:"center", alignContent:"center", background:'#89cff0'}}>
+                { this.state.validStoreName!=true && collectStoreName}
+
+                { this.state.validStoreName ==true && collectStorePassword}
+            </div>
+
         );
     }
 }

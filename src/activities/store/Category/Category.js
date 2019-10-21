@@ -2,7 +2,7 @@ import React from "react";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
-import {LinearProgress, MenuItem, Select, Tab, Tabs, Toolbar} from "@material-ui/core";
+import {LinearProgress, MenuItem, Select, Tab, Tabs, Toolbar, Typography} from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import AppPaper from "../../../components/AppPaper"
 import AppInput from "../../../components/AppInput"
@@ -44,7 +44,6 @@ class Category extends React.Component {
             caption: undefined,
             description: undefined,
             type: undefined,
-            products: [],
             tags: []
         },
         selectMainImageDrawerOpen: false
@@ -176,13 +175,12 @@ class Category extends React.Component {
     render() {
         let {classes} = this.props;
         let {category} = this.state;
-
         let primaryComponent = (
             <React.Fragment>
                 <Grid container>
                     <Grid item xs={12}>
                         <AppPaper title={"Basic details"}>
-                            <Grid container spacing={16} alignContent={"start"}>
+                            <Grid container spacing={24} alignContent={"start"}>
                                 <Grid item xs={6}>
                                     <AppInput onChange={this.watchInput("title")} label={"Label"}
                                               value={this.state.category.title}/>
@@ -190,12 +188,12 @@ class Category extends React.Component {
                                               value={this.state.category.caption}/>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Grid container spacing={8}
+                                    <Grid container spacing={24}
                                           style={{background: "rgba(200,200,200,.9)", borderRadius: 10}}
                                           justify={"center"}>
-                                        <Grid item xs={12} style={{display: 'flex', justifyContent: "center"}}>
+                                        <Grid item xs={12} style={{}}>
                                             <FormControl>
-                                                <div style={{padding: 4, border: ".5px solid blue"}}> Type</div>
+                                                <Typography variant={"caption"}> Type</Typography>
                                                 <Select variant={"standard"}
                                                         value={this.state.category.type || this.state.type}
                                                         onChange={this.typeChange}>
@@ -205,12 +203,12 @@ class Category extends React.Component {
                                                 </Select>
                                             </FormControl>
                                         </Grid>
+
                                         <Grid item>
                                             {this.state.uploading ? <LinearProgress/> : ""}
                                             <div style={{
                                                 width: 100,
                                                 height: 100,
-                                                background: "ghostwhite",
                                                 display: "flex",
                                                 alignItems: "center",
                                                 justifyContent: "center"
@@ -236,7 +234,6 @@ class Category extends React.Component {
                                             <div style={{
                                                 width: 100,
                                                 height: 100,
-                                                background: "ghostwhite",
                                                 display: "flex",
                                                 alignItems: "center",
                                                 justifyContent: "center"

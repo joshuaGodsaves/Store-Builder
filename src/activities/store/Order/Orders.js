@@ -4,6 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import {Delete, Edit, MoreHoriz, SearchRounded} from "@material-ui/icons";
 import {FaDollarSign, FaMailBulk, FaUserCircle} from "react-icons/fa"
 import Button from "@material-ui/core/Button";
+import AppPaper from "../../../components/AppPaper"
 import StoreContext from "../StoreContext"
 import PaperNotification from "../components/PaperNotification"
 import {
@@ -230,10 +231,10 @@ class TableProductsView extends React.Component {
     let ordersNotAvailable = (
         <Grid container style={{height: "100vh"}} alignItems={"center"} justify={"center"}>
             <Grid item sm={10} sm={8} md={6}>
-                <PaperNotification label={""} action={""}>
+                <AppPaper title={"Notification"} action={""}>
                   <Typography>You do not have orders yet.</Typography>
                   <Typography>When ever new orders are made to your store, you'll see theme here</Typography>
-                </PaperNotification>
+                </AppPaper>
             </Grid>
         </Grid>
     );

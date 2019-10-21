@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import Toolbar from "@material-ui/core/Toolbar";
-import {AppBar, Avatar, Grid, IconButton, Menu, MenuItem} from "@material-ui/core";
+import {AppBar, Avatar, Grid, IconButton, Menu, MenuItem, Divider, Typography, ButtonBase, Button, StepButton} from "@material-ui/core";
 import Link from "react-router-dom/Link"
 import withStyles from "@material-ui/core/styles/withStyles";
 import {Link as LinkIcon, Menu as MenuIcon, Notifications, Store} from "@material-ui/icons";
@@ -18,8 +18,7 @@ let styles = theme => ({
         }
     },
     rootMenu: {
-
-        background: "darkblue",
+        background: "ghostwhite",
         [theme.breakpoints.up('sm')]: {
             width: `calc(100% - 225px)`,
             marginLeft: 225
@@ -87,26 +86,29 @@ class App extends Component {
 
     };
 
+    loginHandler = ()=>{
+        window.location.replace("/login");
+        this.closeMenu()
+    }
     render() {
         let {classes} = this.props;
         let {storeListElTrigger} = this.state;
         let {anchorEl, activeProduct} = this.state;
-
         let userMenu = (
             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} id="simple-menu" onClose={this.closeMenu}
                   style={{zIndex: 100000}}>
-                <MenuItem component={Link} to={"/"}>Profile</MenuItem>
-                <MenuItem component={Link} to={"/"}>Settings</MenuItem>
-                <MenuItem onClick={this.closeMenu}
-                          component={Link} to={"/login"}>Logout</MenuItem>
+                <MenuItem component={Link} to={"/"} divider>Profile</MenuItem>
+                <MenuItem component={Link} to={"/"}>Shuttdown</MenuItem>
+                <MenuItem component={Link} to={"/settings"}>Settings</MenuItem>
+                <MenuItem onClick={this.loginHandler} >Logout</MenuItem>
             </Menu>
         );
 
         let {drawerOpener} = this.props;
 
         return (
-
-            <AppBar style={{zIndex: 2000}} elevation={0} className={classes.rootMenu}>
+           <div>
+                <AppBar style={{zIndex: 2000, background:"white"}} elevation={2} className={classes.rootMenu}>
                 {userMenu}
                 <Toolbar
                     style={{display: "flex", alignItems: "center", justifyContent: "space-between", color: "white"}}>
@@ -118,24 +120,30 @@ class App extends Component {
                         </Grid>
                         <Grid item>
                             <Grid container alignItems={"center"}>
+
+                                <Grid item style={{margin:"0px 4px"}}>
+                                    <Typography>Live</Typography>
+                                </Grid>
                                 <Grid item>
-                                    <IconButton style={{color: "ghostwhite"}}>
+                                    <Button color={"primary"}>
+                                        <LinkIcon/>
+                                    </Button>
+                                </Grid>
+                                <Grid item>
+                                    <IconButton  color={"primary"}>
                                         <Notifications/>
                                     </IconButton>
                                 </Grid>
                                 <Grid item>
-                                    <IconButton style={{color: "ghostwhite"}}>
-                                        <LinkIcon/>
-                                    </IconButton>
-                                </Grid>
-                                <Grid item>
-                                    <Avatar sizes={"small"} style={{marginLeft: 12, color: "ghostwhite"}}/>
+                                    <Avatar color={"primary"}  style={{marginLeft: 12, color: "ghostwhite"}} onClick={this.openMenu}/>
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
                 </Toolbar>
+                <Divider color={"primary"}/>
             </AppBar>
+            </div>
 
         );
     }

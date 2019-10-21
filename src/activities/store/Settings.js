@@ -163,8 +163,9 @@ class App extends Component {
                         <Grid item>
                             <Tabs value={0} >
                                 <Tab label={"Basics"}/>
+                                <Tab label={"SEO"}/>
+                                <Tab label={"Account"}/>
                                 <Tab label={"Site"}/>
-                                <Tab label={"Notifications"}/>
                             </Tabs>
                         </Grid>
                         <Grid item>

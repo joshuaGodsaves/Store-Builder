@@ -30,6 +30,18 @@ export default class Component extends React.Component{
 
     onSelected= (id)=>{
         return ()=>{
+
+            if(this.props.single){
+
+                this.state.categories.forEach(v=>{
+                    if(v._id==id){
+                        this.props.closeCategorySelector(v.title)
+                    }
+                })
+                return
+
+            }
+
             let check = this.state.selected.some(v => v == id);
             if(check){
                 let filtered = this.state.selected.filter(v => v != id);
@@ -48,13 +60,18 @@ export default class Component extends React.Component{
     };
     componentWillMount() {
         let open = this.props.open;
-        let initialSelectedCategories = this.props.categories;
-        this.setState({open: open, selected: initialSelectedCategories})
+        let selectedCategories = this.props.categories;
+        if(selectedCategories.push !== true){
+            let temp= selectedCategories;
+            selectedCategories= [temp]
+        }
+        this.setState({open: open, selected: selectedCategories})
     }
 
     componentDidMount() {
         this.dataSource = new DataSource(this.context.store.token, this.context.store.id);
-        this.loadCategories()
+
+        this.loadCategories(this.props.type);
     }
 
     createCategory= ()=>{
@@ -62,10 +79,10 @@ export default class Component extends React.Component{
     };
 
     saveCategory= async  ()=>{
-        let newCategory = await this.dataSource.postStoreCategory({title: this.state.newCategory});
+        let newCategory = await this.dataSource.postStoreCategory({title: this.state.newCategory, type: this.props.type });
         if(newCategory){
             this.setState({newCategory: "", createCategory: false});
-            this.loadCategories()
+            this.loadCategories(this.props.type)
         }
     };
     watch= (e)=>{
@@ -73,8 +90,8 @@ export default class Component extends React.Component{
         this.setState({newCategory: e.target.value})
     };
 
-    loadCategories = () => {
-        this.dataSource.getStoreCategories().then(v=>{
+    loadCategories = (type) => {
+        this.dataSource.getStoreCategories({type:type}).then(v=>{
             this.setState({categories: v, loading: false})
         }).catch(v => console.log(v));
         this.setState({loading: true})
@@ -104,9 +121,7 @@ export default class Component extends React.Component{
                             <Button size={"small"} onClick={this.createCategory}>New</Button>
                         </Grid>
                     </Grid>
-
                     {this.state.createCategory? newCategoryComponent: ""}
-
                 </DialogActions>
                 <Divider/>
                 <DialogContent style={{padding: "12px 0px"}}>

@@ -1,6 +1,6 @@
 import React from "react"
 import withStyles from "@material-ui/core/styles/withStyles"
-import {Avatar, Button, Grid, IconButton, Paper} from "@material-ui/core";
+import {Avatar, Button, Grid, IconButton, Paper, Typography} from "@material-ui/core";
 import {Link} from "react-router-dom";
 import {MoreHoriz} from "@material-ui/icons";
 import StoreContext from "../../StoreContext";
@@ -20,7 +20,7 @@ class Component extends React.Component {
     }
 
     componentDidMount() {
-        this.dataSource.getStoreCategories().then(v => {
+        this.dataSource.getStoreCategories({type: "brand"}).then(v => {
             let categories = v;
             this.setState({categories: categories});
             this.setState({loaded: true});
@@ -38,28 +38,30 @@ class Component extends React.Component {
                 <Grid item xs={12} sm={10}>
                     <Grid container justify={"flex-end"} style={{margin: "8px 0px"}}>
                         <Grid item>
-                            <Button disabled>
-                                Bulk Add
-                            </Button>
-                        </Grid>
-                        <Grid item>
                             <Button component={Link}
+                                    variant={"contained"}
+                                    color={"primary"}
+                                    size={"medium"}
                                     to={`/categories/new?type=brand`}>
                                 New Category
                             </Button>
                         </Grid>
                     </Grid>
+
                     <Grid container spacing={8}>
                         {this.state.categories.map((category, i) => (
-                            <Grid item xs={12} md={6} style={{margin: "8px 0px"}}>
+                            <Grid item xs={12} md={6} style={{margin: "8px 0px"}} key={category._id}>
                                 <Paper elevation={1}>
                                     <Grid container alignItems={"center"} justify={"space-between"} spacing={8}>
                                         <Grid item style={{display: "flex"}} xs={8}>
                                             <div style={{display: "flex", alignItems: "center", paddingLeft: 12}}>
                                                 <Avatar src={category.image}/>
-                                                <span style={{margin: "0px 12px"}}>
-                                      {category.title}
-                                      </span>
+                                                <div style={{margin: "0px 12px"}}>
+                                                    <Typography>
+                                                        {category.title}
+                                                    </Typography>
+                                                    <Typography variant={"caption"}>Label</Typography>
+                                                </div>
                                             </div>
                                         </Grid>
                                         <Grid item>
