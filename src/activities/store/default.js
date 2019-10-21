@@ -14,7 +14,10 @@ let styles = theme => ({
     },
     jumboArea: {
         height: 300,
-        background: "linear-gradient(blue, white)"
+        size:"center",
+        position:"cover",
+        background: "linear-gradient(blue, white)",
+        backgroundImage:'url(https://t3.ftcdn.net/jpg/02/82/76/62/240_F_282766220_lf6nfwH2oKwiMhtqYPXEt8LQjkh9hdDJ.jpg)'
     },
     itemContent: {
         position: "relative",
